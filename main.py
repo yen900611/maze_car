@@ -1,8 +1,11 @@
+import pygame
+from game_core import sound_controller, playingMode, I_Commander
 
 if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("off")
+    game = playingMode.PlayingMode(4, "off")
 
     while game.isRunning():
         commands = {}
@@ -13,7 +16,7 @@ if __name__ == '__main__':
         game.detect_collision()
         game.update_sprite(commands)
         game.draw_bg()
-        game.drawAllSprites()
+        game.drawWorld()
         game.flip()
 
     pygame.quit()

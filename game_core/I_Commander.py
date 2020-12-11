@@ -49,9 +49,9 @@ class KeyBoardCommander(I_Commander):
         if control_dic["RIGHT"]:
             control_list.append("MOVE_RIGHT")
         if control_dic["SPEED_UP"]:
-            control_list.append("SPEED")
+            control_list.append(100)
         if control_dic["BRAKEDOWN"]:
-            control_list.append("BRAKE")
+            control_list.append(-100)
 
         return control_list
 

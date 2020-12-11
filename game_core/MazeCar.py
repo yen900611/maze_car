@@ -1,20 +1,19 @@
 import pygame
-
+from .playingMode import PlayingMode
 from .env import *
 from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
 class MazeCar:
-    def __init__(self, user_num: int, difficulty,sound):
+    def __init__(self, user_num, level,sound):
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
         self.game_mode = PlayingMode(user_num,self.sound_controller)
         self.game_type = "NORMAL"
-
         self.user_num = user_num
 
-    def get_player_scene_info(self) -> dict:
+    def get_player_scene_info(self):
         scene_info = self.get_scene_info
         return {
             "ml_1P" : scene_info,
@@ -39,7 +38,7 @@ class MazeCar:
 
     def draw(self):
         self.game_mode.draw_bg()
-        self.game_mode.drawAllSprites()
+        self.game_mode.drawWorld()
         self.game_mode.flip()
 
     @property
@@ -47,7 +46,6 @@ class MazeCar:
         """
         Get the scene information
         """
-
         scene_info = {
             "frame": self.game_mode.frame,
             "status": self.game_mode.status,

@@ -15,8 +15,8 @@ def positive_int(string):
 
 GAME_PARAMS = {
     "()": {
-        "prog": "RacingCar",
-        "game_usage": "%(prog)s <user_num> [difficulty]"
+        "prog": "MazeCar",
+        "game_usage": "%(prog)s <user_num> <level>"
     },
     "user_num": {
         "type": positive_int,
@@ -24,11 +24,9 @@ GAME_PARAMS = {
         "help": ("[Optional] The score that the game will be exited "
                  "when either side reaches it.[default: %(default)s]")
     },
-    "difficulty": {
-        "choices": ("NORMAL", "COIN"),
-        "metavar": "difficulty",
-        "nargs": "?",
-        "default": "NORMAL",
+    "level": {
+        "type": positive_int,
+        "default": 1,
         "help": "Specify the game style. Choices: %(choices)s"
     },
     "sound":{
@@ -37,17 +35,18 @@ GAME_PARAMS = {
     }
 }
 
-from .game.RacingCar import RacingCar
-import pygame
+from .game_core.MazeCar import MazeCar
 
 GAME_SETUP = {
-    "game": RacingCar,
+    "game": MazeCar,
 
     "ml_clients": [
         {"name": "ml_1P", "args": ("player1",)},
         {"name": "ml_2P", "args": ("player2",)},
         {"name": "ml_3P", "args": ("player3",)},
-        {"name": "ml_4P", "args": ("player4",)}
+        {"name": "ml_4P", "args": ("player4",)},
+        {"name": "ml_5P", "args": ("player5",)},
+        {"name": "ml_3P", "args": ("player6",)},
     ],
     "dynamic_ml_clients":True
 }

@@ -1,5 +1,9 @@
 from os import path
 
+PPM = 20.0  # pixels per meter
+TARGET_FPS = 60
+TIME_STEP = 1.0 / TARGET_FPS
+
 '''width and height'''
 WIDTH = 720
 HEIGHT = 520
@@ -18,9 +22,9 @@ BLUE = (3,28,252)
 LIGHT_BLUE = (33, 161, 241)
 
 '''Maze'''
-Maze1 = []
-Maze2 = []
-Maze3 = []
+Maze = [
+    [[(0,0), (18,0), (0,1), (18,1)], [(24,0), (24,24), (23,0), (23,24)]]
+]
 
 '''object size'''
 car_size = (60, 30)
