@@ -1,5 +1,5 @@
 import Box2D
-
+from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
@@ -10,9 +10,15 @@ class PlayingMode(GameMode):
         super(PlayingMode, self).__init__()
         pygame.font.init()
         self.status = None
+
+        '''set group'''
+        self.cars = []
+
         self.worlds = []
         self._init_world(user_num)
+        self._init_car()
         self._init_maze(0)
+
 
         '''sound'''
         self.sound_controller = sound_controller
@@ -25,6 +31,8 @@ class PlayingMode(GameMode):
         '''update the model of game,call this fuction per frame'''
         self.frame += 1
         self.handle_event()
+        for car in self.cars:
+            car.update(command["ml_" + str(car.car_no+1) + "P"])
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
 
@@ -41,8 +49,10 @@ class PlayingMode(GameMode):
             self.worlds.append(world)
         pass
 
-    def _init_car(self, world):
+    def _init_car(self):
         for world in self.worlds:
+            self.car = Car(world, (21,3), 0)
+            self.cars.append(self.car)
             pass
 
     def _init_maze(self, maze_no):
@@ -61,6 +71,9 @@ class PlayingMode(GameMode):
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
         super(PlayingMode, self).draw_bg()
+        self.screen.fill(BLACK)
+        pygame.draw.rect(self.screen, WHITE, pygame.Rect((520, 20), (280, 480)), border_radius=20)
+        pygame.draw.rect(self.screen, BLUE, pygame.Rect((525, 25), (270, 470)), border_radius=20)
         pass
 
         '''畫出每台車子的資訊'''
@@ -79,7 +92,7 @@ class PlayingMode(GameMode):
         def my_draw_polygon(polygon, body, fixture):
             vertices = [(body.transform * v) * PPM for v in polygon.vertices]
             vertices = [(v[0], HEIGHT - v[1]) for v in vertices]
-            pygame.draw.polygon(self.screen, GREY, vertices)
+            pygame.draw.polygon(self.screen, WHITE, vertices)
 
         Box2D.b2.polygonShape.draw = my_draw_polygon
         Box2D.b2.circleShape.draw = my_draw_circle

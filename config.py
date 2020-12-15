@@ -46,7 +46,7 @@ GAME_SETUP = {
         {"name": "ml_3P", "args": ("player3",)},
         {"name": "ml_4P", "args": ("player4",)},
         {"name": "ml_5P", "args": ("player5",)},
-        {"name": "ml_3P", "args": ("player6",)},
+        {"name": "ml_6P", "args": ("player6",)},
     ],
     "dynamic_ml_clients":True
 }
