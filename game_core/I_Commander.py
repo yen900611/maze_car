@@ -39,19 +39,22 @@ class KeyBoardCommander(I_Commander):
 
     def getControlDict(self):
         keys = pygame.key.get_pressed()
-        control_list = []
+        control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
         control_dic = {"LEFT": keys[self.moveLeftKey],
                        "RIGHT": keys[self.moveRightKey],
                        "SPEED_UP": keys[self.speedKey],
                        "BRAKEDOWN": keys[self.brakeKey]}
+        # TODO 調整參數
         if control_dic["LEFT"]:
-            control_list.append("TURN_LEFT")
+            control_list[0]["right_PWM"] += 100
         if control_dic["RIGHT"]:
-            control_list.append("TURN_RIGHT")
+            control_list[0]["left_PWM"] += 100
         if control_dic["SPEED_UP"]:
-            control_list.append("SPEED")
+            control_list[0]["left_PWM"] += 50
+            control_list[0]["right_PWM"] += 50
         if control_dic["BRAKEDOWN"]:
-            control_list.append("BRAKE")
+            control_list[0]["left_PWM"] += -50
+            control_list[0]["right_PWM"] += -50
 
         return control_list
 

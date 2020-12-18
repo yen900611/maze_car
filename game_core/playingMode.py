@@ -1,3 +1,5 @@
+import math
+
 import Box2D
 from .car import Car
 from .gameMode import GameMode
@@ -24,17 +26,19 @@ class PlayingMode(GameMode):
         self.sound_controller = sound_controller
 
         '''image'''
-        self.cars_info = []
+        self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
         self.sensor_value = []
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
+        # print(command)
         self.frame += 1
         self.handle_event()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no+1) + "P"])
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
+            world.ClearForces()
 
     def detect_collision(self):
         super(PlayingMode,self).detect_collision()
@@ -51,7 +55,7 @@ class PlayingMode(GameMode):
 
     def _init_car(self):
         for world in self.worlds:
-            self.car = Car(world, (21,3), 0)
+            self.car = Car(world, (22,3), 0)
             self.cars.append(self.car)
             pass
 
@@ -72,8 +76,10 @@ class PlayingMode(GameMode):
         '''show the background and imformation on screen,call this fuction per frame'''
         super(PlayingMode, self).draw_bg()
         self.screen.fill(BLACK)
-        pygame.draw.rect(self.screen, WHITE, pygame.Rect((520, 20), (280, 480)), border_radius=20)
-        pygame.draw.rect(self.screen, BLUE, pygame.Rect((525, 25), (270, 470)), border_radius=20)
+        # pygame.draw.rect(self.screen, BROWN, pygame.Rect(20,20,480,480))
+        self.screen.blit(self.info,pygame.Rect(507, 20, 306, 480))
+        # pygame.draw.rect(self.screen, WHITE, pygame.Rect((520, 20), (280, 480)), border_radius=20)
+        # pygame.draw.rect(self.screen, BLUE, pygame.Rect((525, 25), (270, 470)), border_radius=20)
         pass
 
         '''畫出每台車子的資訊'''
@@ -101,9 +107,28 @@ class PlayingMode(GameMode):
             for body in world.bodies:
                 for fixture in body.fixtures:
                     fixture.shape.draw(body, fixture)
+        for car in self.cars:
+            image = pygame.transform.rotate(car.image,(car.body.angle*180/math.pi)%360)
+            rect = image.get_rect()
+            rect.center = car.body.position[0] * PPM, HEIGHT - car.body.position[1] * PPM
+            self.screen.blit(image, rect)
+            pass
         pass
 
     def _draw_user_imformation(self):
+        for i in range(3):
+            for car in self.cars:
+                if car.car_no == i:
+                    # pygame.draw.line(self.screen, RED, (car.sensor_right.body.position[0]*PPM, HEIGHT - car.sensor_right.body.position[1]*PPM),
+                    #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
+                    self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 600, 178 + 20 + 94*i)
+                    self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 600, 178 + 40 + 94*i)
+                    self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 600, 178 + 60 + 94*i)
+
+        for i in range(3):
+            self.draw_information(self.screen, WHITE, "R:", 730, 178 + 20 + 94*i)
+            self.draw_information(self.screen, WHITE, "L:", 730, 178 + 40 + 94*i)
+            self.draw_information(self.screen, WHITE, "F:", 730, 178 + 60 + 94*i)
         pass
 
     def rank(self):

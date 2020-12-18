@@ -5,11 +5,11 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("off")
-    game = playingMode.PlayingMode(4, "off")
+    game = playingMode.PlayingMode(2, "off")
 
     while game.isRunning():
         commands = {}
-        for i in range(4):
+        for i in range(1):
             commands["ml_" + str(i+1) + "P"] = I_Commander.KeyBoardCommander(i).getControlDict()
         game.ticks()
         game.handle_event()
