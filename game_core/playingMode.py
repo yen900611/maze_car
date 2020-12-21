@@ -1,4 +1,5 @@
 import math
+import time
 
 import Box2D
 from .car import Car
@@ -36,6 +37,7 @@ class PlayingMode(GameMode):
         self.handle_event()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no+1) + "P"])
+            self._is_car_arrive_end(car)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
@@ -55,7 +57,7 @@ class PlayingMode(GameMode):
 
     def _init_car(self):
         for world in self.worlds:
-            self.car = Car(world, (22,3), 0)
+            self.car = Car(world, (22,3), self.worlds.index(world))
             self.cars.append(self.car)
             pass
 
@@ -70,16 +72,19 @@ class PlayingMode(GameMode):
         pass
 
     def _is_car_arrive_end(self, car):
+        if car.status:
+            if car.body.position[1]>25:
+                print("end")
+                car.end_time = time.time()
+                car.status = False
         pass
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
         super(PlayingMode, self).draw_bg()
         self.screen.fill(BLACK)
-        # pygame.draw.rect(self.screen, BROWN, pygame.Rect(20,20,480,480))
         self.screen.blit(self.info,pygame.Rect(507, 20, 306, 480))
-        # pygame.draw.rect(self.screen, WHITE, pygame.Rect((520, 20), (280, 480)), border_radius=20)
-        # pygame.draw.rect(self.screen, BLUE, pygame.Rect((525, 25), (270, 470)), border_radius=20)
+        self.draw_time(time.time())
         pass
 
         '''畫出每台車子的資訊'''
@@ -116,19 +121,28 @@ class PlayingMode(GameMode):
         pass
 
     def _draw_user_imformation(self):
-        for i in range(3):
+        for i in range(6):
             for car in self.cars:
                 if car.car_no == i:
                     # pygame.draw.line(self.screen, RED, (car.sensor_right.body.position[0]*PPM, HEIGHT - car.sensor_right.body.position[1]*PPM),
                     #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
-                    self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 600, 178 + 20 + 94*i)
-                    self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 600, 178 + 40 + 94*i)
-                    self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 600, 178 + 60 + 94*i)
+                    if i%2 == 0:
+                        if car.status:
+                            self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 600, 178 + 20 + 94*i/2)
+                            self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 600, 178 + 40 + 94*i/2)
+                            self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 600, 178 + 60 + 94*i/2)
+                        else:
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) +"s", 600, 178 + 40 + 94*i/2)
 
-        for i in range(3):
-            self.draw_information(self.screen, WHITE, "R:", 730, 178 + 20 + 94*i)
-            self.draw_information(self.screen, WHITE, "L:", 730, 178 + 40 + 94*i)
-            self.draw_information(self.screen, WHITE, "F:", 730, 178 + 60 + 94*i)
+                    else:
+                        if car.status:
+                            self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 730, 178 + 20 + 94*(i//2))
+                            self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 730, 178 + 40 + 94*(i//2))
+                            self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 730, 178 + 60 + 94*(i//2))
+                        else:
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)), 730, 178 + 40 + 94*i/2)
+
+
         pass
 
     def rank(self):

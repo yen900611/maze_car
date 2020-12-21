@@ -1,6 +1,9 @@
 """
 This is a base class for different mode in game.
 """
+import math
+import time
+
 import pygame
 from .env import *
 
@@ -11,7 +14,10 @@ class GameMode(object):
         self.clock = pygame.time.Clock()
         self.running = True
         self.frame = 0
+        pygame.font.init()
         self.font = pygame.font.Font(pygame.font.match_font("arial"), 15)
+        self.time_font = pygame.font.Font(pygame.font.match_font("arial"), 46)
+        self.start_time = time.time()
 
     def ticks(self, fps=FPS):
         """This method should be called once per frame.
@@ -64,6 +70,28 @@ class GameMode(object):
 
     def isRunning(self) -> bool:
         return self.running
+
+    def draw_time(self,set_time):
+        now_time = set_time - self.start_time
+        min = round(now_time // 60)
+        if min//10 <1:
+            min_str = "0"+str(min)
+        else:
+            min_str = str(min)
+        sec = math.floor(now_time)%60
+        if sec//10 <1:
+            sec_str = "0"+str(sec)
+        else:
+            sec_str = str(sec)
+        ms = round(round(now_time - math.floor(now_time), 2)*100)
+        if ms//10 <1:
+            ms_str = "0"+str(ms)
+        else:
+            ms_str = str(ms)
+        text_surface = self.time_font.render(min_str+" : "+sec_str+" : "+ms_str, True , WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.center= (660, 100)
+        self.screen.blit(text_surface , text_rect)
 
     def draw_information(self, surf, color, text, x, y):
         text_surface = self.font.render(text , True , color)

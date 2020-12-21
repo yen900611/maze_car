@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     while game.isRunning():
         commands = {}
-        for i in range(1):
+        for i in range(2):
             commands["ml_" + str(i+1) + "P"] = I_Commander.KeyBoardCommander(i).getControlDict()
         game.ticks()
         game.handle_event()
