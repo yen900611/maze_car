@@ -38,6 +38,7 @@ class PlayingMode(GameMode):
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no+1) + "P"])
             self._is_car_arrive_end(car)
+            car.detect_distance(self.frame)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()

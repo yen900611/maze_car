@@ -15,6 +15,7 @@ class Car():
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
+        self.last_detect_sensor = 0
         self.velocity = 0
         self.body = world.CreateDynamicBody(position=position)
         box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
@@ -24,7 +25,7 @@ class Car():
         world.CreateDistanceJoint(bodyA=self.sensor_right.body, bodyB=self.body, collideConnected=True)
 
         '''模擬摩擦力'''
-        r = math.sqrt(0.2 * self.body.inertia / self.body.mass)
+        r = math.sqrt(0.5 * self.body.inertia / self.body.mass)
         gravity = 10
         ground = world.CreateBody(position=(0, 20))
         world.CreateFrictionJoint(
@@ -34,27 +35,29 @@ class Car():
             localAnchorB=(0, 0),
             collideConnected=True,
             maxForce = self.body.mass * r * gravity,
-            maxTorque=self.body.mass * r * gravity
+            maxTorque=self.body.mass * r * gravity*1.5
         )
         pass
 
     def update(self, commands):
         self.velocity =math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status:
-            self.right_move(commands[0]['right_PWM'])
-            self.left_move(commands[0]['left_PWM'])
-            # if commands[0]['left_PWM'] == 0:
-            #     self.body.localCenter = (-0.3, 0)
-            #     self.right_move(commands[0]['right_PWM'])
-            # elif commands[0]['right_PWM'] == 0:
-            #     self.body.localCenter = (0.3, 0)
-            #     self.left_move(commands[0]['left_PWM'])
-            # else:
-            #     self.right_move(commands[0]['right_PWM'])
-            #     self.left_move(commands[0]['left_PWM'])
-        self.sensor_F = self.front_sensor_detect(wall_info)
-        self.sensor_L = self.left_sensor_detect(wall_info)
-        self.sensor_R = self.right_sensor_detect(wall_info)
+            if commands[0]['left_PWM'] == 0:
+                self.body.localCenter = (-0.3, 0)
+                self.right_move(commands[0]['right_PWM'])
+            elif commands[0]['right_PWM'] == 0:
+                self.body.localCenter = (0.3, 0)
+                self.left_move(commands[0]['left_PWM'])
+            else:
+                self.right_move(commands[0]['right_PWM'])
+                self.left_move(commands[0]['left_PWM'])
+
+    def detect_distance(self, frame):
+        if frame -self.last_detect_sensor > FPS/10:
+            self.sensor_F = self.front_sensor_detect(wall_info)
+            self.sensor_L = self.left_sensor_detect(wall_info)
+            self.sensor_R = self.right_sensor_detect(wall_info)
+            self.last_detect_sensor = frame
         pass
 
     def left_move(self, velocity:int):
@@ -63,7 +66,7 @@ class Car():
         else:
             f = self.body.GetWorldVector(localVector=(0.0, velocity))
         p = self.body.GetWorldPoint(localPoint=(-1.0, 0.0))
-        self.body.ApplyForce(f, p, False)
+        self.body.ApplyForce(f, p, True)
 
     def right_move(self, velocity:int):
         if self.velocity > 0.01:
@@ -71,7 +74,7 @@ class Car():
         else:
             f = self.body.GetWorldVector(localVector=(0.0, velocity))
         p = self.body.GetWorldPoint(localPoint=(1.0, 0.0))
-        self.body.ApplyForce(f, p, False)
+        self.body.ApplyForce(f, p, True)
 
     def keep_in_screen(self):
         pass
@@ -116,12 +119,12 @@ class Car():
                 pass
 
         try:
-            result = round(min(results)*5,1)
+            result = round(min(results)*5,1) + random.randint(0,5)
             return result
         except TypeError:
-            return round(random.randrange(30.0), 1)
+            return round(random.randrange(60.0), 1)
         except ValueError:
-            return round(random.randrange(30.0), 1)
+            return round(random.randrange(60.0), 1)
 
     def right_sensor_detect(self, walls):
         distance = []
@@ -146,12 +149,12 @@ class Car():
                     pass
 
         try:
-            result = round(min(results)*5,1)
+            result = round(min(results)*5,1) + random.randint(0,5)
             return result
         except TypeError:
-            return None
+            return round(random.randrange(60.0), 1)
         except ValueError:
-            return None
+            return round(random.randrange(60.0), 1)
 
     def left_sensor_detect(self, walls):
         distance = []
@@ -176,9 +179,9 @@ class Car():
                     pass
         try:
 
-            result = round(min(results)*5, 1)
+            result = round(min(results)*5, 1) + random.randint(0,5)
             return result
         except TypeError:
-            return None
+            return round(random.randrange(60.0), 1)
         except ValueError:
-            return None
+            return round(random.randrange(60.0), 1)

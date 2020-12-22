@@ -56,9 +56,9 @@ class KeyBoardCommander(I_Commander):
                        "BRAKEDOWN": keys[self.brakeKey]}
         # TODO 調整參數
         if control_dic["LEFT"]:
-            control_list[0]["right_PWM"] += 100
+            control_list[0]["right_PWM"] += 75
         if control_dic["RIGHT"]:
-            control_list[0]["left_PWM"] += 100
+            control_list[0]["left_PWM"] += 75
         if control_dic["SPEED_UP"]:
             control_list[0]["left_PWM"] += 50
             control_list[0]["right_PWM"] += 50
