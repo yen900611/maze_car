@@ -15,8 +15,8 @@ class GameMode(object):
         self.running = True
         self.frame = 0
         pygame.font.init()
-        self.font = pygame.font.Font(pygame.font.match_font("arial"), 15)
-        self.time_font = pygame.font.Font(pygame.font.match_font("arial"), 46)
+        self.font = pygame.font.Font(pygame.font.match_font("arial", bold=True), 15)
+        self.time_font = pygame.font.Font(pygame.font.match_font("arial", bold=True), 46)
         self.start_time = time.time()
 
     def ticks(self, fps=FPS):

@@ -16,7 +16,7 @@ def positive_int(string):
 GAME_PARAMS = {
     "()": {
         "prog": "MazeCar",
-        "game_usage": "%(prog)s <user_num> <level>"
+        "game_usage": "%(prog)s <user_num> [game_type]"
     },
     "user_num": {
         "type": positive_int,
@@ -24,7 +24,14 @@ GAME_PARAMS = {
         "help": ("[Optional] The score that the game will be exited "
                  "when either side reaches it.[default: %(default)s]")
     },
-    "level": {
+    "game_type": {
+        "choices": ("NORMAL"),
+        "metavar": "difficulty",
+        "nargs": "?",
+        "default": "NORMAL",
+        "help": "Specify the game style. Choices: %(choices)s"
+    },
+    "Maze": {
         "type": positive_int,
         "default": 1,
         "help": "Specify the game style. Choices: %(choices)s"

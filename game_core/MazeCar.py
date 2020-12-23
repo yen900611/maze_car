@@ -6,7 +6,8 @@ from .sound_controller import *
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
 class MazeCar:
-    def __init__(self, user_num, level,sound):
+    def __init__(self, user_num,game_type, level,sound):
+        self.maze_id = level
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
         self.game_mode = PlayingMode(user_num,self.sound_controller)
@@ -15,13 +16,13 @@ class MazeCar:
 
     def get_player_scene_info(self):
         scene_info = self.get_scene_info
-        return {
-            "ml_1P" : scene_info,
-            "ml_2P" : scene_info,
-            "ml_3P" : scene_info,
-            "ml_4P" : scene_info
-        }
-
+        player_info = {}
+        for car in self.game_mode.car_info:
+            # type of car is dictionary
+            player_info[str(car[id])+"P"] = {"R_sensor":car["r_sensor_value"],
+                                             "L_sensor":car["l_sensor_value"],
+                                             "F_sensor":car["f_sensor_value"],}
+        return player_info
     def update(self, commands):
         self.game_mode.handle_event()
         self.game_mode.detect_collision()
@@ -31,7 +32,7 @@ class MazeCar:
             return "QUIT"
 
     def reset(self):
-        self.__init__(self.user_num,self.game_type,self.is_sound)
+        self.__init__(self.user_num,self.game_type,self.maze_id,self.is_sound)
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -49,7 +50,11 @@ class MazeCar:
         scene_info = {
             "frame": self.game_mode.frame,
             "status": self.game_mode.status,
+            "maze":Maze[self.maze_id]
         }
+        for car in self.game_mode.car_info:
+            # type of car is dictionary
+            scene_info[str(car[id])+"P_position"] = car[vertices]
         return scene_info
 
     def get_game_info(self):

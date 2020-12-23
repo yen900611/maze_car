@@ -12,11 +12,11 @@ class PlayingMode(GameMode):
     def __init__(self, user_num: int, sound_controller):
         super(PlayingMode, self).__init__()
         pygame.font.init()
-        self.status = None
+        self.status = "GAME_PASS"
 
         '''set group'''
         self.cars = []
-
+        self.car_info = []
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -35,8 +35,10 @@ class PlayingMode(GameMode):
         # print(command)
         self.frame += 1
         self.handle_event()
+        self._is_game_end()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no+1) + "P"])
+            self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
             car.detect_distance(self.frame)
         for world in self.worlds:
@@ -70,6 +72,11 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
+        for car in self.cars:
+            if car.status:
+                pass
+            else:
+                self.running = False
         pass
 
     def _is_car_arrive_end(self, car):
@@ -129,22 +136,23 @@ class PlayingMode(GameMode):
                     #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
                     if i%2 == 0:
                         if car.status:
-                            self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 600, 178 + 20 + 94*i/2)
-                            self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 600, 178 + 40 + 94*i/2)
-                            self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 600, 178 + 60 + 94*i/2)
+                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L), 600, 178 + 20 + 94*i/2)
+                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F), 600, 178 + 40 + 94*i/2)
+                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R), 600, 178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) +"s", 600, 178 + 40 + 94*i/2)
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) +"s", 600, 178 + 40 + 94*(i//2))
 
                     else:
                         if car.status:
-                            self.draw_information(self.screen, WHITE, "R:" + str(car.sensor_R), 730, 178 + 20 + 94*(i//2))
-                            self.draw_information(self.screen, WHITE, "L:" + str(car.sensor_L), 730, 178 + 40 + 94*(i//2))
-                            self.draw_information(self.screen, WHITE, "F:" + str(car.sensor_F), 730, 178 + 60 + 94*(i//2))
+                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L), 730, 178 + 20 + 94*(i//2))
+                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F), 730, 178 + 40 + 94*(i//2))
+                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R), 730, 178 + 60 + 94*(i//2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)), 730, 178 + 40 + 94*i/2)
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time))+"s", 730, 178 + 40 + 94*(i//2))
 
 
         pass
+
 
     def rank(self):
         pass

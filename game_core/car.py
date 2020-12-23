@@ -18,7 +18,8 @@ class Car():
         self.last_detect_sensor = 0
         self.velocity = 0
         self.body = world.CreateDynamicBody(position=position)
-        box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
+        self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
+        self.vertices = []
         self.sensor_right = Sensor(world, (position[0]+0.45, position[1]))
         self.sensor_left = Sensor(world, (position[0]-0.45, position[1]))
         world.CreateDistanceJoint(bodyA=self.sensor_left.body, bodyB=self.body, collideConnected=True)
@@ -34,14 +35,17 @@ class Car():
             localAnchorA=(0, 0),
             localAnchorB=(0, 0),
             collideConnected=True,
-            maxForce = self.body.mass * r * gravity,
+            maxForce = self.body.mass * r * gravity*1.5,
             maxTorque=self.body.mass * r * gravity*1.5
         )
         pass
 
     def update(self, commands):
+        self.get_polygon_vertice()
         self.velocity =math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status:
+            # self.right_move(commands[0]['right_PWM'])
+            # self.left_move(commands[0]['left_PWM'])
             if commands[0]['left_PWM'] == 0:
                 self.body.localCenter = (-0.3, 0)
                 self.right_move(commands[0]['right_PWM'])
@@ -81,8 +85,11 @@ class Car():
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
-                         "pos": self.body.position,
-                         "angle":self.body.angle,
+                         "vertices": self.vertices,
+                         "angle":(self.body.angle*180/math.pi)%360,
+                         "r_sensor_value":self.sensor_R,
+                         "l_sensor_value": self.sensor_L,
+                         "f_sensor_value": self.sensor_F,
                          }
         return self.car_info
 
@@ -119,7 +126,7 @@ class Car():
                 pass
 
         try:
-            result = round(min(results)*5,1) + random.randint(0,5)
+            result = round(min(results)*5,1) + random.randint(1,3)
             return result
         except TypeError:
             return round(random.randrange(60.0), 1)
@@ -149,7 +156,7 @@ class Car():
                     pass
 
         try:
-            result = round(min(results)*5,1) + random.randint(0,5)
+            result = round(min(results)*5,1) + random.randint(0,3)
             return result
         except TypeError:
             return round(random.randrange(60.0), 1)
@@ -179,9 +186,14 @@ class Car():
                     pass
         try:
 
-            result = round(min(results)*5, 1) + random.randint(0,5)
+            result = round(min(results)*5, 1) + random.randint(0,3)
             return result
         except TypeError:
             return round(random.randrange(60.0), 1)
         except ValueError:
             return round(random.randrange(60.0), 1)
+
+    def get_polygon_vertice(self):
+        self.vertices = [(self.body.transform * v) * PPM for v in self.box1.shape.vertices]
+        self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
+        pass

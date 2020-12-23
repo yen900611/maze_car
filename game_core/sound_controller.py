@@ -12,7 +12,8 @@ class SoundController():
             self.is_sound_on = False
 
     def play_music(self):
-        if self.is_sound_on:
-            pygame.mixer.music.play(-1)
-        else:
-            pass
+        pass
+        # if self.is_sound_on:
+        #     pygame.mixer.music.play(-1)
+        # else:
+        #     pass
