@@ -44,7 +44,7 @@ class GameMode(object):
         """
         pass
 
-    def update_sprite(self):
+    def update_sprite(self, *args):
         """ This function should update every sprite in games.
         :return: None
         """
