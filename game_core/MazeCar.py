@@ -20,9 +20,10 @@ class MazeCar:
         player_info = {}
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            player_info[str(car[id])+"P"] = {"R_sensor":car["r_sensor_value"],
-                                             "L_sensor":car["l_sensor_value"],
-                                             "F_sensor":car["f_sensor_value"],}
+            player_info["ml_"+str(car["id"]+1)+"P"] ={"R_sensor":car["r_sensor_value"],
+                                                    "L_sensor":car["l_sensor_value"],
+                                                    "F_sensor":car["f_sensor_value"],}
+
         return player_info
     def update(self, commands):
         self.game_mode.handle_event()
@@ -131,18 +132,30 @@ class MazeCar:
         Get the command according to the pressed keys
         """
         key_pressed_list = pygame.key.get_pressed()
-        cmd_1P = []
-        cmd_2P = []
+        cmd_1P = [{"left_PWM" : 0, "right_PWM" : 0}]
+        cmd_2P = [{"left_PWM" : 0, "right_PWM" : 0}]
 
-        if key_pressed_list[pygame.K_DOWN]: cmd_1P.append(BRAKE_cmd)
-        if key_pressed_list[pygame.K_UP]:cmd_1P.append(SPEED_cmd)
-        if key_pressed_list[pygame.K_LEFT]:cmd_1P.append(LEFT_cmd)
-        if key_pressed_list[pygame.K_RIGHT]:cmd_1P.append(RIGHT_cmd)
+        if key_pressed_list[pygame.K_UP]:
+            cmd_1P[0]["left_PWM"] = 75
+            cmd_1P[0]["right_PWM"] = 75
+        if key_pressed_list[pygame.K_DOWN]:
+            cmd_1P[0]["left_PWM"] = -75
+            cmd_1P[0]["right_PWM"] = -75
+        if key_pressed_list[pygame.K_LEFT]:
+            cmd_1P[0]["right_PWM"] += 75
+        if key_pressed_list[pygame.K_RIGHT]:
+            cmd[0]["left_PWM"] += 75
 
-        if key_pressed_list[pygame.K_s]: cmd_2P.append(BRAKE_cmd)
-        if key_pressed_list[pygame.K_w]:cmd_2P.append(SPEED_cmd)
-        if key_pressed_list[pygame.K_a]:cmd_2P.append(LEFT_cmd)
-        if key_pressed_list[pygame.K_d]:cmd_2P.append(RIGHT_cmd)
+        if key_pressed_list[pygame.K_w]:
+            cmd_2P[0]["left_PWM"] = 75
+            cmd_2P[0]["right_PWM"] = 75
+        if key_pressed_list[pygame.K_s]:
+            cmd_2P[0]["left_PWM"] = -75
+            cmd_2P[0]["right_PWM"] = -75
+        if key_pressed_list[pygame.K_a]:
+            cmd_2P[0]["right_PWM"] += 75
+        if key_pressed_list[pygame.K_d]:
+            cmd_2P[0]["left_PWM"] += 75
 
         return {"ml_1P":cmd_1P,
                 "ml_2P":cmd_2P}

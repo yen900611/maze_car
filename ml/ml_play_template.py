@@ -25,9 +25,9 @@ class MLPlay:
         """
         Generate the command according to the received scene information
         """
-        self.r_sensor_value = scene_info[str(self.player+1) + "P"]["R_sensor"]
-        self.l_sensor_value = scene_info[str(self.player+1) + "P"]["L_sensor"]
-        self.f_sensor_value = scene_info[str(self.player+1) + "P"]["F_sensor"]
+        self.r_sensor_value = scene_info["R_sensor"]
+        self.l_sensor_value = scene_info["L_sensor"]
+        self.f_sensor_value = scene_info["F_sensor"]
         self.control_list[0]["left_PWM"] += 50
         self.control_list[0]["right_PWM"] += 50
 

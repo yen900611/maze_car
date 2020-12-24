@@ -16,8 +16,8 @@ class PlayingMode(GameMode):
         self.is_end = False
 
         '''set group'''
-        self.cars = []
         self.car_info = []
+        self.cars = []
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -64,6 +64,7 @@ class PlayingMode(GameMode):
         for world in self.worlds:
             self.car = Car(world, (22,3), self.worlds.index(world))
             self.cars.append(self.car)
+            self.car_info.append(self.car.get_info())
             pass
 
     def _init_maze(self, maze_no):
