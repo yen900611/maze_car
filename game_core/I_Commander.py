@@ -55,16 +55,42 @@ class KeyBoardCommander(I_Commander):
                        "SPEED_UP": keys[self.speedKey],
                        "BRAKEDOWN": keys[self.brakeKey]}
         # TODO 調整參數
+
+        if control_dic["SPEED_UP"]:
+            control_list[0]["left_PWM"] = 75
+            control_list[0]["right_PWM"] = 75
+        elif control_dic["BRAKEDOWN"]:
+            control_list[0]["left_PWM"] = -75
+            control_list[0]["right_PWM"] = -75
+
         if control_dic["LEFT"]:
             control_list[0]["right_PWM"] += 75
-        if control_dic["RIGHT"]:
+        elif control_dic["RIGHT"]:
             control_list[0]["left_PWM"] += 75
-        if control_dic["SPEED_UP"]:
-            control_list[0]["left_PWM"] += 50
-            control_list[0]["right_PWM"] += 50
-        if control_dic["BRAKEDOWN"]:
-            control_list[0]["left_PWM"] += -50
-            control_list[0]["right_PWM"] += -50
+
+
+        # if control_dic["SPEED_UP"]:
+        #     control_list[0]["left_PWM"] = 75
+        #     control_list[0]["right_PWM"] = 75
+        #     if control_dic["LEFT"]:
+        #         control_list[0]["right_PWM"] += 50
+        #     if control_dic["RIGHT"]:
+        #         control_list[0]["left_PWM"] += 50
+        # elif control_dic["BRAKEDOWN"]:
+        #     control_list[0]["left_PWM"] = -75
+        #     control_list[0]["right_PWM"] = -75
+        #     if control_dic["LEFT"]:
+        #         control_list[0]["right_PWM"] += 50
+        #     if control_dic["RIGHT"]:
+        #         control_list[0]["left_PWM"] += 50
+        # else:
+        #     if control_dic["LEFT"]:
+        #         control_list[0]["right_PWM"] = 40
+        #         control_list[0]["left_PWM"] = -40
+        #     if control_dic["RIGHT"]:
+        #         control_list[0]["right_PWM"] = -40
+        #         control_list[0]["left_PWM"] = 40
+
 
         return control_list
 
