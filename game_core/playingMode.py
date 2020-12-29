@@ -22,6 +22,7 @@ class PlayingMode(GameMode):
         self._init_world(user_num)
         self._init_car()
         self._init_maze(0)
+        self.eliminated_user = []
 
 
         '''sound'''
@@ -75,14 +76,15 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        if self.frame >FPS*60*3:
+        for car in self.cars:
+            if car.status:
+                pass
+            else:
+                self.eliminated_user.append(car)
+        if self.frame >FPS*60*3 or len(self.eliminated_user) == len(self.cars):
             self.is_end = True
             self.status = "GAME OVER"
-        # for car in self.cars:
-        #     if car.status:
-        #         pass
-        #     else:
-        #         self.is_end = True
+
         pass
 
     def _is_car_arrive_end(self, car):
