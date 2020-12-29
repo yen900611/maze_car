@@ -1,53 +1,55 @@
+# Maze Car
+
 # MLGame
 
-* 遊戲版本：`0.0.1`
+
+* 遊戲版本：`0.1`
 
 ## 更新
 
 ## 遊戲說明
 
+想要訓練屬於自己的迷宮自走車嗎？
 
+想要跟朋友來場刺激的競賽嗎？
 
+帶上你的自走車往終點衝刺吧！
 
 ### 遊戲玩法
 
-玩家使用方向鍵或由程式發送指令控制車子前進，左右鍵控制車子加速與剎車，上下鍵控制車子的移動。
-若車子之間發生撞擊，則雙方皆淘汰出局。如果玩家因車速過慢離開遊戲畫面亦會被淘汰。
+此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家需要控制一台配備有前、中、後三個超聲波感測器的車子，目標是以最快的速度走出迷宮。除了使用鍵盤，也可以透過程式AI操作車子。
 
-## 遊戲規則
+- 鍵盤操作模式：玩家使用上下左右鍵控制車子。按上鍵車子會以固定速度前進，按下鍵則後退，都沒有按則停在原地。左右鍵控制車子原地左右旋轉。
+- AI操作模式：程式接收三個超聲波感測的數值後，回傳左右輪的馬力以控制車子前進。
 
-遊戲最多可以四個人同時進行，有普通模式和金幣模式。
+### 遊戲規則
 
-### 單人遊戲
+遊戲最多可以六個人同時進行，有普通模式和挑戰模式。
 
-🚗普通模式：抵達終點。
+🚗普通模式：抵達迷宮終點，遊戲將記錄不同玩家完成迷宮所花費的時間。
+🚨挑戰模式：玩家在闖關過程中除了計時，還需要盡可能不讓車體碰到牆壁，當累計碰到牆壁三次將視為挑戰失敗，車子只能停在原地直到遊戲結束。
 
-💰金幣模式：限時１分鐘，時間到可以看到自己吃到的金幣數量。
+![](https://i.imgur.com/ymZZMyO.png)
 
-### 多人遊戲
-
-🚗普通模式：當有玩家抵達終點，或場上僅餘下一名玩家時則遊戲結束，並依結束或玩家死亡時的距離進行排名，距離較遠者勝。
-
-💰金幣模式：在１分鐘內，吃到最多金幣的人獲勝，金幣數量相同則以行駛距離較遠者勝出。
 
 
 ## 執行
-* 直接執行 預設是兩人遊戲
+* 直接執行 預設是單人遊戲
 `python main.py`
-    * 車子加速、剎車、左移、右移：1P - `RIGHT`、`LEFT`、`UP`、`DOWN`，2P - `D`、`A`、`W`、`S`
+    * 車子前進、後退、左轉、右轉：1P - `UP`、`DOWN`、`LEFT`、`RIGHT`，2P - `W`、`S`、`A`、`D`
     
 
-* 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**RacingCar**
+* 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
     * 手動模式：
-`python MLGame.py -m RacingCar <the number of user> [difficulty] [sound]`
+`python MLGame.py -m Maze_Car <the number of user> [game_mode] <map> [sound]`
     * 機器學習模式：
-`python MLGame.py -i ml_play_template.py RacingCar <the number of user> [difficulty] [sound]`
+`python MLGame.py -i ml_play_template.py Maze_Car <the number of user> [game_mode] <map> [sound]`
 
 ### 遊戲參數
 
 * `sound`：由音效設定，可選擇"on"或"off"，預設為"off"
-* `difficulty`：遊戲模式，可選擇"NORMAL"或"COIN"，預設為"NORMAL"。
-* `the number of user`：指定遊戲玩家人數，最少需一名玩家。單機手動模式最多兩名(鍵盤位置不足)，機器學習模式至多四名。
+* `game_mode`：遊戲模式，目前只有普通模式，預設為"NORMAL"。
+* `the number of user`：指定遊戲玩家人數，最少需一名玩家。單機手動模式最多兩名(鍵盤位置不足)，機器學習模式至多六名。
 
 ## 詳細遊戲資料
 
@@ -55,30 +57,7 @@
 
 使用 pygame 的座標系統，原點在遊戲區域的左上角，x 正方向為向右，y 正方向為向下。遊戲物件的座標皆為物件的左上角。
 
-### 遊戲區域
 
-1000 \* 700 像素。
-
-### 遊戲物件
-
-#### 玩家車子
-
-* 60 \* 30 像素大小的矩形
-* 每場遊戲開始時，依玩家順序分配至不同車道
-* 初始車速是0，最高車速為15，當車子沒有在加速或剎車時將會怠速至0.9~1.2之間。
-* 車子顏色：1P:白色; 2P:黃色; 3P:藍色; 4P:紅色。
-
-#### 電腦車子
-
-* 60 \* 30 像素大小的矩形
-* 車子從畫面上方或下方出現，不會左右移動切換車道。前方有車(不論是電腦還是玩家)會剎車減速，否則不斷加速至最高速
-* 每台車最高速度皆不一樣。
-
-
-#### 金幣
-* 30 \*31像素大小的矩形
-* 隨機從畫面上方出現，以5 pixel/frame的速度下降。
-* 電腦車子碰到金幣時金幣不會消失。
 
 ## 撰寫玩遊戲的程式
 
@@ -97,66 +76,56 @@ def __init__(self, player):
         self.player_no = 2
     elif self.player == "player4":
         self.player_no = 3
-    self.car_vel = 0
-    self.car_pos = ()
+    elif self.player == "player5":
+        self.player_no = 4
+    elif self.player == "player6":
+        self.player_no = 5
+    else:
+        pass
+    self.r_sensor_value = 0
+    self.l_sensor_value = 0
+    self.f_sensor_value = 0
+    self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
 ```
-`"player"`: 字串。其值只會是 `"player1"` 、 `"player2"` 、 `"player3"` 或 `"player4"`，代表這個程式被哪一台車使用。
+`"player"`: 字串。其值只會是 `"player1"` 、 `"player2"` 、 `"player3"` 、 `"player4"` 、`"player5"` 、 `"player6"` ，代表這個程式被哪一台車使用。
 
 
 ### 遊戲場景資訊
 
 由遊戲端發送的字典物件，同時也是存到紀錄檔的物件。
 ```python=17
-def update(self, scene_info):
-    """
-    Generate the command according to the received scene information
-    """
-    if scene_info["status"] == "RUNNING":
-        self.car_pos = scene_info["player_" + str(self.player_no) + "_pos"]
+   def update(self, scene_info: dict):
+        """
+        Generate the command according to the received scene information
+        """
+        self.r_sensor_value = scene_info["R_sensor"]
+        self.l_sensor_value = scene_info["L_sensor"]
+        self.f_sensor_value = scene_info["F_sensor"]
+        self.control_list[0]["left_PWM"] += 50
+        self.control_list[0]["right_PWM"] += 50
 
-    self.other_cars_position = scene_info["cars_pos"]
-    if scene_info.__contains__("coin"):
-        self.coin_pos = scene_info["coin"]
-
-    return ["SPEED"]
+        return self.control_list
 
 ```
 以下是該字典物件的鍵值對應：
 
 * `"frame"`：整數。紀錄的是第幾影格的場景資訊
-* `"status"`：字串。目前的遊戲狀態，會是以下的值其中之一：
-    * `"START"`：遊戲開始，此時所有物間都不會更新
-    * `"RUNNING"`：遊戲進行中
-    * `"END"`：遊戲結束，計算排名與輸出結果
-* `"line"`:起跑線與終點線的位置。
-* `"computer_cars"`：`[(x, y)]` list裡面包含數個tuple。電腦車子的位置。
-* `"player_1_pos"`：`(x, y)` tuple。1P的位置。
-* `"player_2_pos"`：`(x, y)` tuple。2P的位置。
-* `"player_3_pos"`：`(x, y)` tuple。3P的位置。
-* `"player_4_pos"`：`(x, y)` tuple。4P的位置。
-* `"cars_pos"`：`[(x,y)]` :list裡面包含數個tuple。內容包含場上所有車子的位置。
-* `"lanes"`:`[(x,y)]`:list裡面包含數個tuple。內容為車道的位置。
-* `"game_result"`:`[{"Player":"1P","Distance":"3052m","Coin":3}]`遊戲結束時，回傳一個list，裡面包含數個字典，內容為玩家的編號(1P、2P)、行駛距離，金幣模式下增加玩家金幣數量。字典對應的Value接為字串，字典在list中的順序按照玩家排名。
-金幣模式下，字典內容將新增金幣位置:
-* `"coins"`：`[(x, y)]` list裡面包含數個tuple。金幣的位置。
+* `"L_sensor"`：玩家自己車子左邊超聲波感測器的值，資料型態為數值
+* `"F_sensor"`：玩家自己車子前面超聲波感測器的值，資料型態為數值
+* `"R_sensor"`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
 
 #### 遊戲指令
 
 傳給遊戲端用來控制板子的指令。
 
-以下是該字典物件的鍵值對應：
-
-* `"frame"`：整數。標示這個指令是給第幾影格的指令，需要與接收到的遊戲場景資訊中影格值一樣。
-* `"command"`：包含數個字串的清單。控制車子的指令，字串須為以下值的其中之一：
-    * `"MOVE_LEFT"`：將車子往左移
-    * `"MOVE_RIGHT"`：將車子往右移
-    * `"SPEED"`:對車子加速
-    * `"BRAKE"`:對車子剎車
+玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為0~255，並將此字典放入清單中回傳。
+例如：`[{"left_PWM" : 0, "right_PWM" : 0}]`
 
 ## 機器學習模式的玩家程式
 
-賽車是多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多四個不同的玩家程式。
+賽車是多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
 * For example
-`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py RacingCar 2 NORMAL off`
+`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car 2 NORMAL 1 off`
+
 
 ![](https://i.imgur.com/ubPC8Fp.jpg)
