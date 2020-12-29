@@ -127,7 +127,7 @@ class PlayingMode(GameMode):
         for car in self.cars:
             image = pygame.transform.rotate(car.image,(car.body.angle*180/math.pi)%360)
             rect = image.get_rect()
-            rect.center = car.body.position[0] * PPM, HEIGHT - car.body.position[1] * PPM
+            rect.center = car.center_position
             self.screen.blit(image, rect)
             pass
         pass

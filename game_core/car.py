@@ -18,6 +18,7 @@ class Car():
         self.sensor_F = 0
         self.last_detect_sensor = 0
         self.velocity = 0
+        self.center_position = (0,0)
         self.body = world.CreateDynamicBody(position=position)
         self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
         self.vertices = []
@@ -99,6 +100,7 @@ class Car():
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
+                         "center": self.center_position,
                          "vertices": self.vertices,
                          "angle": (self.body.angle * 180 / math.pi) % 360,
                          "r_sensor_value": self.sensor_R,
@@ -217,4 +219,5 @@ class Car():
     def get_polygon_vertice(self):
         self.vertices = [(self.body.transform * v) * PPM for v in self.box1.shape.vertices]
         self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
+        self.center_position = self.body.position[0] *PPM, HEIGHT - self.body.position[1]*PPM
         pass

@@ -90,7 +90,8 @@ class MazeCar:
         }
         return game_info
 
-    def _progress_dict(self, pos_left=None, pos_top=None, vertices=None, size=None, color=None, image=None, angle=None):
+    def _progress_dict(self, pos_left=None, pos_top=None, vertices=None, size=None, color=None, image=None, angle=None,
+                       center=None):
         '''
         :return:Dictionary for game_progress
         '''
@@ -107,6 +108,8 @@ class MazeCar:
             object["image"] = image
         if angle != None:
             object["angle"] = angle
+        if center != None:
+            object["center"] = center
 
         return object
 
@@ -118,8 +121,8 @@ class MazeCar:
         game_progress = {"game_object": {
             "info": [self._progress_dict(507, 20)], }}
         for user in self.game_mode.car_info:
-            game_progress["player" + str(user["id"] + 1) + "_car"]=[
-                self._progress_dict(vertices=user["vertices"], angle=user["angle"])]
+            game_progress["player" + str(user["id"] + 1) + "_car"] = [
+                self._progress_dict(center=user["center"], vertices=user["vertices"], angle=user["angle"])]
         return game_progress
 
         pass
