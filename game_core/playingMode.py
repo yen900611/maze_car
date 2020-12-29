@@ -75,6 +75,9 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
+        if self.frame >FPS*60*3:
+            self.is_end = True
+            self.status = "GAME OVER"
         # for car in self.cars:
         #     if car.status:
         #         pass

@@ -58,7 +58,7 @@ class MazeCar:
         }
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            scene_info[str(car[id]) + "P_position"] = car["vertices"]
+            scene_info[str(car["id"]) + "P_position"] = car["vertices"]
         return scene_info
 
     def get_game_info(self):
