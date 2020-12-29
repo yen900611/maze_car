@@ -141,7 +141,9 @@ class Car():
                 pass
 
         try:
-            result = round(min(results) * 5, 1) + random.randint(1, 3)
+            result = round(min(results) * 5, 1) + random.randint(0, 3)
+            if result <0:
+                result = 0
             return result
         except TypeError:
             return round(random.randrange(60.0), 1)

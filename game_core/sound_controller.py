@@ -4,7 +4,7 @@ from .env import *
 
 class SoundController():
     def __init__(self, is_sound_on):
-        if is_sound_on == "on":
+        if is_sound_on == "ON":
             self.is_sound_on = True
             pygame.mixer.init()
             pygame.mixer.music.set_volume(0.4)

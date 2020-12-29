@@ -4,8 +4,8 @@ from game_core import sound_controller, playingMode, I_Commander
 if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
-    sound_controller = sound_controller.SoundController("off")
-    game = playingMode.PlayingMode(1, "off")
+    sound_controller = sound_controller.SoundController("OFF")
+    game = playingMode.PlayingMode(1, "OFF")
 
     while game.isRunning():
         commands = {}

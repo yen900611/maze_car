@@ -11,7 +11,7 @@ class MazeCar:
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
         self.game_mode = PlayingMode(user_num,self.sound_controller)
-        self.game_type = "NORMAL"
+        self.game_type = "MAZE"
         self.user_num = user_num
 
 
@@ -20,11 +20,14 @@ class MazeCar:
         player_info = {}
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            player_info["ml_"+str(car["id"]+1)+"P"] ={"R_sensor":car["r_sensor_value"],
+            player_info["ml_"+str(car["id"]+1)+"P"] ={"frame":scene_info["frame"],
+                                                    "status":scene_info["status"],
+                                                    "R_sensor":car["r_sensor_value"],
                                                     "L_sensor":car["l_sensor_value"],
                                                     "F_sensor":car["f_sensor_value"],}
 
         return player_info
+
     def update(self, commands):
         self.game_mode.handle_event()
         self.game_mode.detect_collision()
@@ -144,7 +147,7 @@ class MazeCar:
         if key_pressed_list[pygame.K_LEFT]:
             cmd_1P[0]["right_PWM"] += 75
         if key_pressed_list[pygame.K_RIGHT]:
-            cmd[0]["left_PWM"] += 75
+            cmd_1P[0]["left_PWM"] += 75
 
         if key_pressed_list[pygame.K_w]:
             cmd_2P[0]["left_PWM"] = 75

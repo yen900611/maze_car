@@ -75,11 +75,11 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        for car in self.cars:
-            if car.status:
-                pass
-            else:
-                self.is_end = True
+        # for car in self.cars:
+        #     if car.status:
+        #         pass
+        #     else:
+        #         self.is_end = True
         pass
 
     def _is_car_arrive_end(self, car):

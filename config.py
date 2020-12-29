@@ -25,20 +25,20 @@ GAME_PARAMS = {
                  "when either side reaches it.[default: %(default)s]")
     },
     "game_type": {
-        "choices": ("NORMAL"),
-        "metavar": "difficulty",
+        "choices": ("MAZE"),
+        "metavar": "game_mode",
         "nargs": "?",
-        "default": "NORMAL",
+        "default": "MAZE",
         "help": "Specify the game style. Choices: %(choices)s"
     },
-    "Maze": {
+    "map": {
         "type": positive_int,
         "default": 1,
         "help": "Specify the game style. Choices: %(choices)s"
     },
     "sound":{
-        "choices":("on","off"),
-        "default":"off"
+        "choices":("ON","OFF"),
+        "default":"OFF"
     }
 }
 
