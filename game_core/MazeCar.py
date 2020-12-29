@@ -5,26 +5,26 @@ from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
+
 class MazeCar:
-    def __init__(self, user_num,game_type, level,sound):
-        self.maze_id = level-1
+    def __init__(self, user_num, game_type, level, sound):
+        self.maze_id = level - 1
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
-        self.game_mode = PlayingMode(user_num,self.sound_controller)
+        self.game_mode = PlayingMode(user_num, self.sound_controller)
         self.game_type = "MAZE"
         self.user_num = user_num
-
 
     def get_player_scene_info(self):
         scene_info = self.get_scene_info
         player_info = {}
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            player_info["ml_"+str(car["id"]+1)+"P"] ={"frame":scene_info["frame"],
-                                                    "status":scene_info["status"],
-                                                    "R_sensor":car["r_sensor_value"],
-                                                    "L_sensor":car["l_sensor_value"],
-                                                    "F_sensor":car["f_sensor_value"],}
+            player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
+                                                             "status": scene_info["status"],
+                                                             "R_sensor": car["r_sensor_value"],
+                                                             "L_sensor": car["l_sensor_value"],
+                                                             "F_sensor": car["f_sensor_value"], }
 
         return player_info
 
@@ -37,7 +37,7 @@ class MazeCar:
             return "QUIT"
 
     def reset(self):
-        self.__init__(self.user_num,self.game_type,self.maze_id,self.is_sound)
+        self.__init__(self.user_num, self.game_type, self.maze_id, self.is_sound)
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -58,7 +58,7 @@ class MazeCar:
         }
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            scene_info[str(car[id])+"P_position"] = car[vertices]
+            scene_info[str(car[id]) + "P_position"] = car[vertices]
         return scene_info
 
     def get_game_info(self):
@@ -69,12 +69,12 @@ class MazeCar:
         for wall in Maze[self.maze_id]:
             vertices = []
             for vertice in wall:
-                vertices.append((vertice[0]*PPM, HEIGHT - vertice[1]*PPM))
+                vertices.append((vertice[0] * PPM, HEIGHT - vertice[1] * PPM))
             wall_vertices.append(vertices)
         game_info = {
             "scene": {
                 "size": [WIDTH, HEIGHT],
-                "walls": wall_vertices #
+                "walls": wall_vertices  #
             },
             "game_object": [
                 {"name": "player1_car", "size": 36, "color": RED, "image": "car01.png"},
@@ -85,19 +85,19 @@ class MazeCar:
                 {"name": "player6_car", "size": 36, "color": PINK, "image": "car06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
             ],
-            "images": ["car01.png", "car02.png", "car03.png", "car04.png", "car05.png", "car06.png","info.png",
-                      ]
+            "images": ["car01.png", "car02.png", "car03.png", "car04.png", "car05.png", "car06.png", "info.png",
+                       ]
         }
         return game_info
 
-    def _progress_dict(self, pos_left = None, pos_top = None,vertices = None, size = None, color = None, image = None, angle = None):
+    def _progress_dict(self, pos_left=None, pos_top=None, vertices=None, size=None, color=None, image=None, angle=None):
         '''
         :return:Dictionary for game_progress
         '''
         object = {}
-        if pos_left !=None and pos_top !=None:
+        if pos_left != None and pos_top != None:
             object["pos"] = [pos_left, pos_top]
-        if vertices !=None:
+        if vertices != None:
             object["vertices"] = vertices
         if size != None:
             object["size"] = size
@@ -116,9 +116,10 @@ class MazeCar:
         """
         scene_info = self.get_scene_info
         game_progress = {"game_object": {
-            "info": [self._progress_dict(507, 20)],}}
+            "info": [self._progress_dict(507, 20)], }}
         for user in self.game_mode.car_info:
-            game_progress["player" + str(user["id"]+1)+"_car"]:[self._progress_dict(vertices=user["vertices"], angle=user["angle"])]
+            game_progress["player" + str(user["id"] + 1) + "_car"]=[
+                self._progress_dict(vertices=user["vertices"], angle=user["angle"])]
         return game_progress
 
         pass
@@ -135,8 +136,8 @@ class MazeCar:
         Get the command according to the pressed keys
         """
         key_pressed_list = pygame.key.get_pressed()
-        cmd_1P = [{"left_PWM" : 0, "right_PWM" : 0}]
-        cmd_2P = [{"left_PWM" : 0, "right_PWM" : 0}]
+        cmd_1P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_2P = [{"left_PWM": 0, "right_PWM": 0}]
 
         if key_pressed_list[pygame.K_UP]:
             cmd_1P[0]["left_PWM"] = 75
@@ -160,8 +161,8 @@ class MazeCar:
         if key_pressed_list[pygame.K_d]:
             cmd_2P[0]["left_PWM"] += 75
 
-        return {"ml_1P":cmd_1P,
-                "ml_2P":cmd_2P}
+        return {"ml_1P": cmd_1P,
+                "ml_2P": cmd_2P}
 
 # if __name__ == "__main__":
 #     game=MazeCar(1,"NORMAL",1,"off")
