@@ -102,7 +102,7 @@ class Car():
         self.car_info = {"id": self.car_no,
                          "center": self.center_position,
                          "vertices": self.vertices,
-                         "angle": (self.body.angle * 180 / math.pi) % 360,
+                         "angle": self.body.angle,
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
                          "f_sensor_value": self.sensor_F,
