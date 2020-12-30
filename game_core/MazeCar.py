@@ -85,7 +85,7 @@ class MazeCar:
                 {"name": "player6_car", "size": 36, "color": PINK, "image": "car06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
             ],
-            "images": ["car01.png", "car02.png", "car03.png", "car04.png", "car05.png", "car06.png", "info.png",
+            "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
                        ]
         }
         return game_info
@@ -118,11 +118,17 @@ class MazeCar:
         Get the position of game objects for drawing on the web
         """
         scene_info = self.get_scene_info
-        game_progress = {"game_object": {
-            "info": [self._progress_dict(507, 20)], }}
+        game_progress = {
+            "game_object": {"info": [self._progress_dict(507, 20)], },
+            "game_user_information": []
+        }
         for user in self.game_mode.car_info:
+            user_information = {"right_sensor_value": user["r_sensor_value"],
+                                "left_sensor_value": user["l_sensor_value"],
+                                "front_sensor_value": user["f_sensor_value"], }
+            game_progress["game_user_information"].append(user_information)
             game_progress["player" + str(user["id"] + 1) + "_car"] = [
-                self._progress_dict(center=user["center"], vertices=user["vertices"], angle=user["angle"])]
+                self._progress_dict(vertices=user["vertices"], angle=user["angle"])]
         return game_progress
 
         pass
