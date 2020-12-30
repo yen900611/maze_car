@@ -77,12 +77,12 @@ class MazeCar:
                 "walls": wall_vertices  #
             },
             "game_object": [
-                {"name": "player1_car", "size": 36, "color": RED, "image": "car01.png"},
-                {"name": "player2_car", "size": 36, "color": GREEN, "image": "car02.png"},
-                {"name": "player3_car", "size": 36, "color": BLUE, "image": "car03.png"},
-                {"name": "player4_car", "size": 36, "color": YELLOW, "image": "car04.png"},
-                {"name": "player5_car", "size": 36, "color": BROWN, "image": "car05.png"},
-                {"name": "player6_car", "size": 36, "color": PINK, "image": "car06.png"},
+                {"name": "player1_car", "size": 36, "color": RED, "image": "car_01.png"},
+                {"name": "player2_car", "size": 36, "color": GREEN, "image": "car_02.png"},
+                {"name": "player3_car", "size": 36, "color": BLUE, "image": "car_03.png"},
+                {"name": "player4_car", "size": 36, "color": YELLOW, "image": "car_04.png"},
+                {"name": "player5_car", "size": 36, "color": BROWN, "image": "car_05.png"},
+                {"name": "player6_car", "size": 36, "color": PINK, "image": "car_06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
             ],
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
