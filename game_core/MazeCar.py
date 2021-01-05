@@ -137,6 +137,11 @@ class MazeCar:
         """
         Get the game result for the web
         """
+        scene_info = self.get_scene_info
+        result = self.game_mode.result
+
+        return {"used_frame": scene_info["frame"],
+                "result": result}
 
         pass
 

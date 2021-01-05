@@ -8,12 +8,15 @@ from .env import *
 import pygame
 import random
 
+
 class PlayingMode(GameMode):
     def __init__(self, user_num: int, sound_controller):
         super(PlayingMode, self).__init__()
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
+        self.result = []
+        self.x = 0
 
         '''set group'''
         self.car_info = []
@@ -23,7 +26,6 @@ class PlayingMode(GameMode):
         self._init_car()
         self._init_maze(0)
         self.eliminated_user = []
-
 
         '''sound'''
         self.sound_controller = sound_controller
@@ -40,7 +42,7 @@ class PlayingMode(GameMode):
         self.handle_event()
         self._is_game_end()
         for car in self.cars:
-            car.update(command["ml_" + str(car.car_no+1) + "P"])
+            car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
             car.detect_distance(self.frame)
@@ -49,10 +51,14 @@ class PlayingMode(GameMode):
             world.ClearForces()
 
     def detect_collision(self):
-        super(PlayingMode,self).detect_collision()
+        super(PlayingMode, self).detect_collision()
         pass
 
     def _print_result(self):
+        if self.is_end and self.x == 0:
+            for i in range(len(self.result)):
+                print(str(i + 1)+"P：", self.result[i])
+            self.x += 1
         pass
 
     def _init_world(self, user_no: int):
@@ -63,7 +69,7 @@ class PlayingMode(GameMode):
 
     def _init_car(self):
         for world in self.worlds:
-            self.car = Car(world, (22,3), self.worlds.index(world))
+            self.car = Car(world, (22, 3), self.worlds.index(world))
             self.cars.append(self.car)
             self.car_info.append(self.car.get_info())
             pass
@@ -81,15 +87,21 @@ class PlayingMode(GameMode):
                 pass
             else:
                 self.eliminated_user.append(car)
-        if self.frame >FPS*60*3 or len(self.eliminated_user) == len(self.cars):
+        if self.frame > FPS * 60 * 3 or len(self.eliminated_user) == len(self.cars):
             self.is_end = True
+            for car in self.cars:
+                if car.status:
+                    self.result.append("GAME OVER")
+                else:
+                    self.result.append("GAME PASS")
+            self._print_result()
             self.status = "GAME OVER"
 
         pass
 
     def _is_car_arrive_end(self, car):
         if car.status:
-            if car.body.position[1]>25:
+            if car.body.position[1] > 25:
                 print("end")
                 car.end_time = time.time()
                 car.status = False
@@ -99,7 +111,7 @@ class PlayingMode(GameMode):
         '''show the background and imformation on screen,call this fuction per frame'''
         super(PlayingMode, self).draw_bg()
         self.screen.fill(BLACK)
-        self.screen.blit(self.info,pygame.Rect(507, 20, 306, 480))
+        self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
             self.draw_time(time.time())
         pass
@@ -109,7 +121,7 @@ class PlayingMode(GameMode):
 
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
-        super(PlayingMode,self).drawWorld()
+        super(PlayingMode, self).drawWorld()
 
         def my_draw_circle(circle, body, fixture):
             position = body.transform * circle.pos * PPM
@@ -130,7 +142,7 @@ class PlayingMode(GameMode):
                 for fixture in body.fixtures:
                     fixture.shape.draw(body, fixture)
         for car in self.cars:
-            image = pygame.transform.rotate(car.image,(car.body.angle*180/math.pi)%360)
+            image = pygame.transform.rotate(car.image, (car.body.angle * 180 / math.pi) % 360)
             rect = image.get_rect()
             rect.center = car.center_position
             self.screen.blit(image, rect)
@@ -143,25 +155,31 @@ class PlayingMode(GameMode):
                 if car.car_no == i:
                     # pygame.draw.line(self.screen, RED, (car.sensor_right.body.position[0]*PPM, HEIGHT - car.sensor_right.body.position[1]*PPM),
                     #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
-                    if i%2 == 0:
+                    if i % 2 == 0:
                         if car.status:
-                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L)+"cm", 600, 178 + 20 + 94*i/2)
-                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F)+"cm", 600, 178 + 40 + 94*i/2)
-                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R)+"cm", 600, 178 + 60 + 94 * i / 2)
+                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 600,
+                                                  178 + 20 + 94 * i / 2)
+                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F) + "cm", 600,
+                                                  178 + 40 + 94 * i / 2)
+                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
+                                                  178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) +"s", 600, 178 + 40 + 94*(i//2))
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) + "s",
+                                                  600, 178 + 40 + 94 * (i // 2))
 
                     else:
                         if car.status:
-                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L)+"cm", 730, 178 + 20 + 94*(i//2))
-                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F)+"cm", 730, 178 + 40 + 94*(i//2))
-                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R)+"cm", 730, 178 + 60 + 94*(i//2))
+                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 730,
+                                                  178 + 20 + 94 * (i // 2))
+                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F) + "cm", 730,
+                                                  178 + 40 + 94 * (i // 2))
+                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
+                                                  178 + 60 + 94 * (i // 2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time))+"s", 730, 178 + 40 + 94*(i//2))
-
+                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) + "s",
+                                                  730, 178 + 40 + 94 * (i // 2))
 
         pass
-
 
     def rank(self):
         pass
