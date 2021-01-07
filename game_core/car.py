@@ -8,20 +8,24 @@ import random
 
 
 class Car():
-    def __init__(self, world, position: tuple, car_no: int):
+    def __init__(self, world, position: tuple, car_no: int, size):
         self.car_no = car_no
+        self.maze_size = size
+        self.size = (int(50 * self.maze_size), int(40 * self.maze_size))
         self.end_time = 0
-        self.image = pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png"))
+        self.image = pygame.transform.scale(
+            pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
+            self.size)
         self.status = True
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
         self.velocity = 0
-        self.center_position = (0,0)
+        self.center_position = (0, 0)
         self.body = world.CreateDynamicBody(position=position)
         self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
         self.vertices = []
-        self.sensor=Sensor(world, self.body)
+        self.sensor = Sensor(world, self.body)
 
         '''模擬摩擦力'''
         r = math.sqrt(0.5 * self.body.inertia / self.body.mass)
@@ -65,27 +69,22 @@ class Car():
 
     def left_move(self, pwm: int):
 
-        current_forward_normal = self.body.GetWorldVector((0, 1))
 
         if self.velocity > 0.01:
             f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
         else:
             f = self.body.GetWorldVector(localVector=(0.0, pwm))
 
-        # f = pwm*current_forward_normal
         p = self.body.GetWorldPoint(localPoint=(-1.0, 0.0))
         self.body.ApplyForce(f, p, True)
 
     def right_move(self, pwm: int):
 
-        current_forward_normal = self.body.GetWorldVector((0, 1))
 
         if self.velocity > 0.01:
             f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
         else:
             f = self.body.GetWorldVector(localVector=(0.0, pwm))
-
-        # f = pwm*current_forward_normal
 
         p = self.body.GetWorldPoint(localPoint=(1.0, 0.0))
         self.body.ApplyForce(f, p, True)
@@ -95,7 +94,7 @@ class Car():
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
-                         "size": self.body, # TODO
+                         "size": self.size,
                          "center": self.center_position,
                          "vertices": self.vertices,
                          "angle": self.body.angle,
@@ -106,7 +105,8 @@ class Car():
         return self.car_info
 
     def get_polygon_vertice(self):
-        self.vertices = [(self.body.transform * v) * PPM for v in self.box1.shape.vertices]
+        self.vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box1.shape.vertices]
         self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
-        self.center_position = self.body.position[0] *PPM, HEIGHT - self.body.position[1]*PPM
+        self.center_position = self.body.position[0] * PPM * self.maze_size, HEIGHT - self.body.position[
+            1] * PPM * self.maze_size
         pass

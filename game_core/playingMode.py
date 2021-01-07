@@ -19,6 +19,7 @@ class PlayingMode(GameMode):
         self.x = 0
         self.maze_id = maze_no-1
         self.size = 4/maze_size[self.maze_id]
+        self.start_pos = (22,3)
 
         '''set group'''
         self.car_info = []
@@ -39,7 +40,6 @@ class PlayingMode(GameMode):
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
-        # print(command)
         self.car_info = []
         self.frame += 1
         self.handle_event()
@@ -71,8 +71,14 @@ class PlayingMode(GameMode):
         pass
 
     def _init_car(self):
+        if maze_size[self.maze_id] == 4:
+            self.start_pos = (22,3)
+        elif maze_size[self.maze_id] == 5:
+            self.start_pos = (28,3)
+        elif maze_size[self.maze_id] == 6:
+            self.start_pos = (34,3)
         for world in self.worlds:
-            self.car = Car(world, (22, 3), self.worlds.index(world))
+            self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
             self.cars.append(self.car)
             self.car_info.append(self.car.get_info())
             pass
@@ -85,7 +91,7 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        if self.frame > FPS*60*0.5 or len(self.eliminated_user) == len(self.cars):
+        if self.frame > FPS*60*2 or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
                     car.end_time = round(time.time() - self.start_time)
@@ -100,7 +106,7 @@ class PlayingMode(GameMode):
 
     def _is_car_arrive_end(self, car):
         if car.status:
-            if car.body.position[1] > 25:
+            if car.body.position[1] > 6*maze_size[self.maze_id]+1:
                 car.end_time = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
                 self.user_time.append(car.end_time)
@@ -124,13 +130,13 @@ class PlayingMode(GameMode):
         super(PlayingMode, self).drawWorld()
 
         def my_draw_circle(circle, body, fixture):
-            position = body.transform * circle.pos * PPM
+            position = body.transform * circle.pos * PPM * self.size
             position = (position[0], HEIGHT - position[1])
             pygame.draw.circle(self.screen, WHITE, [int(
-                x) for x in position], int(circle.radius * PPM))
+                x) for x in position], int(circle.radius * PPM * self.size))
 
         def my_draw_polygon(polygon, body, fixture):
-            vertices = [(body.transform * v) * PPM for v in polygon.vertices]
+            vertices = [(body.transform * v) * PPM * self.size for v in polygon.vertices]
             vertices = [(v[0], HEIGHT - v[1]) for v in vertices]
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
