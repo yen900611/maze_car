@@ -67,21 +67,6 @@
 ### 初始化參數
 ```python=2
 def __init__(self, player):
-    self.player = player
-    if self.player == "player1":
-        self.player_no = 0
-    elif self.player == "player2":
-        self.player_no = 1
-    elif self.player == "player3":
-        self.player_no = 2
-    elif self.player == "player4":
-        self.player_no = 3
-    elif self.player == "player5":
-        self.player_no = 4
-    elif self.player == "player6":
-        self.player_no = 5
-    else:
-        pass
     self.r_sensor_value = 0
     self.l_sensor_value = 0
     self.f_sensor_value = 0
@@ -118,7 +103,7 @@ def __init__(self, player):
 
 傳給遊戲端用來控制板子的指令。
 
-玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為0~255，並將此字典放入清單中回傳。
+玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為-255~255，並將此字典放入清單中回傳。
 例如：`[{"left_PWM" : 0, "right_PWM" : 0}]`
 
 ## 機器學習模式的玩家程式

@@ -95,6 +95,7 @@ class Car():
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
+                         "size": self.body, # TODO
                          "center": self.center_position,
                          "vertices": self.vertices,
                          "angle": self.body.angle,

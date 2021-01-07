@@ -10,13 +10,15 @@ import random
 
 
 class PlayingMode(GameMode):
-    def __init__(self, user_num: int, sound_controller):
+    def __init__(self, user_num: int, maze_no, sound_controller):
         super(PlayingMode, self).__init__()
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
         self.result = []
         self.x = 0
+        self.maze_id = maze_no-1
+        self.size = 4/maze_size[self.maze_id]
 
         '''set group'''
         self.car_info = []
@@ -24,8 +26,9 @@ class PlayingMode(GameMode):
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
-        self._init_maze(0)
+        self._init_maze(self.maze_id)
         self.eliminated_user = []
+        self.user_time = []
 
         '''sound'''
         self.sound_controller = sound_controller
@@ -56,8 +59,8 @@ class PlayingMode(GameMode):
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for i in range(len(self.result)):
-                print(str(i + 1)+"P：", self.result[i])
+            for user in self.result:
+                print(str(user.car_no+1)+"P",":",str(user.end_time))
             self.x += 1
         pass
 
@@ -82,28 +85,19 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        for car in self.cars:
-            if car.status:
-                pass
-            else:
-                self.eliminated_user.append(car)
-        if self.frame > FPS * 60 * 3 or len(self.eliminated_user) == len(self.cars):
+        if len(self.eliminated_user) == len(self.cars):
             self.is_end = True
-            for car in self.cars:
-                if car.status:
-                    self.result.append("GAME OVER")
-                else:
-                    self.result.append("GAME PASS")
+            self.rank()
             self._print_result()
             self.status = "GAME OVER"
-
         pass
 
     def _is_car_arrive_end(self, car):
         if car.status:
             if car.body.position[1] > 25:
-                print("end")
-                car.end_time = time.time()
+                car.end_time = round(time.time() - self.start_time)
+                self.eliminated_user.append(car)
+                self.user_time.append(car.end_time)
                 car.status = False
         pass
 
@@ -164,7 +158,7 @@ class PlayingMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
                                                   178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
                                                   600, 178 + 40 + 94 * (i // 2))
 
                     else:
@@ -176,10 +170,15 @@ class PlayingMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
                                                   178 + 60 + 94 * (i // 2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(round(car.end_time - self.start_time)) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
                                                   730, 178 + 40 + 94 * (i // 2))
 
         pass
 
     def rank(self):
-        pass
+        while len(self.eliminated_user) > 0:
+            for car in self.eliminated_user:
+                if car.end_time == min(self.user_time):
+                    self.result.append(car)
+                    self.user_time.remove(car.end_time)
+                    self.eliminated_user.remove(car)

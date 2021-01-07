@@ -20,8 +20,8 @@ class Sensor():
 
     def update(self, frame):
         if frame - self.last_detect_sensor > FPS /10:
-            self.front_sensor_detect(wall_info)
-            self.sensor_detect(wall_info)
+            self.front_sensor_detect(wall_info[0])
+            self.sensor_detect(wall_info[0])
             self.last_detect_sensor = frame
             pass
         return {"right_value": self.right_value,
