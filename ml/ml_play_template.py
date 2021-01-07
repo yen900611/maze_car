@@ -1,20 +1,6 @@
 class MLPlay:
     def __init__(self, player):
-        self.player = player
-        if self.player == "player1":
-            self.player_no = 0
-        elif self.player == "player2":
-            self.player_no = 1
-        elif self.player == "player3":
-            self.player_no = 2
-        elif self.player == "player4":
-            self.player_no = 3
-        elif self.player == "player5":
-            self.player_no = 4
-        elif self.player == "player6":
-            self.player_no = 5
-        else:
-            pass
+        self.player_no = player[6]
         self.r_sensor_value = 0
         self.l_sensor_value = 0
         self.f_sensor_value = 0

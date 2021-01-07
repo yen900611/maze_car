@@ -16,16 +16,12 @@ class Car():
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
-        self.last_detect_sensor = 0
         self.velocity = 0
         self.center_position = (0,0)
         self.body = world.CreateDynamicBody(position=position)
         self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=2, friction=0.1, restitution=0.3)
         self.vertices = []
-        self.sensor_right = Sensor(world, (position[0] + 0.45, position[1]))
-        self.sensor_left = Sensor(world, (position[0] - 0.45, position[1]))
-        world.CreateDistanceJoint(bodyA=self.sensor_left.body, bodyB=self.body, collideConnected=True)
-        world.CreateDistanceJoint(bodyA=self.sensor_right.body, bodyB=self.body, collideConnected=True)
+        self.sensor=Sensor(world, self.body)
 
         '''模擬摩擦力'''
         r = math.sqrt(0.5 * self.body.inertia / self.body.mass)
@@ -61,11 +57,10 @@ class Car():
             #     self.left_move(commands[0]['left_PWM'])
 
     def detect_distance(self, frame):
-        if frame - self.last_detect_sensor > FPS / 10:
-            self.sensor_F = self.front_sensor_detect(wall_info)
-            self.sensor_L = self.left_sensor_detect(wall_info)
-            self.sensor_R = self.right_sensor_detect(wall_info)
-            self.last_detect_sensor = frame
+        sensor_value = self.sensor.update(frame)
+        self.sensor_R = sensor_value["right_value"]
+        self.sensor_L = sensor_value["left_value"]
+        self.sensor_F = sensor_value["front_value"]
         pass
 
     def left_move(self, pwm: int):
@@ -100,6 +95,7 @@ class Car():
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
+                         "size": self.body, # TODO
                          "center": self.center_position,
                          "vertices": self.vertices,
                          "angle": self.body.angle,
@@ -108,113 +104,6 @@ class Car():
                          "f_sensor_value": self.sensor_F,
                          }
         return self.car_info
-
-    def front_sensor_detect(self, walls):
-        distance = []
-        results = []
-        dots = []
-        vector = None
-        if self.sensor_left.body.position[0] == self.sensor_right.body.position[0]:
-            vector = (1, 0)
-        elif self.sensor_left.body.position[1] == self.sensor_right.body.position[1]:
-            vector = (0, 1)
-        else:
-            vector = (
-                self.sensor_left.body.position[1] - self.sensor_right.body.position[1],
-                self.sensor_right.body.position[0] - self.sensor_left.body.position[0])
-
-        for wall in walls:
-            distance.append(cross_point_dot(self.body.position,
-                                            vector,
-                                            wall[0], wall[1]))
-        for i in distance:
-            if i:
-                if i[0] - self.body.position[0] > 0 and vector[0] > 0:
-                    results.append(math.sqrt(
-                        (i[0] - self.body.position[0]) ** 2 + (i[1] - self.body.position[1]) ** 2) - 1.5)
-                    dots.append(i)
-                elif i[0] - self.body.position[0] < 0 and vector[0] < 0:
-                    results.append(math.sqrt(
-                        (i[0] - self.body.position[0]) ** 2 + (i[1] - self.body.position[1]) ** 2) - 1.5)
-                    dots.append(i)
-                else:
-                    pass
-            else:
-                pass
-
-        try:
-            result = round(min(results) * 5, 1) + random.randint(0, 3)
-            if result <0:
-                result = 0
-            return result
-        except TypeError:
-            return round(random.randrange(60.0), 1)
-        except ValueError:
-            return round(random.randrange(60.0), 1)
-
-    def right_sensor_detect(self, walls):
-        distance = []
-        results = []
-        dots = []
-        for wall in walls:
-            distance.append(cross_point_dot(self.sensor_right.body.position,
-                                            self.sensor_left.body.position - self.sensor_right.body.position,
-                                            wall[0], wall[1])
-                            )
-        for i in distance:
-            if i:
-                if self.sensor_left.body.position[0] > self.sensor_right.body.position[0] >= i[0]:
-                    dots.append(i)
-                    results.append(
-                        math.sqrt((i[0] - self.sensor_right.body.position[0]) ** 2 + (
-                                    i[1] - self.sensor_right.body.position[1]) ** 2))
-                elif i[0] >= self.sensor_right.body.position[0] > self.sensor_left.body.position[0]:
-                    dots.append(i)
-                    results.append(
-                        math.sqrt((i[0] - self.sensor_right.body.position[0]) ** 2 + (
-                                    i[1] - self.sensor_right.body.position[1]) ** 2))
-                else:
-                    pass
-
-        try:
-            result = round(min(results) * 5, 1) + random.randint(0, 3)
-            return result
-        except TypeError:
-            return round(random.randrange(60.0), 1)
-        except ValueError:
-            return round(random.randrange(60.0), 1)
-
-    def left_sensor_detect(self, walls):
-        distance = []
-        results = []
-        dots = []
-        for wall in walls:
-            distance.append(cross_point_dot(self.sensor_left.body.position,
-                                            self.sensor_right.body.position - self.sensor_left.body.position,
-                                            wall[0], wall[1])
-                            )
-        for i in distance:
-            if i:
-                if self.sensor_right.body.position[0] > self.sensor_left.body.position[0] >= i[0]:
-                    dots.append(i)
-                    results.append(
-                        math.sqrt((i[0] - self.sensor_left.body.position[0]) ** 2 + (
-                                    i[1] - self.sensor_left.body.position[1]) ** 2))
-                elif i[0] >= self.sensor_left.body.position[0] > self.sensor_right.body.position[0]:
-                    dots.append(i)
-                    results.append(
-                        math.sqrt((i[0] - self.sensor_left.body.position[0]) ** 2 + (
-                                    i[1] - self.sensor_left.body.position[1]) ** 2))
-                else:
-                    pass
-        try:
-
-            result = round(min(results) * 5, 1) + random.randint(0, 3)
-            return result
-        except TypeError:
-            return round(random.randrange(60.0), 1)
-        except ValueError:
-            return round(random.randrange(60.0), 1)
 
     def get_polygon_vertice(self):
         self.vertices = [(self.body.transform * v) * PPM for v in self.box1.shape.vertices]

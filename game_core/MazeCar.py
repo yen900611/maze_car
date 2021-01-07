@@ -11,7 +11,7 @@ class MazeCar:
         self.maze_id = level - 1
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
-        self.game_mode = PlayingMode(user_num, self.sound_controller)
+        self.game_mode = PlayingMode(user_num, level, self.sound_controller)
         self.game_type = "MAZE"
         self.user_num = user_num
 
@@ -77,12 +77,12 @@ class MazeCar:
                 "walls": wall_vertices  #
             },
             "game_object": [
-                {"name": "player1_car", "size": 36, "color": RED, "image": "car_01.png"},
-                {"name": "player2_car", "size": 36, "color": GREEN, "image": "car_02.png"},
-                {"name": "player3_car", "size": 36, "color": BLUE, "image": "car_03.png"},
-                {"name": "player4_car", "size": 36, "color": YELLOW, "image": "car_04.png"},
-                {"name": "player5_car", "size": 36, "color": BROWN, "image": "car_05.png"},
-                {"name": "player6_car", "size": 36, "color": PINK, "image": "car_06.png"},
+                {"name": "player1_car", "size": (36,36), "color": RED, "image": "car_01.png"},
+                {"name": "player2_car", "size": (36,36), "color": GREEN, "image": "car_02.png"},
+                {"name": "player3_car", "size": (36,36), "color": BLUE, "image": "car_03.png"},
+                {"name": "player4_car", "size": (36,36), "color": YELLOW, "image": "car_04.png"},
+                {"name": "player5_car", "size": (36,36), "color": BROWN, "image": "car_05.png"},
+                {"name": "player6_car", "size": (36,36), "color": PINK, "image": "car_06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
             ],
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
@@ -137,6 +137,11 @@ class MazeCar:
         """
         Get the game result for the web
         """
+        scene_info = self.get_scene_info
+        result = self.game_mode.result
+
+        return {"used_frame": scene_info["frame"],
+                "result": result}
 
         pass
 
