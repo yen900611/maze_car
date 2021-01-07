@@ -60,7 +60,7 @@ class PlayingMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.result:
-                print(str(user.car_no+1)+"P",":",str(user.end_time))
+                print(str(user.car_no+1)+"P",":",str(user.end_time),"s")
             self.x += 1
         pass
 
@@ -85,7 +85,13 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        if len(self.eliminated_user) == len(self.cars):
+        if self.frame > FPS*60*0.5 or len(self.eliminated_user) == len(self.cars):
+            for car in self.cars:
+                if car not in self.eliminated_user and car.status:
+                    car.end_time = round(time.time() - self.start_time)
+                    self.eliminated_user.append(car)
+                    self.user_time.append(car.end_time)
+                    car.status = False
             self.is_end = True
             self.rank()
             self._print_result()
