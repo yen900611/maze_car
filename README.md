@@ -3,9 +3,10 @@
 # MLGame
 
 
-* 遊戲版本：`0.1`
+* 遊戲版本：`1.1`
 
 ## 更新
+增加6 X 6迷宮地圖
 
 ## 遊戲說明
 
@@ -49,6 +50,7 @@
 
 * `sound`：由音效設定，可選擇"on"或"off"，預設為"off"
 * `game_mode`：遊戲模式，目前只有迷宮模式，預設為"MAZE"。
+* `map`：選擇不同的迷宮，目前提供2種迷宮地圖，並且會隨時增加，迷宮編號從1開始，預設為1號地圖。
 * `the number of user`：指定遊戲玩家人數，最少需一名玩家。單機手動模式最多兩名(鍵盤位置不足)，機器學習模式至多六名。
 
 ## 詳細遊戲資料
@@ -95,22 +97,23 @@ def __init__(self, player):
 以下是該字典物件的鍵值對應：
 
 * `"frame"`：整數。紀錄的是第幾影格的場景資訊
+* `status`：遊戲狀態
 * `"L_sensor"`：玩家自己車子左邊超聲波感測器的值，資料型態為數值
 * `"F_sensor"`：玩家自己車子前面超聲波感測器的值，資料型態為數值
 * `"R_sensor"`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
 
 #### 遊戲指令
 
-傳給遊戲端用來控制板子的指令。
+傳給遊戲端用來控制自走車的指令。
 
 玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為-255~255，並將此字典放入清單中回傳。
 例如：`[{"left_PWM" : 0, "right_PWM" : 0}]`
 
 ## 機器學習模式的玩家程式
 
-賽車是多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
+自走車可以多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
 * For example
-`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car 2 NORMAL 1 off`
+`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car 2 MAZE 1 off`
 
 
 ![](https://i.imgur.com/ubPC8Fp.jpg)

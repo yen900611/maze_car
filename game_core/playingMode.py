@@ -48,7 +48,7 @@ class PlayingMode(GameMode):
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
-            car.detect_distance(self.frame)
+            car.detect_distance(self.frame,self.maze_id)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()

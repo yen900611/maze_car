@@ -60,16 +60,14 @@ class Car():
             #     self.right_move(commands[0]['right_PWM'])
             #     self.left_move(commands[0]['left_PWM'])
 
-    def detect_distance(self, frame):
-        sensor_value = self.sensor.update(frame)
+    def detect_distance(self, frame, maze_id):
+        sensor_value = self.sensor.update(frame,maze_id)
         self.sensor_R = sensor_value["right_value"]
         self.sensor_L = sensor_value["left_value"]
         self.sensor_F = sensor_value["front_value"]
         pass
 
     def left_move(self, pwm: int):
-
-
         if self.velocity > 0.01:
             f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
         else:
