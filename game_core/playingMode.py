@@ -12,6 +12,7 @@ import random
 class PlayingMode(GameMode):
     def __init__(self, user_num: int, maze_no, sound_controller):
         super(PlayingMode, self).__init__()
+        self.ranking_result = []
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
@@ -61,9 +62,11 @@ class PlayingMode(GameMode):
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for user in self.result:
+            for user in self.ranking_result:
+                self.result.append(str(user.car_no + 1) + "P:"+str(user.end_time)+"s")
                 print(str(user.car_no + 1) + "P", ":", str(user.end_time), "s")
             self.x += 1
+            print(self.result)
         pass
 
     def _init_world(self, user_no: int):
@@ -187,12 +190,10 @@ class PlayingMode(GameMode):
                             self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
                                                   730, 178 + 40 + 94 * (i // 2))
 
-        pass
-
     def rank(self):
         while len(self.eliminated_user) > 0:
             for car in self.eliminated_user:
                 if car.end_time == min(self.user_time):
-                    self.result.append(car)
+                    self.ranking_result.append(car)
                     self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
