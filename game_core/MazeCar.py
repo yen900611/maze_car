@@ -69,7 +69,8 @@ class MazeCar:
         for wall in Maze[self.maze_id]:
             vertices = []
             for vertice in wall:
-                vertices.append((vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM*self.game_mode.size))
+                vertices.append(
+                    (vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM * self.game_mode.size))
             wall_vertices.append(vertices)
         game_info = {
             "scene": {

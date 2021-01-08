@@ -17,9 +17,9 @@ class PlayingMode(GameMode):
         self.is_end = False
         self.result = []
         self.x = 0
-        self.maze_id = maze_no-1
-        self.size = 4/maze_size[self.maze_id]
-        self.start_pos = (22,3)
+        self.maze_id = maze_no - 1
+        self.size = 4 / maze_size[self.maze_id]
+        self.start_pos = (22, 3)
 
         '''set group'''
         self.car_info = []
@@ -48,10 +48,12 @@ class PlayingMode(GameMode):
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
-            car.detect_distance(self.frame,self.maze_id)
+            car.detect_distance(self.frame, self.maze_id)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
+        if self.is_end:
+            self.running = False
 
     def detect_collision(self):
         super(PlayingMode, self).detect_collision()
@@ -60,7 +62,7 @@ class PlayingMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.result:
-                print(str(user.car_no+1)+"P",":",str(user.end_time),"s")
+                print(str(user.car_no + 1) + "P", ":", str(user.end_time), "s")
             self.x += 1
         pass
 
@@ -72,11 +74,11 @@ class PlayingMode(GameMode):
 
     def _init_car(self):
         if maze_size[self.maze_id] == 4:
-            self.start_pos = (22,3)
+            self.start_pos = (22, 3)
         elif maze_size[self.maze_id] == 5:
-            self.start_pos = (28,3)
+            self.start_pos = (28, 3)
         elif maze_size[self.maze_id] == 6:
-            self.start_pos = (34,3)
+            self.start_pos = (34, 3)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
             self.cars.append(self.car)
@@ -91,7 +93,7 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        if self.frame > FPS*60*2 or len(self.eliminated_user) == len(self.cars):
+        if self.frame > FPS * 60 * 2 or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
                     car.end_time = round(time.time() - self.start_time)
@@ -106,7 +108,7 @@ class PlayingMode(GameMode):
 
     def _is_car_arrive_end(self, car):
         if car.status:
-            if car.body.position[1] > 6*maze_size[self.maze_id]+1:
+            if car.body.position[1] > 6 * maze_size[self.maze_id] + 1:
                 car.end_time = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
                 self.user_time.append(car.end_time)
