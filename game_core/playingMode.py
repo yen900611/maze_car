@@ -10,8 +10,9 @@ import random
 
 
 class PlayingMode(GameMode):
-    def __init__(self, user_num: int, maze_no, sound_controller):
+    def __init__(self, user_num: int, maze_no,time, sound_controller):
         super(PlayingMode, self).__init__()
+        self.game_end_time = time # int, decide how many second the game will end even some users don't finish game
         self.ranking_result = []
         pygame.font.init()
         self.status = "GAME_PASS"
@@ -96,7 +97,7 @@ class PlayingMode(GameMode):
         pass
 
     def _is_game_end(self):
-        if self.frame > FPS * 60 * 2 or len(self.eliminated_user) == len(self.cars):
+        if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
                     car.end_time = round(time.time() - self.start_time)

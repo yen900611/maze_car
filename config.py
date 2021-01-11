@@ -36,6 +36,11 @@ GAME_PARAMS = {
         "default": 1,
         "help": "Specify the game style. Choices: %(choices)s"
     },
+    "time": {
+        "type": positive_int,
+        "default": 2,
+        "help": "Specify the game style. Choices: %(choices)s"
+    },
     "sound":{
         "choices":("ON","OFF"),
         "default":"OFF"

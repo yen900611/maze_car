@@ -7,11 +7,12 @@ from .sound_controller import *
 
 
 class MazeCar:
-    def __init__(self, user_num, game_type, level, sound):
-        self.maze_id = level - 1
+    def __init__(self, user_num, game_type, map, time, sound):
+        self.maze_id = map - 1
+        self.game_end_time = time
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
-        self.game_mode = PlayingMode(user_num, level, self.sound_controller)
+        self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
         self.game_type = "MAZE"
         self.user_num = user_num
 
@@ -37,7 +38,7 @@ class MazeCar:
             return "QUIT"
 
     def reset(self):
-        self.__init__(self.user_num, self.game_type, self.maze_id, self.is_sound)
+        self.__init__(self.user_num, self.game_type, self.maze_id, self.game_end_time,self.is_sound)
 
     def isRunning(self):
         return self.game_mode.isRunning()
