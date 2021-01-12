@@ -38,7 +38,7 @@ class Car():
             localAnchorB=(0, 0),
             collideConnected=True,
             maxForce=self.body.mass * r * gravity * 1.5,
-            maxTorque=self.body.mass * r * 5
+            maxTorque=self.body.mass * r * 1
         )
         pass
 
@@ -68,24 +68,29 @@ class Car():
         pass
 
     def left_move(self, pwm: int):
-        if self.velocity > 0.01:
-            f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
-        else:
-            f = self.body.GetWorldVector(localVector=(0.0, pwm))
-
-        p = self.body.GetWorldPoint(localPoint=(-1.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+        f = self.body.GetWorldVector(localVector=(0.0, pwm))
+        p = self.sensor.sensor_left.GetWorldPoint(localPoint=(0.0, 0.0))
+        self.sensor.sensor_left.ApplyForce(f, p, True)
+        # if self.velocity > 0.01:
+        #     f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
+        # else:
+        #     f = self.body.GetWorldVector(localVector=(0.0, pwm))
+        #
+        # p = self.body.GetWorldPoint(localPoint=(-1.0, 0.0))
+        # self.body.ApplyForce(f, p, True)
 
     def right_move(self, pwm: int):
+        f = self.body.GetWorldVector(localVector=(0.0, pwm))
+        p = self.sensor.sensor_right.GetWorldPoint(localPoint=(0.0, 0.0))
+        self.sensor.sensor_right.ApplyForce(f, p, True)
 
-
-        if self.velocity > 0.01:
-            f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
-        else:
-            f = self.body.GetWorldVector(localVector=(0.0, pwm))
-
-        p = self.body.GetWorldPoint(localPoint=(1.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+        # if self.velocity > 0.01:
+        #     f = self.body.GetWorldVector(localVector=(0.0, pwm / self.velocity))
+        # else:
+        #     f = self.body.GetWorldVector(localVector=(0.0, pwm))
+        #
+        # p = self.body.GetWorldPoint(localPoint=(1.0, 0.0))
+        # self.body.ApplyForce(f, p, True)
 
     def keep_in_screen(self):
         pass

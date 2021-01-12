@@ -5,7 +5,7 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("OFF")
-    game = playingMode.PlayingMode(1,1,10, "OFF")
+    game = playingMode.PlayingMode(1,1,110, "OFF")
 
     while game.isRunning():
         commands = {}
