@@ -165,8 +165,6 @@ class PlayingMode(GameMode):
         for i in range(6):
             for car in self.cars:
                 if car.car_no == i:
-                    # pygame.draw.line(self.screen, RED, (car.sensor_right.body.position[0]*PPM, HEIGHT - car.sensor_right.body.position[1]*PPM),
-                    #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
                     if i % 2 == 0:
                         if car.status:
                             self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 600,
@@ -198,3 +196,4 @@ class PlayingMode(GameMode):
                     self.ranking_result.append(car)
                     self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
+

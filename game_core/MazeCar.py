@@ -1,5 +1,5 @@
 import pygame
-from .playingMode import PlayingMode
+from .mazeMode import PlayingMode
 from .env import *
 from .sound_controller import *
 
