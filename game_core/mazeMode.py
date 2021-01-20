@@ -25,7 +25,7 @@ class PlayingMode(GameMode):
 
         '''set group'''
         self.car_info = []
-        self.cars = []
+        self.cars = pygame.sprite.Group()
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -85,7 +85,7 @@ class PlayingMode(GameMode):
             self.start_pos = (34, 3)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
-            self.cars.append(self.car)
+            self.cars.add(self.car)
             self.car_info.append(self.car.get_info())
             pass
 
@@ -153,12 +153,7 @@ class PlayingMode(GameMode):
             for body in world.bodies:
                 for fixture in body.fixtures:
                     fixture.shape.draw(body, fixture)
-        for car in self.cars:
-            image = pygame.transform.rotate(car.image, (car.body.angle * 180 / math.pi) % 360)
-            rect = image.get_rect()
-            rect.center = car.center_position
-            self.screen.blit(image, rect)
-            pass
+        self.cars.draw(self.screen)
         pass
 
     def _draw_user_imformation(self):

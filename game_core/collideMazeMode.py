@@ -94,6 +94,7 @@ class CollideMode(GameMode):
             for wall in Maze[maze_no]:
                 wall_bottom = world.CreateKinematicBody(position=(0, 0), linearVelocity=(0, 0))
                 box = wall_bottom.CreatePolygonFixture(vertices=wall)
+
         pass
 
     def _is_game_end(self):
@@ -154,11 +155,6 @@ class CollideMode(GameMode):
                 for fixture in body.fixtures:
                     fixture.shape.draw(body, fixture)
         self.cars.draw(self.screen)
-        # for car in self.cars:
-        #     image = pygame.transform.rotate(car.image, (car.body.angle * 180 / math.pi) % 360)
-        #     rect = image.get_rect()
-        #     rect.center = car.center_position
-        #     self.screen.blit(image, rect)
         pass
 
     def _draw_user_imformation(self):
