@@ -9,9 +9,9 @@ import pygame
 import random
 
 
-class PlayingMode(GameMode):
+class CollideMode(GameMode):
     def __init__(self, user_num: int, maze_no,time, sound_controller):
-        super(PlayingMode, self).__init__()
+        super(CollideMode, self).__init__()
         self.game_end_time = time # int, decide how many second the game will end even some users don't finish game
         self.ranking_result = []
         pygame.font.init()
@@ -25,7 +25,7 @@ class PlayingMode(GameMode):
 
         '''set group'''
         self.car_info = []
-        self.cars = []
+        self.cars =pygame.sprite.Group()
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -58,7 +58,7 @@ class PlayingMode(GameMode):
             self.running = False
 
     def detect_collision(self):
-        super(PlayingMode, self).detect_collision()
+        super(CollideMode, self).detect_collision()
         pass
 
     def _print_result(self):
@@ -85,7 +85,7 @@ class PlayingMode(GameMode):
             self.start_pos = (34, 3)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
-            self.cars.append(self.car)
+            self.cars.add(self.car)
             self.car_info.append(self.car.get_info())
             pass
 
@@ -94,6 +94,7 @@ class PlayingMode(GameMode):
             for wall in Maze[maze_no]:
                 wall_bottom = world.CreateKinematicBody(position=(0, 0), linearVelocity=(0, 0))
                 box = wall_bottom.CreatePolygonFixture(vertices=wall)
+
         pass
 
     def _is_game_end(self):
@@ -121,7 +122,7 @@ class PlayingMode(GameMode):
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
-        super(PlayingMode, self).draw_bg()
+        super(CollideMode, self).draw_bg()
         self.screen.fill(BLACK)
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
@@ -133,7 +134,7 @@ class PlayingMode(GameMode):
 
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
-        super(PlayingMode, self).drawWorld()
+        super(CollideMode, self).drawWorld()
 
         def my_draw_circle(circle, body, fixture):
             position = body.transform * circle.pos * PPM * self.size
@@ -153,12 +154,7 @@ class PlayingMode(GameMode):
             for body in world.bodies:
                 for fixture in body.fixtures:
                     fixture.shape.draw(body, fixture)
-        for car in self.cars:
-            image = pygame.transform.rotate(car.image, (car.body.angle * 180 / math.pi) % 360)
-            rect = image.get_rect()
-            rect.center = car.center_position
-            self.screen.blit(image, rect)
-            pass
+        self.cars.draw(self.screen)
         pass
 
     def _draw_user_imformation(self):

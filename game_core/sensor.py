@@ -1,11 +1,12 @@
 import random
 from .math_function import *
+import pygame
 import Box2D
 from .env import *
 
-
 class Sensor():
     def __init__(self, world, body):
+        self.car = body
         self.right_value = 0
         self.left_value = 0
         self.front_value = 0
@@ -13,13 +14,15 @@ class Sensor():
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
         self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 0.45, body.position[1]))
         ball = self.sensor_left.CreateCircleFixture(radius=0.1)
-        world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, collideConnected=True)
-        world.CreateDistanceJoint(bodyA=self.sensor_right, bodyB=body, collideConnected=True)
+        world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, anchorA=self.sensor_left.position,
+                                  anchorB=body.position, collideConnected=True)
+        world.CreateDistanceJoint(bodyA=self.sensor_right, bodyB=body, anchorA=self.sensor_right.position,
+                                  anchorB=body.position, collideConnected=True)
         self.last_detect_sensor = 0
         pass
 
-    def update(self, frame,maze_id):
-        if frame - self.last_detect_sensor > FPS /10:
+    def update(self, frame, maze_id):
+        if frame - self.last_detect_sensor > FPS / 10:
             self.front_sensor_detect(wall_info[maze_id])
             self.sensor_detect(wall_info[maze_id])
             self.last_detect_sensor = frame
@@ -29,8 +32,7 @@ class Sensor():
                 "front_value": self.front_value}
 
     def front_sensor_detect(self, walls):
-        car_center = (self.sensor_left.position[0] + self.sensor_right.position[0]) / 2, (
-                    self.sensor_left.position[1] + self.sensor_right.position[1]) / 2
+        car_center = self.car.position
         distance = []
         results = []
         dots = []
@@ -64,13 +66,13 @@ class Sensor():
                 pass
 
         try:
-            self.front_value = round(min(results) * 5+ random.uniform(0, 3), 1)
+            self.front_value = round(min(results) * 5 + random.uniform(0, 3), 1)
             if self.front_value < 0:
                 self.front_value = 0
         except TypeError:
-            self.front_value = round(random.uniform(0,60), 1)
+            self.front_value = round(random.uniform(20, 40), 1)
         except ValueError:
-            self.front_value = round(random.uniform(0,60), 1)
+            self.front_value = round(random.uniform(20, 40), 1)
 
     def sensor_detect(self, walls):
         r_distance = []
@@ -118,8 +120,8 @@ class Sensor():
             self.left_value = round(min(l_distance) * 5 + random.uniform(0, 3), 1)
 
         except TypeError:
-            self.right_value = round(random.uniform(0,60), 1)
-            self.left_value = round(random.uniform(0,60), 1)
+            self.right_value = round(random.uniform(20, 40), 1)
+            self.left_value = round(random.uniform(20, 40), 1)
         except ValueError:
-            self.right_value = round(random.uniform(0,60), 1)
-            self.left_value = round(random.uniform(0,60), 1)
+            self.right_value = round(random.uniform(20, 40), 1)
+            self.left_value = round(random.uniform(20, 40), 1)
