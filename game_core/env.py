@@ -23,8 +23,22 @@ LIGHT_BLUE = (33, 161, 241)
 BROWN = (199, 178, 153)
 PINK = (255, 105, 180)
 MEDIUMPURPLE = (147, 112, 219)
-car_color1 = [WHITE, LIGHT_BLUE, MEDIUMPURPLE]
-car_color2 = [YELLOW, RED, GREEN]
+
+'''object size'''
+car_size = (60, 30)
+
+'''command'''
+LEFT_cmd = "TURN_LEFT"
+RIGHT_cmd = "TURN_RIGHT"
+SPEED_cmd = "SPEED"
+BRAKE_cmd = "BRAKE"
+
+'''data path'''
+IMAGE_DIR = path.join(path.dirname(__file__), 'image')
+SOUND_DIR = path.join(path.dirname(__file__), 'sound')
+
+'''image'''
+info_image = "info.png"
 
 '''Maze'''
 Maze = [
@@ -68,19 +82,3 @@ wall_info = [
      [(19, 1), (19, 19)], [(1, 7), (7, 7)], ],
  []
 ]
-
-'''object size'''
-car_size = (60, 30)
-
-'''command'''
-LEFT_cmd = "TURN_LEFT"
-RIGHT_cmd = "TURN_RIGHT"
-SPEED_cmd = "SPEED"
-BRAKE_cmd = "BRAKE"
-
-'''data path'''
-IMAGE_DIR = path.join(path.dirname(__file__), 'image')
-SOUND_DIR = path.join(path.dirname(__file__), 'sound')
-
-'''image'''
-info_image = "info.png"
