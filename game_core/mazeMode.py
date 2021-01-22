@@ -10,10 +10,11 @@ import random
 
 
 class PlayingMode(GameMode):
-    def __init__(self, user_num: int, maze_no,time, sound_controller):
+    def __init__(self, user_num: int, maze_no, time, sound_controller):
         super(PlayingMode, self).__init__()
-        self.game_end_time = time # int, decide how many second the game will end even some users don't finish game
-        self.ranking_result = []
+        self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
+        self.ranked_user = []  # pygame.sprite car
+        self.ranked_score = {"1P":0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
@@ -38,13 +39,13 @@ class PlayingMode(GameMode):
 
         '''image'''
         self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
-        self.sensor_value = []
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
         self.car_info = []
         self.frame += 1
         self.handle_event()
+
         self._is_game_end()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
@@ -63,9 +64,10 @@ class PlayingMode(GameMode):
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for user in self.ranking_result:
-                self.result.append(str(user.car_no + 1) + "P:"+str(user.end_time)+"s")
-                print(str(user.car_no + 1) + "P", ":", str(user.end_time), "s")
+            for user in self.ranked_user:
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
+                self.ranked_score[str(user.car_no + 1) + "P"] = user.score
+            print("score:",self.ranked_score)
             self.x += 1
             print(self.result)
         pass
@@ -188,7 +190,23 @@ class PlayingMode(GameMode):
         while len(self.eliminated_user) > 0:
             for car in self.eliminated_user:
                 if car.end_time == min(self.user_time):
-                    self.ranking_result.append(car)
+                    self.ranked_user.append(car)
                     self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
-
+        for i in range(len(self.ranked_user)):
+            if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
+                if i == 0:
+                    self.ranked_user[i].score = 6
+                else:
+                    for j in range(1, i + 1):
+                        if self.ranked_user[i - j].end_time == self.ranked_user[i].end_time:
+                            if i == j:
+                                self.ranked_user[i].score = 6
+                            else:
+                                pass
+                            pass
+                        else:
+                            self.ranked_user[i].score = 6 - (i - j + 1)
+                            break
+            else:
+                self.ranked_user[i].score = 6 - i

@@ -8,6 +8,7 @@ from .sound_controller import *
 
 class MazeCar:
     def __init__(self, user_num, game_type, map, time, sound):
+        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         self.maze_id = map - 1
         self.game_end_time = time
         self.is_sound = sound
@@ -38,7 +39,10 @@ class MazeCar:
             return "QUIT"
 
     def reset(self):
-        self.__init__(self.user_num, self.game_type, self.maze_id, self.game_end_time,self.is_sound)
+        for key in self.game_mode.ranked_score.keys():
+            self.ranked_score[key] += self.game_mode.ranked_score[key]
+        print(self.ranked_score)
+        self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
 
     def isRunning(self):
         return self.game_mode.isRunning()
