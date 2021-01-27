@@ -8,6 +8,7 @@ from .sound_controller import *
 
 class MazeCar:
     def __init__(self, user_num, game_type, map, time, sound):
+        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         self.maze_id = map - 1
         self.game_end_time = time
         self.is_sound = sound
@@ -38,7 +39,10 @@ class MazeCar:
             return "QUIT"
 
     def reset(self):
-        self.__init__(self.user_num, self.game_type, self.maze_id, self.game_end_time,self.is_sound)
+        for key in self.game_mode.ranked_score.keys():
+            self.ranked_score[key] += self.game_mode.ranked_score[key]
+        print(self.ranked_score)
+        self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -143,7 +147,9 @@ class MazeCar:
         result = self.game_mode.result
 
         return {"used_frame": scene_info["frame"],
-                "result": result}
+                "result": result, # ["1P:7s", "2P:5s"]
+                "rank": self.ranking()
+                }
 
         pass
 
@@ -179,7 +185,53 @@ class MazeCar:
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
+    def ranking(self):
+        '''
+        ranking by score
+        :return: list
+        [[],[],[],[],[],[]]
+        '''
+        ranked_player = []
+        scores = []
+        result = []
+        for key in self.ranked_score.keys():
+            scores.append(self.ranked_score[key])
+            '''
+            scores = [p1_score,p2_score....,p6_score]
+            '''
+        while len(scores) != 0:
+            for key in self.ranked_score.keys():
+                try:
+                    if self.ranked_score[key] == max(scores):
+                        ranked_player.append(key)
+                        scores.remove(self.ranked_score[key])
+                except ValueError:
+                    pass
+            '''
+            ranked_player=[2P,3P,5P,1P,6P,4P] # sort from most score
+            '''
+        for i in range(len(ranked_player)):
+            same_rank = []
+            if i == len(ranked_player) - 1:
+                same_rank.append(ranked_player[i])
+                result.append(same_rank)
+            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i - 1]]:
+                pass
+            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i + 1]]:
+                same_rank.append(ranked_player[i])
+                for j in range(1, len(ranked_player) - i):
+                    if self.ranked_score[ranked_player[i + j]] == self.ranked_score[ranked_player[i]]:
+                        if j == 0:
+                            pass
+                        else:
+                            same_rank.append(ranked_player[i + j])
+                            continue
+                        break
+                    else:
+                        break
+                result.append(same_rank)
 
-# if __name__ == "__main__":
-#     game=MazeCar(1,"NORMAL",1,"off")
-#     print(game.get_game_progress())
+            else:
+                same_rank.append(ranked_player[i])
+                result.append(same_rank)
+        return result

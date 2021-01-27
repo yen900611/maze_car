@@ -5,13 +5,13 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("OFF")
-    game = mazeMode.PlayingMode(1, 1, 110, "OFF")
+    game = mazeMode.PlayingMode(1, 1, 120, "OFF")
     # game = collideMazeMode.CollideMode(1, 1, 110, "OFF")
 
     while game.isRunning():
         commands = {}
         for i in range(6):
-            commands["ml_" + str(i+1) + "P"] = I_Commander.KeyBoardCommander(i).getControlDict()
+            commands["ml_" + str(i + 1) + "P"] = I_Commander.KeyBoardCommander(i).getControlDict()
         game.ticks()
         game.handle_event()
         game.detect_collision()

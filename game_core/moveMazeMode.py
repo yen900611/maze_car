@@ -1,17 +1,17 @@
 import time
+
 import Box2D
 from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
 
-
 class PlayingMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sound_controller):
         super(PlayingMode, self).__init__()
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         self.ranked_user = []  # pygame.sprite car
-        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
+        self.ranked_score = {"1P":0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
@@ -64,7 +64,7 @@ class PlayingMode(GameMode):
             for user in self.ranked_user:
                 self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
-            print("score:", self.ranked_score)
+            print("score:",self.ranked_score)
             self.x += 1
             print(self.result)
         pass
