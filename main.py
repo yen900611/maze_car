@@ -1,11 +1,12 @@
 import pygame
-from game_core import sound_controller, mazeMode, I_Commander, collideMazeMode
+from game_core import sound_controller, mazeMode, I_Commander, collideMazeMode, moveMazeMode
 
 if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("OFF")
-    game = mazeMode.PlayingMode(1, 1, 120, "OFF")
+    # game = mazeMode.PlayingMode(1, 2, 120, "OFF")
+    game = moveMazeMode.MoveMazeMode(1, 1, 20, "OFF")
     # game = collideMazeMode.CollideMode(1, 1, 110, "OFF")
 
     while game.isRunning():

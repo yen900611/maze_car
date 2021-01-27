@@ -57,8 +57,8 @@ class Car(pygame.sprite.Sprite):
                 self.right_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
                 self.left_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
 
-    def detect_distance(self, frame, maze_id):
-        sensor_value = self.sensor.update(frame, maze_id)
+    def detect_distance(self, frame, walls):
+        sensor_value = self.sensor.update(frame, walls)
         self.sensor_R = sensor_value["right_value"]
         self.sensor_L = sensor_value["left_value"]
         self.sensor_F = sensor_value["front_value"]

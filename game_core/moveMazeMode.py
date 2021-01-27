@@ -1,35 +1,38 @@
 import time
-
 import Box2D
 from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
+from .maze_wall import Wall
 
-class PlayingMode(GameMode):
+
+class MoveMazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sound_controller):
-        super(PlayingMode, self).__init__()
+        super(MoveMazeMode, self).__init__()
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         self.ranked_user = []  # pygame.sprite car
-        self.ranked_score = {"1P":0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
+        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
         self.result = []
         self.x = 0
         self.maze_id = maze_no - 1
-        self.size = 4 / maze_size[self.maze_id]
+        self.size = 4 / move_maze_size[self.maze_id]
         self.start_pos = (22, 3)
 
         '''set group'''
         self.car_info = []
         self.cars = pygame.sprite.Group()
+        self.walls = pygame.sprite.Group()
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
         self._init_maze(self.maze_id)
         self.eliminated_user = []
         self.user_time = []
+        self.wall_information = []
 
         '''sound'''
         self.sound_controller = sound_controller
@@ -44,11 +47,16 @@ class PlayingMode(GameMode):
         self.handle_event()
 
         self._is_game_end()
+        self.walls.update()
+        self.wall_information = []
+        for wall in self.walls:
+            for info in wall.wall_info:
+                self.wall_information.append(info)
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
-            car.detect_distance(self.frame, self.maze_id)
+            car.detect_distance(self.frame, self.wall_information)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
@@ -56,7 +64,7 @@ class PlayingMode(GameMode):
             self.running = False
 
     def detect_collision(self):
-        super(PlayingMode, self).detect_collision()
+        super(MoveMazeMode, self).detect_collision()
         pass
 
     def _print_result(self):
@@ -64,7 +72,7 @@ class PlayingMode(GameMode):
             for user in self.ranked_user:
                 self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
-            print("score:",self.ranked_score)
+            print("score:", self.ranked_score)
             self.x += 1
             print(self.result)
         pass
@@ -76,11 +84,13 @@ class PlayingMode(GameMode):
         pass
 
     def _init_car(self):
-        if maze_size[self.maze_id] == 4:
+        if move_maze_size[self.maze_id] == 3:
+            self.start_pos = (16, 3)
+        elif move_maze_size[self.maze_id] == 4:
             self.start_pos = (22, 3)
-        elif maze_size[self.maze_id] == 5:
+        elif move_maze_size[self.maze_id] == 5:
             self.start_pos = (28, 3)
-        elif maze_size[self.maze_id] == 6:
+        elif move_maze_size[self.maze_id] == 6:
             self.start_pos = (34, 3)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
@@ -90,9 +100,10 @@ class PlayingMode(GameMode):
 
     def _init_maze(self, maze_no):
         for world in self.worlds:
-            for wall in Maze[maze_no]:
-                wall_bottom = world.CreateKinematicBody(position=(0, 0), linearVelocity=(0, 0))
-                box = wall_bottom.CreatePolygonFixture(vertices=wall)
+            for wall in Move_Maze[maze_no]:
+                maze_wall = Wall(world, wall["vertices_init"], self.size, wall["is_move"], velocity=wall["velocity"],
+                                 vertices_end=wall["vertices_end"])
+                self.walls.add(maze_wall)
         pass
 
     def _is_game_end(self):
@@ -120,7 +131,7 @@ class PlayingMode(GameMode):
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
-        super(PlayingMode, self).draw_bg()
+        super(MoveMazeMode, self).draw_bg()
         self.screen.fill(BLACK)
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
@@ -132,7 +143,7 @@ class PlayingMode(GameMode):
 
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
-        super(PlayingMode, self).drawWorld()
+        super(MoveMazeMode, self).drawWorld()
 
         def my_draw_circle(circle, body, fixture):
             position = body.transform * circle.pos * PPM * self.size

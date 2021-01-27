@@ -15,6 +15,7 @@ class PlayingMode(GameMode):
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
+
         self.result = []
         self.x = 0
         self.maze_id = maze_no - 1
@@ -48,7 +49,7 @@ class PlayingMode(GameMode):
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
-            car.detect_distance(self.frame, self.maze_id)
+            car.detect_distance(self.frame, wall_info[self.maze_id])
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()

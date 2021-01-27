@@ -21,10 +21,10 @@ class Sensor():
         self.last_detect_sensor = 0
         pass
 
-    def update(self, frame, maze_id):
+    def update(self, frame, walls):
         if frame - self.last_detect_sensor > FPS / 15:
-            self.front_sensor_detect(wall_info[maze_id])
-            self.sensor_detect(wall_info[maze_id])
+            self.front_sensor_detect(walls)
+            self.sensor_detect(walls)
             self.last_detect_sensor = frame
             pass
         return {"right_value": self.right_value,

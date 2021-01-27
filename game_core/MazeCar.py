@@ -1,5 +1,6 @@
 import pygame
 from .mazeMode import PlayingMode
+from .moveMazeMode import MoveMazeMode
 from .env import *
 from .sound_controller import *
 
@@ -13,8 +14,12 @@ class MazeCar:
         self.game_end_time = time
         self.is_sound = sound
         self.sound_controller = SoundController(self.is_sound)
-        self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
-        self.game_type = "MAZE"
+        if game_type == "MAZE":
+            self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
+            self.game_type = "MAZE"
+        elif game_type == "MOVE_MAZE":
+            self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
+            self.game_type = "MOVE_MAZE"
         self.user_num = user_num
 
     def get_player_scene_info(self):
@@ -71,16 +76,22 @@ class MazeCar:
         Get the scene and object information for drawing on the web
         """
         wall_vertices = []
-        for wall in Maze[self.maze_id]:
-            vertices = []
-            for vertice in wall:
-                vertices.append(
-                    (vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM * self.game_mode.size))
-            wall_vertices.append(vertices)
+        if self.game_type == "MAZE":
+            for wall in Maze[self.maze_id]:
+                vertices = []
+                for vertice in wall:
+                    vertices.append(
+                        (vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM * self.game_mode.size))
+                wall_vertices.append(vertices)
+        elif self.game_type == "MOVE_MAZE":
+            for wall in self.game_mode.walls:
+                wall_vertices.append(wall.pixel_vertices)
+        else:
+            pass
         game_info = {
             "scene": {
                 "size": [WIDTH, HEIGHT],
-                "walls": wall_vertices  #
+                "walls": wall_vertices  #pygame(pixel)
             },
             "game_object": [
                 {"name": "player1_car", "size": self.game_mode.car.size, "color": RED, "image": "car_01.png"},
@@ -94,6 +105,8 @@ class MazeCar:
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
                        ]
         }
+        if self.game_type == "MOVE_MAZE":
+            game_info["game_object"].append({"name": "wall", "size": (120,10), "color": WHITE})
         return game_info
 
     def _progress_dict(self, pos_left=None, pos_top=None, vertices=None, size=None, color=None, image=None, angle=None,
@@ -135,6 +148,11 @@ class MazeCar:
             game_progress["game_user_information"].append(user_information)
             game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
                 self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
+        if self.game_type == "MOVE_MAZE":
+            wall_vertices = []
+            for wall in self.game_mode.walls:
+                wall_vertices.append(wall.pixel_vertices)
+            game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
         return game_progress
 
         pass
@@ -148,7 +166,7 @@ class MazeCar:
 
         return {"used_frame": scene_info["frame"],
                 "result": result, # ["1P:7s", "2P:5s"]
-                "rank": self.ranking()
+                "rank": self.ranking()# by score
                 }
 
         pass
