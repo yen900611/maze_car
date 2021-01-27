@@ -1,4 +1,3 @@
-import math
 import time
 
 import Box2D
@@ -6,8 +5,6 @@ from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
-import random
-
 
 class CollideMode(GameMode):
     def __init__(self, user_num: int, maze_no,time, sound_controller):

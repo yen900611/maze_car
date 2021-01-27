@@ -147,7 +147,9 @@ class MazeCar:
         result = self.game_mode.result
 
         return {"used_frame": scene_info["frame"],
-                "result": result}
+                "result": result, # ["1P:7s", "2P:5s"]
+                "rank": self.ranking()
+                }
 
         pass
 
@@ -183,7 +185,53 @@ class MazeCar:
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
+    def ranking(self):
+        '''
+        ranking by score
+        :return: list
+        [[],[],[],[],[],[]]
+        '''
+        ranked_player = []
+        scores = []
+        result = []
+        for key in self.ranked_score.keys():
+            scores.append(self.ranked_score[key])
+            '''
+            scores = [p1_score,p2_score....,p6_score]
+            '''
+        while len(scores) != 0:
+            for key in self.ranked_score.keys():
+                try:
+                    if self.ranked_score[key] == max(scores):
+                        ranked_player.append(key)
+                        scores.remove(self.ranked_score[key])
+                except ValueError:
+                    pass
+            '''
+            ranked_player=[2P,3P,5P,1P,6P,4P] # sort from most score
+            '''
+        for i in range(len(ranked_player)):
+            same_rank = []
+            if i == len(ranked_player) - 1:
+                same_rank.append(ranked_player[i])
+                result.append(same_rank)
+            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i - 1]]:
+                pass
+            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i + 1]]:
+                same_rank.append(ranked_player[i])
+                for j in range(1, len(ranked_player) - i):
+                    if self.ranked_score[ranked_player[i + j]] == self.ranked_score[ranked_player[i]]:
+                        if j == 0:
+                            pass
+                        else:
+                            same_rank.append(ranked_player[i + j])
+                            continue
+                        break
+                    else:
+                        break
+                result.append(same_rank)
 
-# if __name__ == "__main__":
-#     game=MazeCar(1,"NORMAL",1,"off")
-#     print(game.get_game_progress())
+            else:
+                same_rank.append(ranked_player[i])
+                result.append(same_rank)
+        return result

@@ -49,7 +49,7 @@ class Car(pygame.sprite.Sprite):
     def update(self, commands):
         self.get_polygon_vertice()
         self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
-        if self.status:
+        if self.status and commands != None:
             if commands[0]['right_PWM'] == commands[0]['left_PWM']:
                 self.right_move(commands[0]['right_PWM'])
                 self.left_move(commands[0]['left_PWM'])
