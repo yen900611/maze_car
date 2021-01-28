@@ -31,8 +31,6 @@ class Wall(pygame.sprite.Sprite):
         else:
             self.end_position = self.count_position(vertices_end)
         pass
-        if self.is_move:
-            print(self.end_position, self.init_position)
 
     def update(self) -> None:
         self.get_polygon_vertice()
@@ -53,12 +51,41 @@ class Wall(pygame.sprite.Sprite):
         return v_sum[0] / 4, v_sum[1] / 4
 
     def move(self):
-        if self.body.linearVelocity[0] < 0:
-            if self.body.position[0] < self.end_position[0] - self.init_position[0]:
-                self.body.linearVelocity[0] = self.velocity[0] * -1
-        elif self.body.linearVelocity[0] > 0:
-            if self.body.position[0] > 0:
-                self.body.linearVelocity[0] = self.velocity[0]
+        if self.end_position[1] == self.init_position[1]:
+            # y軸不變，左右移動
+            if self.body.linearVelocity[0] < 0:
+                if self.body.position[0] < self.end_position[0] - self.init_position[0]:
+                    self.body.linearVelocity[0] = self.velocity[0] * -1
+            elif self.body.linearVelocity[0] > 0:
+                if self.body.position[0] > 0:
+                    self.body.linearVelocity[0] = self.velocity[0]
+            else:
+                pass
+        elif self.end_position[0] == self.init_position[0]:
+            # x軸不變，上下移動
+            if self.velocity[1] < 0:
+                #初始向下移動
+                if self.body.linearVelocity[1] < 0:
+                    #向下移動
+                    if self.body.position[1] < self.end_position[1] - self.init_position[1]:
+                        self.body.linearVelocity[1] = self.velocity[1] * -1
+                elif self.body.linearVelocity[1] > 0:
+                    if self.body.position[1] > 0:
+                        self.body.linearVelocity[1] = self.velocity[1]
+                else:
+                    pass
+            elif self.velocity[1] > 0:
+                #初始向上移動
+                if self.body.linearVelocity[1] > 0:
+                    #向上移動
+                    if self.body.position[1] > self.end_position[1] - self.init_position[1]:
+                        self.body.linearVelocity[1] = self.velocity[1] * -1
+                elif self.body.linearVelocity[1] < 0:
+                    if self.body.position[1] < 0:
+                        self.body.linearVelocity[1] = self.velocity[1]
+                else:
+                    pass
+            pass
         else:
             pass
     def get_polygon_vertice(self):
