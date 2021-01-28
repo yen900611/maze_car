@@ -144,7 +144,9 @@ class MazeCar:
         for user in self.game_mode.car_info:
             user_information = {"right_sensor_value": user["r_sensor_value"],
                                 "left_sensor_value": user["l_sensor_value"],
-                                "front_sensor_value": user["f_sensor_value"], }
+                                "front_sensor_value": user["f_sensor_value"],
+                                "L_PWM":user["L_PWM"],
+                                "R_PWM":user["R_PWM"]}
             game_progress["game_user_information"].append(user_information)
             game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
                 self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]

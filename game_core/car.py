@@ -24,6 +24,8 @@ class Car(pygame.sprite.Sprite):
         self.sensor_L = 0
         self.sensor_F = 0
         self.velocity = 0
+        self.L_PWM = 0
+        self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
         self.body = world.CreateDynamicBody(position=position)
         self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=1, friction=0.1, restitution=0.3)
@@ -46,6 +48,8 @@ class Car(pygame.sprite.Sprite):
         pass
 
     def update(self, commands):
+        self.L_PWM = commands[0]['left_PWM']
+        self.R_PWM = commands[0]['right_PWM']
         self.get_polygon_vertice()
         self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
@@ -98,6 +102,8 @@ class Car(pygame.sprite.Sprite):
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
                          "f_sensor_value": self.sensor_F,
+                         "L_PWM": self.L_PWM,
+                         "R_PWM":self.R_PWM
                          }
         return self.car_info
 
