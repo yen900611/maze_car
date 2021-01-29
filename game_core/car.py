@@ -48,8 +48,6 @@ class Car(pygame.sprite.Sprite):
         pass
 
     def update(self, commands):
-        self.L_PWM = commands[0]['left_PWM']
-        self.R_PWM = commands[0]['right_PWM']
         self.get_polygon_vertice()
         self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
@@ -75,6 +73,7 @@ class Car(pygame.sprite.Sprite):
             pwm = -255
         else:
             pass
+        self.L_PWM = pwm
         f = self.body.GetWorldVector(localVector=(0.0, pwm))
         p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
         self.body.ApplyForce(f, p, True)
@@ -86,6 +85,7 @@ class Car(pygame.sprite.Sprite):
             pwm = -255
         else:
             pass
+        self.R_PWM = pwm
         f = self.body.GetWorldVector(localVector=(0.0, pwm))
         p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
         self.body.ApplyForce(f, p, True)
