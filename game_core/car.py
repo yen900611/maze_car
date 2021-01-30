@@ -51,13 +51,25 @@ class Car(pygame.sprite.Sprite):
         self.get_polygon_vertice()
         self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
-            if commands[0]['right_PWM'] == commands[0]['left_PWM']:
-                self.right_move(commands[0]['right_PWM'])
-                self.left_move(commands[0]['left_PWM'])
+            if commands[0]['right_PWM'] > 255:
+                self.R_PWM = 255
+            elif commands[0]['right_PWM'] < -255:
+                self.R_PWM = -255
             else:
-                self.body.angularVelocity = (commands[0]['right_PWM'] - commands[0]['left_PWM']) / 40
-                self.right_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
-                self.left_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
+                self.R_PWM = commands[0]['right_PWM']
+            if commands[0]['left_PWM'] > 255:
+                self.L_PWM = 255
+            elif commands[0]['left_PWM'] < -255:
+                self.L_PWM = -255
+            else:
+                self.L_PWM = commands[0]['left_PWM']
+            if self.R_PWM == self.L_PWM:
+                self.right_move(self.R_PWM)
+                self.left_move(self.L_PWM)
+            else:
+                self.body.angularVelocity = (self.R_PWM - self.L_PWM) / 40
+                self.right_move((self.R_PWM + self.L_PWM) / 2)
+                self.left_move((self.R_PWM + self.L_PWM) / 2)
 
     def detect_distance(self, frame, walls):
         sensor_value = self.sensor.update(frame, walls)
@@ -67,25 +79,11 @@ class Car(pygame.sprite.Sprite):
         pass
 
     def left_move(self, pwm: int):
-        if pwm > 255:
-            pwm = 255
-        elif pwm < -255:
-            pwm = -255
-        else:
-            pass
-        self.L_PWM = pwm
         f = self.body.GetWorldVector(localVector=(0.0, pwm))
         p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
         self.body.ApplyForce(f, p, True)
 
     def right_move(self, pwm: int):
-        if pwm > 255:
-            pwm = 255
-        elif pwm < -255:
-            pwm = -255
-        else:
-            pass
-        self.R_PWM = pwm
         f = self.body.GetWorldVector(localVector=(0.0, pwm))
         p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
         self.body.ApplyForce(f, p, True)
