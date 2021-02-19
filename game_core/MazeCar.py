@@ -1,8 +1,8 @@
-import pygame
-from .mazeMode import PlayingMode
-from .moveMazeMode import MoveMazeMode
-from .env import *
-from .sound_controller import *
+from game_core.gameView import *
+from game_core.mazeMode import PlayingMode
+from game_core.moveMazeMode import MoveMazeMode
+from game_core.env import *
+from game_core.sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
