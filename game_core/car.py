@@ -23,7 +23,6 @@ class Car(pygame.sprite.Sprite):
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
-        self.velocity = 0
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
@@ -49,7 +48,6 @@ class Car(pygame.sprite.Sprite):
 
     def update(self, commands):
         self.get_polygon_vertice()
-        self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
             if commands[0]['right_PWM'] > 255:
                 self.R_PWM = 255

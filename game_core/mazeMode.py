@@ -134,25 +134,13 @@ class PlayingMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(PlayingMode, self).drawWorld()
-
-        def my_draw_circle(circle, body, fixture):
-            position = body.transform * circle.pos * PPM * self.size
-            position = (position[0], HEIGHT - position[1])
-            pygame.draw.circle(self.screen, WHITE, [int(
-                x) for x in position], int(circle.radius * PPM * self.size))
-
-        def my_draw_polygon(polygon, body, fixture):
-            vertices = [(body.transform * v) * PPM * self.size for v in polygon.vertices]
-            vertices = [(v[0], HEIGHT - v[1]) for v in vertices]
+        for wall in Maze[self.maze_id]:
+            vertices = []
+            for vertice in wall:
+                vertices.append(
+                    (vertice[0] * PPM * self.size, HEIGHT - vertice[1] * PPM * self.size))
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
-        Box2D.b2.polygonShape.draw = my_draw_polygon
-        Box2D.b2.circleShape.draw = my_draw_circle
-
-        for world in self.worlds:
-            for body in world.bodies:
-                for fixture in body.fixtures:
-                    fixture.shape.draw(body, fixture)
         self.cars.draw(self.screen)
         pass
 
