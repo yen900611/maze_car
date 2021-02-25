@@ -1,11 +1,9 @@
-from game_core.gameView import *
-from game_core.mazeMode import PlayingMode
-from game_core.moveMazeMode import MoveMazeMode
-from game_core.env import *
-from game_core.sound_controller import *
+from .mazeMode import PlayingMode
+from .moveMazeMode import MoveMazeMode
+from .env import *
+from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
-
 
 class MazeCar:
     def __init__(self, user_num, game_type, map, time, sound):
@@ -21,6 +19,7 @@ class MazeCar:
             self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
             self.game_type = "MOVE_MAZE"
         self.user_num = user_num
+        self.sound_controller.play_music()
 
     def get_player_scene_info(self):
         scene_info = self.get_scene_info
@@ -34,7 +33,6 @@ class MazeCar:
                                                              "F_sensor": car["f_sensor_value"], }
 
         return player_info
-
     def update(self, commands):
         self.game_mode.handle_event()
         self.game_mode.detect_collision()
@@ -47,7 +45,7 @@ class MazeCar:
         for key in self.game_mode.ranked_score.keys():
             self.ranked_score[key] += self.game_mode.ranked_score[key]
         print(self.ranked_score)
-        self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
+        # self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -205,6 +203,7 @@ class MazeCar:
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
+
     def ranking(self):
         '''
         ranking by score
