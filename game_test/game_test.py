@@ -1,8 +1,7 @@
-from .mazeMode import MazeMode
-from .moveMazeMode import MoveMazeMode
-from .env import *
-from .sound_controller import *
-from .gameView import PygameView
+from game_test.mode_test import MazeMode
+from game_core.env import *
+from game_core.sound_controller import *
+from game_core.gameView import PygameView
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
@@ -27,7 +26,8 @@ class MazeCar:
         self.game_mode.ticks()
         self.game_mode.handle_event()
         self.game_mode.detect_collision()
-        game_object = self.game_mode.update_sprite(commands)
+        self.game_mode.update_sprite(commands)
+        game_object = self.get_game_progress()
         self.draw(game_object)
         if not self.isRunning():
             return "QUIT"
@@ -140,28 +140,37 @@ class MazeCar:
         """
         Get the position of game objects for drawing on the web
         """
-        scene_info = self.get_scene_info
-        game_progress = {
-            "game_object": {"info": [self._progress_dict(507, 20)], },
-            "game_user_information": []
+        game_info = {
+            "scene": {
+                "size": [WIDTH, HEIGHT],
+                # "walls": wall_vertices  # pygame(pixel)
+            },
+            "game_object": [
+                {"type": "image", "name": "info", "size": (306, 480), "color": WHITE, "image": "info.png",
+                 "coordinate": (507, 20)},
+            ],
+            "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
+                       ]
         }
         for user in self.game_mode.car_info:
-            user_information = {"right_sensor_value": user["r_sensor_value"],
-                                "left_sensor_value": user["l_sensor_value"],
-                                "front_sensor_value": user["f_sensor_value"],
-                                "L_PWM":user["L_PWM"],
-                                "R_PWM":user["R_PWM"]}
-            game_progress["game_user_information"].append(user_information)
-            game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
-                self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
-        if self.game_type == "MOVE_MAZE":
-            wall_vertices = []
-            for wall in self.game_mode.walls:
-                wall_vertices.append(wall.pixel_vertices)
-            game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
-        return game_progress
+            game_info["game_object"].append({"type": "image",
+                                             "name": "player_car",
+                                             "angle": user["angle"],
+                                             "size": user["size"],
+                                             "image": "car_0" + str(user["id"] + 1) + ".png",
+                                             "coordinate": user["center"]})
+        for wall in Maze[self.maze_id]:
+            vertices = []
+            for vertice in wall:
+                vertices.append(
+                    (vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM * self.game_mode.size))
+            game_info["game_object"].append({"type": "vertices",
+                                             "name": "wall",
+                                             "color": WHITE,
+                                             "vertices": vertices})
+        # print(game_info)
 
-        pass
+        return game_info
 
     def get_game_result(self):
         """

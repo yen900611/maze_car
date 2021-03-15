@@ -23,7 +23,6 @@ class Car(pygame.sprite.Sprite):
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
-        self.velocity = 0
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
@@ -33,23 +32,22 @@ class Car(pygame.sprite.Sprite):
         self.sensor = Sensor(world, self.body)
 
         '''模擬摩擦力'''
-        r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
-        gravity = 10
-        ground = world.CreateBody(position=(0, 20))
-        world.CreateFrictionJoint(
-            bodyA=ground,
-            bodyB=self.body,
-            localAnchorA=(0, 0),
-            localAnchorB=(0, 0),
-            collideConnected=True,
-            maxForce=self.body.mass * r * gravity * 4,
-            maxTorque=self.body.mass * r * gravity
-        )
+        # r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
+        # gravity = 10
+        # ground = world.CreateBody(position=(0, 20))
+        # world.CreateFrictionJoint(
+        #     bodyA=ground,
+        #     bodyB=self.body,
+        #     localAnchorA=(0, 0),
+        #     localAnchorB=(0, 0),
+        #     collideConnected=True,
+        #     maxForce=self.body.mass * r * gravity * 4,
+        #     maxTorque=self.body.mass * r * gravity
+        # )
         pass
 
     def update(self, commands):
         self.get_polygon_vertice()
-        self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
             if commands[0]['right_PWM'] > 255:
                 self.R_PWM = 255
@@ -63,13 +61,8 @@ class Car(pygame.sprite.Sprite):
                 self.L_PWM = -255
             else:
                 self.L_PWM = commands[0]['left_PWM']
-            if self.R_PWM == self.L_PWM:
-                self.right_move(self.R_PWM)
-                self.left_move(self.L_PWM)
-            else:
-                self.body.angularVelocity = (self.R_PWM - self.L_PWM) / 40
-                self.right_move((self.R_PWM + self.L_PWM) / 2)
-                self.left_move((self.R_PWM + self.L_PWM) / 2)
+            self.right_move(self.R_PWM)
+            self.left_move(self.L_PWM)
 
     def detect_distance(self, frame, walls):
         sensor_value = self.sensor.update(frame, walls)
@@ -79,14 +72,16 @@ class Car(pygame.sprite.Sprite):
         pass
 
     def left_move(self, pwm: int):
-        f = self.body.GetWorldVector(localVector=(0.0, pwm))
-        p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+        if pwm <0:
+            self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
+        else:
+            self.sensor.sensor_left.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def right_move(self, pwm: int):
-        f = self.body.GetWorldVector(localVector=(0.0, pwm))
-        p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+        if pwm <0:
+            self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
+        else:
+            self.sensor.sensor_right.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def keep_in_screen(self):
         pass
