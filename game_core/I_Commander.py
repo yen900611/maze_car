@@ -49,7 +49,7 @@ class KeyBoardCommander(I_Commander):
         self.brakeKey = keyboardSet[keyboard_no]["BRAKE"]
         self.moveLeftKey = keyboardSet[keyboard_no]["TURN_LEFT"]
         self.moveRightKey = keyboardSet[keyboard_no]["TURN_RIGHT"]
-        self.speed = 150
+        self.speed = 100
 
     def getControlDict(self):
         keys = pygame.key.get_pressed()

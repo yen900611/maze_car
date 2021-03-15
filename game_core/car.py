@@ -32,18 +32,18 @@ class Car(pygame.sprite.Sprite):
         self.sensor = Sensor(world, self.body)
 
         '''模擬摩擦力'''
-        # r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
-        # gravity = 10
-        # ground = world.CreateBody(position=(0, 20))
-        # world.CreateFrictionJoint(
-        #     bodyA=ground,
-        #     bodyB=self.body,
-        #     localAnchorA=(0, 0),
-        #     localAnchorB=(0, 0),
-        #     collideConnected=True,
-        #     maxForce=self.body.mass * r * gravity * 4,
-        #     maxTorque=self.body.mass * r * gravity
-        # )
+        r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
+        gravity = 10
+        ground = world.CreateBody(position=(0, 20))
+        world.CreateFrictionJoint(
+            bodyA=ground,
+            bodyB=self.body,
+            localAnchorA=(0, 0),
+            localAnchorB=(0, 0),
+            collideConnected=True,
+            maxForce=self.body.mass * r * gravity * 4,
+            maxTorque=self.body.mass * r * gravity
+        )
         pass
 
     def update(self, commands):
@@ -61,8 +61,10 @@ class Car(pygame.sprite.Sprite):
                 self.L_PWM = -255
             else:
                 self.L_PWM = commands[0]['left_PWM']
-            self.right_move(self.R_PWM)
+
             self.left_move(self.L_PWM)
+            self.right_move(self.R_PWM)
+
 
     def detect_distance(self, frame, walls):
         sensor_value = self.sensor.update(frame, walls)

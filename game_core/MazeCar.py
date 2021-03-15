@@ -54,12 +54,12 @@ class MazeCar:
         return self.game_mode.isRunning()
 
     def draw(self, data):
-        self.gameView.draw_screen()
-        self.gameView.draw(data)
-        self.gameView.flip()
-        # self.game_mode.draw_bg()
-        # self.game_mode.drawWorld()
-        # self.game_mode.flip()
+        # self.gameView.draw_screen()
+        # self.gameView.draw(data)
+        # self.gameView.flip()
+        self.game_mode.draw_bg()
+        self.game_mode.drawWorld()
+        self.game_mode.flip()
 
     @property
     def get_scene_info(self):
