@@ -9,7 +9,7 @@ version: 1.1
 
 帶上你的自走車往終點衝刺吧！
 
-* 遊戲版本：`1.1`
+* 遊戲版本：`1.2`
 
 ![](https://i.imgur.com/ymZZMyO.png)
 
