@@ -1,8 +1,8 @@
 import time
 import Box2D
-from .car import Car
-from .gameMode import GameMode
-from .env import *
+from game_core.car import Car
+from game_core.gameMode import GameMode
+from game_core.env import *
 import pygame
 
 class MazeMode(GameMode):
@@ -42,8 +42,8 @@ class MazeMode(GameMode):
         self.car_info = []
         self.frame += 1
         self.handle_event()
+
         self._is_game_end()
-        self.command = command
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
