@@ -1,19 +1,20 @@
 import time
-
 import Box2D
-from .car import Car
-from .gameMode import GameMode
-from .env import *
+from game_core.car import Car
+from game_core.gameMode import GameMode
+from game_core.env import *
 import pygame
 
-class CollideMode(GameMode):
-    def __init__(self, user_num: int, maze_no,time, sound_controller):
-        super(CollideMode, self).__init__()
-        self.game_end_time = time # int, decide how many second the game will end even some users don't finish game
-        self.ranking_result = []
+class MazeMode(GameMode):
+    def __init__(self, user_num: int, maze_no, time, sound_controller):
+        super(MazeMode, self).__init__()
+        self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
+        self.ranked_user = []  # pygame.sprite car
+        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
+
         self.result = []
         self.x = 0
         self.maze_id = maze_no - 1
@@ -22,7 +23,7 @@ class CollideMode(GameMode):
 
         '''set group'''
         self.car_info = []
-        self.cars =pygame.sprite.Group()
+        self.cars = pygame.sprite.Group()
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -35,19 +36,19 @@ class CollideMode(GameMode):
 
         '''image'''
         self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
-        self.sensor_value = []
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
         self.car_info = []
         self.frame += 1
         self.handle_event()
+
         self._is_game_end()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
-            car.detect_distance(self.frame, self.maze_id)
+            car.detect_distance(self.frame, wall_info[self.maze_id])
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
@@ -55,14 +56,15 @@ class CollideMode(GameMode):
             self.running = False
 
     def detect_collision(self):
-        super(CollideMode, self).detect_collision()
+        super(MazeMode, self).detect_collision()
         pass
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for user in self.ranking_result:
-                self.result.append(str(user.car_no + 1) + "P:"+str(user.end_time)+"s")
-                print(str(user.car_no + 1) + "P", ":", str(user.end_time), "s")
+            for user in self.ranked_user:
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
+                self.ranked_score[str(user.car_no + 1) + "P"] = user.score
+            print("score:", self.ranked_score)
             self.x += 1
             print(self.result)
         pass
@@ -91,7 +93,6 @@ class CollideMode(GameMode):
             for wall in Maze[maze_no]:
                 wall_bottom = world.CreateKinematicBody(position=(0, 0), linearVelocity=(0, 0))
                 box = wall_bottom.CreatePolygonFixture(vertices=wall)
-
         pass
 
     def _is_game_end(self):
@@ -119,7 +120,7 @@ class CollideMode(GameMode):
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
-        super(CollideMode, self).draw_bg()
+        super(MazeMode, self).draw_bg()
         self.screen.fill(BLACK)
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
@@ -131,26 +132,14 @@ class CollideMode(GameMode):
 
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
-        super(CollideMode, self).drawWorld()
-
-        def my_draw_circle(circle, body, fixture):
-            position = body.transform * circle.pos * PPM * self.size
-            position = (position[0], HEIGHT - position[1])
-            pygame.draw.circle(self.screen, WHITE, [int(
-                x) for x in position], int(circle.radius * PPM * self.size))
-
-        def my_draw_polygon(polygon, body, fixture):
-            vertices = [(body.transform * v) * PPM * self.size for v in polygon.vertices]
-            vertices = [(v[0], HEIGHT - v[1]) for v in vertices]
+        super(MazeMode, self).drawWorld()
+        for wall in Maze[self.maze_id]:
+            vertices = []
+            for vertice in wall:
+                vertices.append(
+                    (vertice[0] * PPM * self.size, HEIGHT - vertice[1] * PPM * self.size))
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
-        Box2D.b2.polygonShape.draw = my_draw_polygon
-        Box2D.b2.circleShape.draw = my_draw_circle
-
-        for world in self.worlds:
-            for body in world.bodies:
-                for fixture in body.fixtures:
-                    fixture.shape.draw(body, fixture)
         self.cars.draw(self.screen)
         pass
 
@@ -158,8 +147,6 @@ class CollideMode(GameMode):
         for i in range(6):
             for car in self.cars:
                 if car.car_no == i:
-                    # pygame.draw.line(self.screen, RED, (car.sensor_right.body.position[0]*PPM, HEIGHT - car.sensor_right.body.position[1]*PPM),
-                    #                  (car.sensor_R[0]*PPM, HEIGHT - car.sensor_R[1]*PPM),2)
                     if i % 2 == 0:
                         if car.status:
                             self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 600,
@@ -188,6 +175,23 @@ class CollideMode(GameMode):
         while len(self.eliminated_user) > 0:
             for car in self.eliminated_user:
                 if car.end_time == min(self.user_time):
-                    self.ranking_result.append(car)
+                    self.ranked_user.append(car)
                     self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
+        for i in range(len(self.ranked_user)):
+            if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
+                if i == 0:
+                    self.ranked_user[i].score = 6
+                else:
+                    for j in range(1, i + 1):
+                        if self.ranked_user[i - j].end_time == self.ranked_user[i].end_time:
+                            if i == j:
+                                self.ranked_user[i].score = 6
+                            else:
+                                pass
+                            pass
+                        else:
+                            self.ranked_user[i].score = 6 - (i - j + 1)
+                            break
+            else:
+                self.ranked_user[i].score = 6 - i

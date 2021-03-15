@@ -23,7 +23,8 @@ class Car(pygame.sprite.Sprite):
         self.sensor_R = 0
         self.sensor_L = 0
         self.sensor_F = 0
-        self.velocity = 0
+        self.L_PWM = 0
+        self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
         self.body = world.CreateDynamicBody(position=position)
         self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=1, friction=0.1, restitution=0.3)
@@ -47,44 +48,42 @@ class Car(pygame.sprite.Sprite):
 
     def update(self, commands):
         self.get_polygon_vertice()
-        self.velocity = math.sqrt(self.body.linearVelocity[0] ** 2 + self.body.linearVelocity[1] ** 2)
         if self.status and commands != None:
-            if commands[0]['right_PWM'] == commands[0]['left_PWM']:
-                self.right_move(commands[0]['right_PWM'])
-                self.left_move(commands[0]['left_PWM'])
+            if commands[0]['right_PWM'] > 255:
+                self.R_PWM = 255
+            elif commands[0]['right_PWM'] < -255:
+                self.R_PWM = -255
             else:
-                self.body.angularVelocity = (commands[0]['right_PWM'] - commands[0]['left_PWM']) / 40
-                self.right_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
-                self.left_move((commands[0]['right_PWM'] + commands[0]['left_PWM']) / 2)
+                self.R_PWM = commands[0]['right_PWM']
+            if commands[0]['left_PWM'] > 255:
+                self.L_PWM = 255
+            elif commands[0]['left_PWM'] < -255:
+                self.L_PWM = -255
+            else:
+                self.L_PWM = commands[0]['left_PWM']
 
-    def detect_distance(self, frame, maze_id):
-        sensor_value = self.sensor.update(frame, maze_id)
+            self.left_move(self.L_PWM)
+            self.right_move(self.R_PWM)
+
+
+    def detect_distance(self, frame, walls):
+        sensor_value = self.sensor.update(frame, walls)
         self.sensor_R = sensor_value["right_value"]
         self.sensor_L = sensor_value["left_value"]
         self.sensor_F = sensor_value["front_value"]
         pass
 
     def left_move(self, pwm: int):
-        if pwm > 255:
-            pwm = 255
-        elif pwm < -255:
-            pwm = -255
+        if pwm <0:
+            self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            pass
-        f = self.body.GetWorldVector(localVector=(0.0, pwm))
-        p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+            self.sensor.sensor_left.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def right_move(self, pwm: int):
-        if pwm > 255:
-            pwm = 255
-        elif pwm < -255:
-            pwm = -255
+        if pwm <0:
+            self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            pass
-        f = self.body.GetWorldVector(localVector=(0.0, pwm))
-        p = self.body.GetWorldPoint(localPoint=(0.0, 0.0))
-        self.body.ApplyForce(f, p, True)
+            self.sensor.sensor_right.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def keep_in_screen(self):
         pass
@@ -98,6 +97,8 @@ class Car(pygame.sprite.Sprite):
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
                          "f_sensor_value": self.sensor_F,
+                         "L_PWM": self.L_PWM,
+                         "R_PWM":self.R_PWM
                          }
         return self.car_info
 
