@@ -35,10 +35,7 @@ class Wall(pygame.sprite.Sprite):
     def update(self) -> None:
         self.get_polygon_vertice()
         self.get_wall_infomation()
-        # self.count_position(self.vertices)
         if self.is_move:
-            # print(self.pixel_vertices)
-            # print(self.wall_info)
             self.move()
         pass
 
@@ -93,10 +90,6 @@ class Wall(pygame.sprite.Sprite):
         self.vertices = [(self.body.transform * v) for v in self.box.shape.vertices]
         self.pixel_vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box.shape.vertices]
         self.pixel_vertices = [(v[0], HEIGHT - v[1]) for v in self.pixel_vertices]
-        # self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
-        # self.rect = self.image.get_rect()
-        # self.rect.center = self.body.position[0] * PPM * self.maze_size, HEIGHT - self.body.position[
-        #     1] * PPM * self.maze_size
 
     def get_wall_infomation(self):
         self.wall_info = []
@@ -106,4 +99,9 @@ class Wall(pygame.sprite.Sprite):
         self.wall_info.append([self.vertices[2],self.vertices[3]])
         pass
 
+class Check_point:
+    def __init__(self):
+        pass
 
+    def collide_with_car(self):
+        pass

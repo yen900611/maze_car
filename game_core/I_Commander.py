@@ -73,5 +73,4 @@ class KeyBoardCommander(I_Commander):
         elif control_dic["RIGHT"]:
             control_list[0]["left_PWM"] += self.speed
 
-
         return control_list

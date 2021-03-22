@@ -1,5 +1,7 @@
 import time
 import Box2D
+
+from maze_imformation import Normal_Maze_Size, wall_info, Normal_Maze_Map
 from .car import Car
 from .gameMode import GameMode
 from .env import *
@@ -18,7 +20,7 @@ class MazeMode(GameMode):
         self.result = []
         self.x = 0
         self.maze_id = maze_no - 1
-        self.size = 4 / maze_size[self.maze_id]
+        self.size = 4 / Normal_Maze_Size[self.maze_id]
         self.start_pos = (22, 3)
 
         '''set group'''
@@ -76,11 +78,11 @@ class MazeMode(GameMode):
         pass
 
     def _init_car(self):
-        if maze_size[self.maze_id] == 4:
+        if Normal_Maze_Size[self.maze_id] == 4:
             self.start_pos = (22, 3)
-        elif maze_size[self.maze_id] == 5:
+        elif Normal_Maze_Size[self.maze_id] == 5:
             self.start_pos = (28, 3)
-        elif maze_size[self.maze_id] == 6:
+        elif Normal_Maze_Size[self.maze_id] == 6:
             self.start_pos = (34, 3)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
@@ -90,7 +92,7 @@ class MazeMode(GameMode):
 
     def _init_maze(self, maze_no):
         for world in self.worlds:
-            for wall in Maze[maze_no]:
+            for wall in Normal_Maze_Map[maze_no]:
                 wall_bottom = world.CreateKinematicBody(position=(0, 0), linearVelocity=(0, 0))
                 box = wall_bottom.CreatePolygonFixture(vertices=wall)
         pass
@@ -111,7 +113,7 @@ class MazeMode(GameMode):
 
     def _is_car_arrive_end(self, car):
         if car.status:
-            if car.body.position[1] > 6 * maze_size[self.maze_id] + 1:
+            if car.body.position[1] > 6 * Normal_Maze_Size[self.maze_id] + 1:
                 car.end_time = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
                 self.user_time.append(car.end_time)
@@ -133,7 +135,7 @@ class MazeMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
-        for wall in Maze[self.maze_id]:
+        for wall in Normal_Maze_Map[self.maze_id]:
             vertices = []
             for vertice in wall:
                 vertices.append(
