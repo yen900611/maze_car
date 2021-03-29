@@ -81,12 +81,14 @@ class MazeCar:
         """
         wall_vertices = []
         if self.game_type == "MAZE":
-            for wall in Normal_Maze_Map[self.maze_id]:
+            for wall in self.game_mode.walls:
                 vertices = []
-                for vertice in wall:
-                    vertices.append(
-                        (vertice[0] * PPM * self.game_mode.size, HEIGHT - vertice[1] * PPM * self.game_mode.size))
-                wall_vertices.append(vertices)
+                wall_vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+                wall_vertices = [
+                    (v[0] - self.game_mode.viewCenter[0] + WIDTH / (PPM * 2), self.game_mode.viewCenter[1] - v[1] + HEIGHT / (PPM * 2))
+                    for v in wall_vertices]
+                wall_vertices = [(v[0] * PPM, v[1] * PPM) for v in wall_vertices]
+                vertices.append(wall_vertices)
         elif self.game_type == "MOVE_MAZE":
             for wall in self.game_mode.walls:
                 wall_vertices.append(wall.pixel_vertices)
@@ -105,8 +107,10 @@ class MazeCar:
                 {"name": "player5_car", "size": self.game_mode.car.size, "color": BROWN, "image": "car_05.png"},
                 {"name": "player6_car", "size": self.game_mode.car.size, "color": PINK, "image": "car_06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
+                {"name": "end_point", "size": (2*TILESIZE, 2*TILESIZE), "color": WHITE, "image": "logo.png"}
             ],
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
+                       "logo.png"
                        ]
         }
         if self.game_type == "MOVE_MAZE":
@@ -142,7 +146,8 @@ class MazeCar:
         """
         scene_info = self.get_scene_info
         game_progress = {
-            "game_object": {"info": [self._progress_dict(507, 20)], },
+            "game_object": {"info": [self._progress_dict(507, 20)],
+                            },
             "game_user_information": []
         }
         for user in self.game_mode.car_info:
@@ -159,6 +164,8 @@ class MazeCar:
             for wall in self.game_mode.walls:
                 wall_vertices.append(wall.pixel_vertices)
             game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
+        # else:
+        #     game_progress["game_object"]["logo"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
         return game_progress
 
         pass
