@@ -215,7 +215,10 @@ class MazeMode(GameMode):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
         # self.all_sprites.draw(self.screen)
-        self.screen.blit(self.end_point.image, self.end_point.rect)
+        try:
+            self.screen.blit(self.end_point.image, self.end_point.rect)
+        except Exception:
+            pass
         # self.draw_grid()
         # for sprite in self.all_sprites:
         #     pygame.draw.rect(self.screen, RED, sprite.rect, 2)
