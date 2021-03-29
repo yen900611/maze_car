@@ -1,10 +1,10 @@
 import time
 import Box2D
 
-from game_core.end_point import End_point, Check_point
-from game_core.maze_wall import Wall
-from game_core.tilemap import Map, Camera
-from game_core.maze_imformation import Normal_Maze_Size, Normal_Maze_Map
+from .end_point import End_point, Check_point
+from .maze_wall import Wall
+from .tilemap import Map, Camera
+from .maze_imformation import Normal_Maze_Size, Normal_Maze_Map
 from .car import Car
 from .gameMode import GameMode
 from .env import *

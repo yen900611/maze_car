@@ -1,8 +1,8 @@
 import time
 import Box2D
 
-from game_core.maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
-from game_core.maze_wall import Move_Wall
+from .maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
+from .maze_wall import Move_Wall
 from .car import Car
 from .gameMode import GameMode
 from .env import *

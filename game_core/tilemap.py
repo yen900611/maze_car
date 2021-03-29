@@ -1,5 +1,5 @@
 import pygame
-from game_core.env import *
+from .env import *
 
 class Map:
     def __init__(self, filename):

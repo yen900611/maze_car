@@ -1,4 +1,4 @@
-from game_core.maze_imformation import Normal_Maze_Map
+from .maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .sound_controller import *

@@ -1,7 +1,7 @@
 import time
 
 import pygame
-from game_core.env import *
+from .env import *
 
 class End_point(pygame.sprite.Sprite):
     def __init__(self, game, coordinate):
