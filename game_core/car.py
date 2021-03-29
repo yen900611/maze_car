@@ -5,19 +5,19 @@ from .sensor import Sensor
 import pygame
 from .env import *
 
-
 class Car(pygame.sprite.Sprite):
-    def __init__(self, world, position: tuple, car_no: int, size):
+    def __init__(self, world, coordinate: tuple, car_no: int, size):
         pygame.sprite.Sprite.__init__(self)
         self.car_no = car_no  # From 0 to 5
         self.maze_size = size  # 4/size of maze
-        self.size = (int(50 * self.maze_size), int(40 * self.maze_size))  # car size
+        self.size =  (int(50 * self.maze_size), int(40 * self.maze_size))  # car size
+        self.is_completed = False
         self.end_time = 0
         self.score = 0 # 積分
         self.origin_image = pygame.transform.scale(
             pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
             self.size)
-        self.image = self.origin_image  # after rotate
+        self.image = self.origin_image  # after rotatef`
         self.rect = self.image.get_rect()
         self.status = True
         self.sensor_R = 0
@@ -26,25 +26,11 @@ class Car(pygame.sprite.Sprite):
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
-        self.body = world.CreateDynamicBody(position=position)
-        self.box1 = self.body.CreatePolygonFixture(box=(0.9, 0.9), density=1, friction=0.1, restitution=0.3)
+        self.body = world.CreateDynamicBody(position=coordinate)
+        self.box = self.body.CreatePolygonFixture(box=(1, 1), density=1, friction=0.1, restitution=0.3)
         self.vertices = []  # pygame
         self.sensor = Sensor(world, self.body)
-
-        '''模擬摩擦力'''
-        r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
-        gravity = 10
-        ground = world.CreateBody(position=(0, 20))
-        world.CreateFrictionJoint(
-            bodyA=ground,
-            bodyB=self.body,
-            localAnchorA=(0, 0),
-            localAnchorB=(0, 0),
-            collideConnected=True,
-            maxForce=self.body.mass * r * gravity * 4,
-            maxTorque=self.body.mass * r * gravity
-        )
-        pass
+        self.check_point = 0
 
     def update(self, commands):
         self.get_polygon_vertice()
@@ -61,9 +47,10 @@ class Car(pygame.sprite.Sprite):
                 self.L_PWM = -255
             else:
                 self.L_PWM = commands[0]['left_PWM']
-
             self.left_move(self.L_PWM)
             self.right_move(self.R_PWM)
+        else:
+            self.body.linearVelocity = (0, 0)
 
 
     def detect_distance(self, frame, walls):
@@ -71,7 +58,6 @@ class Car(pygame.sprite.Sprite):
         self.sensor_R = sensor_value["right_value"]
         self.sensor_L = sensor_value["left_value"]
         self.sensor_F = sensor_value["front_value"]
-        pass
 
     def left_move(self, pwm: int):
         if pwm <0:
@@ -103,7 +89,7 @@ class Car(pygame.sprite.Sprite):
         return self.car_info
 
     def get_polygon_vertice(self):
-        self.vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box1.shape.vertices]
+        self.vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box.shape.vertices]
         self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
         self.rect = self.image.get_rect()

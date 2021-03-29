@@ -5,8 +5,16 @@ TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 
 '''width and height'''
-WIDTH = 820
+WIDTH =820
 HEIGHT = 520
+TILE_WIDTH = 480 #大小
+TILE_HEIGHT = 480
+
+'''tile-base'''
+TILESIZE = 20
+TILE_LEFTTOP = 20, 20
+GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0])/TILESIZE
+GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1])/TILESIZE
 
 '''environment data'''
 FPS = 30
@@ -39,4 +47,9 @@ SOUND_DIR = path.join(path.dirname(__file__), 'sound')
 
 '''image'''
 info_image = "info.png"
+LOGO = "logo.png"
+
+'''map_file'''
+NORMAL_MAZE_MAPS = ["level_1.txt", "normal_map_1.txt"]
+MAZE_TEST = "map_test.txt"
 
