@@ -1,7 +1,7 @@
 import time
 import Box2D
 
-from game_core.end_point import End_point
+from game_core.end_point import End_point, Check_point
 from game_core.maze_wall import Wall
 from game_core.tilemap import Map, Camera
 from game_core.maze_imformation import Normal_Maze_Size, Normal_Maze_Map
@@ -37,7 +37,7 @@ class MazeMode(GameMode):
         self._init_car()
         # self._init_maze(self.maze_id)
         self.eliminated_user = []
-        self.user_time = []
+        self.user_check_points = []
         self.new()
         '''sound'''
         self.sound_controller = sound_controller
@@ -80,7 +80,9 @@ class MazeMode(GameMode):
                         Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world,
                                   len(self.map.data))
                 elif tile == "E":
-                    End_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    self.end_point = End_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                elif tile == "C":
+                    Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.camera = Camera(self.map.width, self.map.height)
         pass
 
@@ -192,22 +194,12 @@ class MazeMode(GameMode):
                 if car not in self.eliminated_user and car.status:
                     car.end_time = round(time.time() - self.start_time)
                     self.eliminated_user.append(car)
-                    self.user_time.append(car.end_time)
+                    self.user_check_points.append(car.check_point)
                     car.status = False
             self.is_end = True
             self.rank()
             self._print_result()
             self.status = "GAME OVER"
-        pass
-
-    def _is_car_arrive_end(self, car):
-        if car.status:
-            if car.body.position[1] > 6 * Normal_Maze_Size[self.maze_id] + 1:
-                car.end_time = round(time.time() - self.start_time)
-                self.eliminated_user.append(car)
-                self.user_time.append(car.end_time)
-                car.status = False
-        pass
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
@@ -223,6 +215,7 @@ class MazeMode(GameMode):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
         # self.all_sprites.draw(self.screen)
+        self.screen.blit(self.end_point.image, self.end_point.rect)
         # self.draw_grid()
         # for sprite in self.all_sprites:
         #     pygame.draw.rect(self.screen, RED, sprite.rect, 2)
@@ -283,10 +276,14 @@ class MazeMode(GameMode):
     def rank(self):
         while len(self.eliminated_user) > 0:
             for car in self.eliminated_user:
-                if car.end_time == min(self.user_time):
+                if car.is_completed:
                     self.ranked_user.append(car)
-                    self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
+                else:
+                    if car.check_point == max(self.user_check_points):
+                        self.ranked_user.append(car)
+                        self.user_check_points.remove(car.check_point)
+                        self.eliminated_user.remove(car)
         for i in range(len(self.ranked_user)):
             if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
                 if i == 0:

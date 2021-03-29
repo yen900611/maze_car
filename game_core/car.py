@@ -11,6 +11,7 @@ class Car(pygame.sprite.Sprite):
         self.car_no = car_no  # From 0 to 5
         self.maze_size = size  # 4/size of maze
         self.size =  (int(50 * self.maze_size), int(40 * self.maze_size))  # car size
+        self.is_completed = False
         self.end_time = 0
         self.score = 0 # 積分
         self.origin_image = pygame.transform.scale(
@@ -29,20 +30,7 @@ class Car(pygame.sprite.Sprite):
         self.box = self.body.CreatePolygonFixture(box=(1, 1), density=1, friction=0.1, restitution=0.3)
         self.vertices = []  # pygame
         self.sensor = Sensor(world, self.body)
-
-        # '''模擬摩擦力'''
-        # r = math.sqrt(2.0 * self.body.inertia / self.body.mass)
-        # gravity = 10
-        # ground = world.CreateBody(position=(0, 20))
-        # world.CreateFrictionJoint(
-        #     bodyA=ground,
-        #     bodyB=self.body,
-        #     localAnchorA=(0, 0),
-        #     localAnchorB=(0, 0),
-        #     collideConnected=True,
-        #     maxForce=self.body.mass * r * gravity * 4,
-        #     maxTorque=self.body.mass * r * gravity
-        # )
+        self.check_point = 0
 
     def update(self, commands):
         self.get_polygon_vertice()
