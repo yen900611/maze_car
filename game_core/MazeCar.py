@@ -21,7 +21,7 @@ class MazeCar:
             self.game_type = "MOVE_MAZE"
         self.user_num = user_num
         self.sound_controller.play_music()
-        self.gameView = PygameView(self.get_game_info())
+        # self.gameView = PygameView(self.get_game_info())
 
     def update(self, commands):
         self.game_mode.ticks()
@@ -110,7 +110,7 @@ class MazeCar:
                 {"name": "end_point", "size": (2*TILESIZE, 2*TILESIZE), "color": WHITE, "image": "logo.png"}
             ],
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
-                       "logo.png"
+                       LOGO
                        ]
         }
         if self.game_type == "MOVE_MAZE":
