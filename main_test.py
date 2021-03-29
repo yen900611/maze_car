@@ -6,6 +6,7 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     game = game_test.MazeCar(2, "MAZE", 1, 120, "OFF")
+    # game = game_test.MazeCar(2, "MOVE_MAZE", 1, 12., "OFF")
     # sound_controller.play_music()
 
     while game.isRunning():

@@ -10,9 +10,9 @@ class Sensor():
         self.right_value = 0
         self.left_value = 0
         self.front_value = 0
-        self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + 0.45, body.position[1]))
+        self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + 1, body.position[1]))
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
-        self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 0.45, body.position[1]))
+        self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 1, body.position[1]))
         ball = self.sensor_left.CreateCircleFixture(radius=0.1)
         world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, anchorA=self.sensor_left.position,
                                   anchorB=body.position, collideConnected=True)

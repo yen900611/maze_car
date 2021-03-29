@@ -10,8 +10,21 @@ def count_position(vertices):
     position = v_sum[0] / 4, v_sum[1] / 4
     return position
 
-
 class Wall(pygame.sprite.Sprite):
+    def __init__(self, game, coordinate, world, map_length):
+        pygame.sprite.Sprite.__init__(self, game.walls)
+        self.game = game
+        self.world = world
+        self.image = pygame.Surface((TILESIZE, TILESIZE))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.x, self.y = coordinate
+        self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
+        self.body = world.CreateKinematicBody(position=(self.x + TILESIZE/ (2*PPM), GRIDHEIGHT + TILE_LEFTTOP[1] / PPM - self.y - TILESIZE/ (2*PPM)))
+        # self.body = world.CreateKinematicBody(position=(2,2))
+        self.box = self.body.CreatePolygonFixture(box = ((TILESIZE/ (2*PPM), TILESIZE/ (2*PPM))))
+
+class Move_Wall(pygame.sprite.Sprite):
     def __init__(self, world, vertices_init, size, is_move=False, vertices_end=None, velocity=(0, 0)):
         pygame.sprite.Sprite.__init__(self)
         # 先建立Box2D的物件，再用Box2D換算pygame座標來建立sprite(？
@@ -35,10 +48,7 @@ class Wall(pygame.sprite.Sprite):
     def update(self) -> None:
         self.get_polygon_vertice()
         self.get_wall_infomation()
-        # self.count_position(self.vertices)
         if self.is_move:
-            # print(self.pixel_vertices)
-            # print(self.wall_info)
             self.move()
         pass
 
@@ -93,10 +103,6 @@ class Wall(pygame.sprite.Sprite):
         self.vertices = [(self.body.transform * v) for v in self.box.shape.vertices]
         self.pixel_vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box.shape.vertices]
         self.pixel_vertices = [(v[0], HEIGHT - v[1]) for v in self.pixel_vertices]
-        # self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
-        # self.rect = self.image.get_rect()
-        # self.rect.center = self.body.position[0] * PPM * self.maze_size, HEIGHT - self.body.position[
-        #     1] * PPM * self.maze_size
 
     def get_wall_infomation(self):
         self.wall_info = []
@@ -104,6 +110,10 @@ class Wall(pygame.sprite.Sprite):
         self.wall_info.append([self.vertices[2],self.vertices[1]])
         self.wall_info.append([self.vertices[3],self.vertices[0]])
         self.wall_info.append([self.vertices[2],self.vertices[3]])
+
+class Check_point:
+    def __init__(self):
         pass
 
-
+    def collide_with_car(self):
+        pass

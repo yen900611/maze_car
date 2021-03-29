@@ -5,9 +5,9 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("OFF")
-    game = mazeMode.MazeMode(1, 1, 120, sound_controller)
-    # game = moveMazeMode.MoveMazeMode(1, 1, 40, "OFF")
-    # game = collideMazeMode.CollideMode(1, 1, 110, "OFF")
+    game = mazeMode.MazeMode(3, 2, 40, sound_controller)
+    # game = moveMazeMode.MoveMazeMode(1, 2, 40, sound_controller)
+    # game = collideMazeMode.CollideMode(1, 1, 110, sound_controller)
     sound_controller.play_music()
 
     while game.isRunning():
@@ -21,6 +21,7 @@ if __name__ == '__main__':
         game.update_sprite(commands)
         game.draw_bg()
         game.drawWorld()
+        # game.all_sprites.draw(game.screen)
         game.flip()
 
     pygame.quit()

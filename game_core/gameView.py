@@ -3,6 +3,16 @@ import math
 from .env import *
 import pygame
 
+NAME = "name"
+TYPE = "type"
+ANGLE = "angle"
+SIZE = "size"
+COLOR = "color"
+CORDINATE = "coordinate"
+IMAGE = "image"
+RECTANGLE = "rectangle"
+VERTICES = "vertices"
+
 class PygameView():
     def __init__(self, game_info:dict):
         pygame.display.init()
@@ -27,21 +37,23 @@ class PygameView():
         '''
         object_imformation = self.check_game_object_information(object_imformation)
         for game_object in object_imformation["game_object"]:
-            if game_object["type"] == "image":
-                if "angle" in game_object.keys():
-                    image = pygame.transform.rotate(pygame.transform.scale(self.image_dict[game_object["image"]], game_object["size"]), (game_object["angle"]* 180 / math.pi) % 360)
+            if game_object[TYPE] == IMAGE:
+                if ANGLE in game_object.keys():
+                    image = pygame.transform.rotate(pygame.transform.scale(self.image_dict[game_object[IMAGE]], game_object[
+                        SIZE]), (game_object[ANGLE] * 180 / math.pi) % 360)
                     rect = image.get_rect()
-                    rect.center = game_object["coordinate"]
+                    rect.center = game_object[CORDINATE]
                     self.screen.blit(image, rect)
 
                 else:
-                    self.screen.blit(pygame.transform.scale(self.image_dict[game_object["image"]], game_object["size"]), game_object["coordinate"])
-            elif game_object["type"] == "rectangle":
-                pygame.draw.rect(self.screen, game_object["color"],
-                                 pygame.Rect(game_object["coordinate"], game_object["size"]))
+                    self.screen.blit(pygame.transform.scale(self.image_dict[game_object[IMAGE]], game_object[SIZE]), game_object[
+                        CORDINATE])
+            elif game_object[TYPE] == RECTANGLE:
+                pygame.draw.rect(self.screen, game_object[COLOR],
+                                 pygame.Rect(game_object[CORDINATE], game_object[SIZE]))
                 pass
-            elif game_object["type"] == "vertices":
-                pygame.draw.polygon(self.screen, game_object["color"], game_object["vertices"])
+            elif game_object[TYPE] == VERTICES:
+                pygame.draw.polygon(self.screen, game_object[COLOR], game_object[VERTICES])
                 pass
             else:
                 pass
@@ -65,17 +77,17 @@ class PygameView():
         object_information = data
         if "game_object" in object_information.keys():
             for game_object in object_information["game_object"]:
-                if ("name" or "type" or "coordinate") not in game_object.keys():
+                if (NAME or TYPE or CORDINATE) not in game_object.keys():
                     object_information["game_object"].remove(game_object)
                 else:
-                    if game_object["type"] == "image":
-                        if "image" not in game_object.keys():
+                    if game_object[TYPE] == IMAGE:
+                        if IMAGE not in game_object.keys():
                             object_information["game_object"].remove(game_object)
-                    elif game_object["type"] == "rectangle":
-                        if ("size" or "color") not in game_object.keys():
+                    elif game_object[TYPE] == RECTANGLE:
+                        if (SIZE or COLOR) not in game_object.keys():
                             object_information["game_object"].remove(game_object)
-                    elif game_object["type"] == "vertices":
-                        if "vertices" not in game_object.keys():
+                    elif game_object[TYPE] == VERTICES:
+                        if VERTICES not in game_object.keys():
                             object_information["game_object"].remove(game_object)
                     else:
                         object_information["game_object"].remove(game_object)

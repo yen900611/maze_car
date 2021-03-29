@@ -81,7 +81,7 @@ class MazeCar:
         """
         wall_vertices = []
         if self.game_type == "MAZE":
-            for wall in Maze[self.maze_id]:
+            for wall in Normal_Maze_Map[self.maze_id]:
                 vertices = []
                 for vertice in wall:
                     vertices.append(
@@ -159,7 +159,7 @@ class MazeCar:
                                              "size": user["size"],
                                              "image": "car_0" + str(user["id"] + 1) + ".png",
                                              "coordinate": user["center"]})
-        for wall in Maze[self.maze_id]:
+        for wall in Normal_Maze_Map[self.maze_id]:
             vertices = []
             for vertice in wall:
                 vertices.append(

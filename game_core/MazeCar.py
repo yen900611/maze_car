@@ -1,6 +1,6 @@
+from game_core.maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
-from .env import *
 from .sound_controller import *
 from .gameView import PygameView
 
@@ -81,7 +81,7 @@ class MazeCar:
         """
         wall_vertices = []
         if self.game_type == "MAZE":
-            for wall in Maze[self.maze_id]:
+            for wall in Normal_Maze_Map[self.maze_id]:
                 vertices = []
                 for vertice in wall:
                     vertices.append(
