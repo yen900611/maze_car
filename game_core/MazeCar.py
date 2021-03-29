@@ -1,7 +1,6 @@
-from maze_imformation import Normal_Maze_Map
+from game_core.maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
-from .env import *
 from .sound_controller import *
 from .gameView import PygameView
 

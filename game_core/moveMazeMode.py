@@ -1,12 +1,13 @@
 import time
 import Box2D
 
-from maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
+from game_core.maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
+from game_core.maze_wall import Move_Wall
 from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
-from .maze_wall import Wall
+# from .maze_wall import Wall
 
 
 class MoveMazeMode(GameMode):
@@ -103,7 +104,7 @@ class MoveMazeMode(GameMode):
     def _init_maze(self, maze_no):
         for world in self.worlds:
             for wall in Move_Maze[maze_no]:
-                maze_wall = Wall(world, wall["vertices_init"], self.size, wall["is_move"], velocity=wall["velocity"],
+                maze_wall = Move_Wall(world, wall["vertices_init"], self.size, wall["is_move"], velocity=wall["velocity"],
                                  vertices_end=wall["vertices_end"])
                 self.walls.add(maze_wall)
         pass
@@ -124,7 +125,8 @@ class MoveMazeMode(GameMode):
 
     def _is_car_arrive_end(self, car):
         if car.status:
-            if car.body.position[1] > 6 * Normal_Maze_Size[self.maze_id] + 1:
+            if car.body.position[1] > 6 * Move_Maze_Size[self.maze_id] + 1:
+
                 car.end_time = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
                 self.user_time.append(car.end_time)
@@ -146,25 +148,11 @@ class MoveMazeMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MoveMazeMode, self).drawWorld()
-
-        def my_draw_circle(circle, body, fixture):
-            position = body.transform * circle.pos * PPM * self.size
-            position = (position[0], HEIGHT - position[1])
-            pygame.draw.circle(self.screen, WHITE, [int(
-                x) for x in position], int(circle.radius * PPM * self.size))
-
-        def my_draw_polygon(polygon, body, fixture):
-            vertices = [(body.transform * v) * PPM * self.size for v in polygon.vertices]
+        for wall in self.walls:
+            vertices = [(wall.body.transform * v) * PPM * self.size for v in wall.box.shape.vertices]
             vertices = [(v[0], HEIGHT - v[1]) for v in vertices]
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
-        Box2D.b2.polygonShape.draw = my_draw_polygon
-        Box2D.b2.circleShape.draw = my_draw_circle
-
-        for world in self.worlds:
-            for body in world.bodies:
-                for fixture in body.fixtures:
-                    fixture.shape.draw(body, fixture)
         self.cars.draw(self.screen)
         pass
 
