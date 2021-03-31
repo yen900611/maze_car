@@ -15,11 +15,11 @@ class Wall(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, game.walls)
         self.game = game
         self.world = world
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(WHITE)
-        self.rect = self.image.get_rect()
+        # self.image = pygame.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(WHITE)
+        # self.rect = self.image.get_rect()
+        # self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
         self.x, self.y = coordinate
-        self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
         self.body = world.CreateKinematicBody(position=(self.x + TILESIZE/ (2*PPM), GRIDHEIGHT + TILE_LEFTTOP[1] / PPM - self.y - TILESIZE/ (2*PPM)))
         # self.body = world.CreateKinematicBody(position=(2,2))
         self.box = self.body.CreatePolygonFixture(box = ((TILESIZE/ (2*PPM), TILESIZE/ (2*PPM))))

@@ -1,3 +1,4 @@
+import math
 import time
 import Box2D
 
@@ -57,6 +58,7 @@ class MoveMazeMode(GameMode):
                 self.wall_information.append(info)
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
+            self.get_polygon_vertice(car)
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
             car.detect_distance(self.frame, self.wall_information)
@@ -131,7 +133,14 @@ class MoveMazeMode(GameMode):
                 self.eliminated_user.append(car)
                 self.user_time.append(car.end_time)
                 car.status = False
-        pass
+
+    def get_polygon_vertice(self, car):
+        car.vertices = [(car.body.transform * v) * PPM * car.maze_size for v in car.box.shape.vertices]
+        car.vertices = [(v[0], HEIGHT - v[1]) for v in car.vertices]
+        car.image = pygame.transform.rotate(car.origin_image, (car.body.angle * 180 / math.pi) % 360)
+        car.rect = car.image.get_rect()
+        car.rect.center = car.body.position[0] * PPM * car.maze_size, HEIGHT - car.body.position[
+            1] * PPM * car.maze_size
 
     def draw_bg(self):
         '''show the background and imformation on screen,call this fuction per frame'''
@@ -139,7 +148,7 @@ class MoveMazeMode(GameMode):
         self.screen.fill(BLACK)
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
-            self.draw_time(time.time())
+            self.draw_time(self.frame)
         pass
 
         '''畫出每台車子的資訊'''

@@ -90,10 +90,10 @@ class Car(pygame.sprite.Sprite):
                          }
         return self.car_info
 
-    def get_polygon_vertice(self):
-        self.vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box.shape.vertices]
-        self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
-        self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.body.position[0] * PPM * self.maze_size, HEIGHT - self.body.position[
-            1] * PPM * self.maze_size
+    # def get_polygon_vertice(self):
+    #     self.vertices = [(self.body.transform * v) * PPM * self.maze_size for v in self.box.shape.vertices]
+    #     self.vertices = [(v[0], HEIGHT - v[1]) for v in self.vertices]
+    #     self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
+    #     self.rect = self.image.get_rect()
+    #     self.rect.center = self.body.position[0] * PPM * self.maze_size, HEIGHT - self.body.position[
+    #         1] * PPM * self.maze_size
