@@ -71,8 +71,8 @@ class GameMode(object):
     def isRunning(self) -> bool:
         return self.running
 
-    def draw_time(self,set_time):
-        now_time = set_time - self.start_time
+    def draw_time(self,present_frame):
+        now_time = present_frame / FPS
         min = round(now_time // 60)
         if min//10 <1:
             min_str = "0"+str(min)

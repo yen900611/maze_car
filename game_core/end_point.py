@@ -24,7 +24,7 @@ class End_point(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
         for hit in hits:
             if hit.status:
-                hit.end_time = round(time.time() - self.game.start_time)
+                hit.end_frame = self.game.frame
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)
                 hit.status = False

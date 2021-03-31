@@ -12,7 +12,7 @@ class Car(pygame.sprite.Sprite):
         self.maze_size = size  # 4/size of maze
         self.size =  (int(50 * self.maze_size), int(40 * self.maze_size))  # car size
         self.is_completed = False
-        self.end_time = 0
+        self.end_frame = 0
         self.score = 0 # 積分
         self.origin_image = pygame.transform.scale(
             pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),

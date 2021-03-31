@@ -154,7 +154,7 @@ class MazeMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.ranked_user:
-                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "frame")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
             print("score:", self.ranked_score)
             self.x += 1
@@ -192,7 +192,7 @@ class MazeMode(GameMode):
             print("game end")
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
-                    car.end_time = round(time.time() - self.start_time)
+                    car.end_time = self.frame
                     self.eliminated_user.append(car)
                     self.user_check_points.append(car.check_point)
                     car.status = False
@@ -207,7 +207,7 @@ class MazeMode(GameMode):
         self.screen.fill(BLACK)
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
         if self.is_end == False:
-            self.draw_time(time.time())
+            self.draw_time(self.frame)
         '''畫出每台車子的資訊'''
         self._draw_user_imformation()
 
@@ -261,7 +261,7 @@ class MazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
                                                   178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "frame",
                                                   600, 178 + 40 + 94 * (i // 2))
 
                     else:
@@ -273,7 +273,7 @@ class MazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
                                                   178 + 60 + 94 * (i // 2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "frame",
                                                   730, 178 + 40 + 94 * (i // 2))
 
     def rank(self):
@@ -288,12 +288,12 @@ class MazeMode(GameMode):
                         self.user_check_points.remove(car.check_point)
                         self.eliminated_user.remove(car)
         for i in range(len(self.ranked_user)):
-            if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
+            if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
                 if i == 0:
                     self.ranked_user[i].score = 6
                 else:
                     for j in range(1, i + 1):
-                        if self.ranked_user[i - j].end_time == self.ranked_user[i].end_time:
+                        if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
                             if i == j:
                                 self.ranked_user[i].score = 6
                             else:
