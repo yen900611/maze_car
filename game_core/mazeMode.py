@@ -14,7 +14,7 @@ import pygame
 class MazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sound_controller):
         super(MazeMode, self).__init__()
-        self.viewCenter = [WIDTH / 2 / PPM, HEIGHT / 2 / PPM]  # Box2D to Pygame
+        self.pygame_point = [0, HEIGHT / PPM]  # Box2D to Pygame
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         self.ranked_user = []  # pygame.sprite car
         self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
@@ -65,7 +65,7 @@ class MazeMode(GameMode):
             self.running = False
         # self.viewCenter[0] += 0.1
 
-        # self.viewCenter = self.car.body.position[0], self.car.body.position[1]
+        # self.pygame_point = self.car.body.position[0], self.car.body.position[1]
         # self.camera.update(self.car)
 
     def new(self):
@@ -228,10 +228,11 @@ class MazeMode(GameMode):
             # pygame.draw.line(self.screen, GREY, (wall[0][0]*PPM, HEIGHT - wall[0][1]*PPM), (wall[1][0]*PPM, HEIGHT - wall[1][1]*PPM), 3)
         for wall in self.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [(v[0] - self.viewCenter[0] + WIDTH / (PPM * 2), self.viewCenter[1] - v[1] + HEIGHT / (PPM * 2))
+            vertices = [(v[0] - self.pygame_point[0], self.pygame_point[1] - v[1])
                         for v in vertices]
             vertices = [(v[0] * PPM, v[1] * PPM) for v in vertices]
             pygame.draw.polygon(self.screen, WHITE, vertices)
+        pygame.draw.circle(self.screen, BLUE, (0- self.pygame_point[0] * PPM, self.pygame_point[1]*PPM), 10)
         # for car in self.cars:
             # pygame.draw.rect(self.screen, GREEN, car.rect, 2)
             # pygame.draw.circle(self.screen, GREEN, (car.sensor.sensor_right.position[0]*PPM,HEIGHT - car.sensor.sensor_right.position[1]*PPM),
@@ -245,7 +246,9 @@ class MazeMode(GameMode):
             # vertices = [(v[0] - self.viewCenter[0] + WIDTH/(PPM * 2), self.viewCenter[1] - v[1] + HEIGHT/(PPM * 2)) for v in vertices]
             # vertices = [(v[0] * PPM, v[1] * PPM) for v in vertices]
             # pygame.draw.polygon(self.screen, WHITE, vertices)
-
+        for car in self.cars:
+            car.rect.centerx = (car.body.position[0] - self.pygame_point[0]) * PPM
+            car.rect.centery = (self.pygame_point[1] - car.body.position[1]) * PPM
         self.cars.draw(self.screen)
 
     def _draw_user_imformation(self):
