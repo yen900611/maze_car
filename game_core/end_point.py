@@ -6,6 +6,7 @@ from .env import *
 class End_point(pygame.sprite.Sprite):
     def __init__(self, game, coordinate):
         self.group = game.all_sprites
+        # super(End_point, self).__init__(self.group)
         pygame.sprite.Sprite.__init__(self, self.group)
         self.game = game
         self.image = pygame.image.load(path.join(IMAGE_DIR, LOGO))
@@ -28,7 +29,6 @@ class End_point(pygame.sprite.Sprite):
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)
                 hit.status = False
-        pass
 
 class Check_point(pygame.sprite.Sprite):
     def __init__(self, game, coordinate):
@@ -44,6 +44,7 @@ class Check_point(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
+
 
     def detect_cars_collision(self):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)

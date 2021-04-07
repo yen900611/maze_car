@@ -10,11 +10,9 @@ from .gameMode import GameMode
 from .env import *
 import pygame
 
-
 class MazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sound_controller):
         super(MazeMode, self).__init__()
-        self.viewCenter = [WIDTH / 2 / PPM, HEIGHT / 2 / PPM]  # Box2D to Pygame
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         self.ranked_user = []  # pygame.sprite car
         self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
@@ -39,6 +37,10 @@ class MazeMode(GameMode):
         self.eliminated_user = []
         self.user_check_points = []
         self.new()
+        # self.pygame_point = [0, self.map.tileHeight]  # Box2D to Pygame
+        # self.pygame_point = [TILE_LEFTTOP[0]/-PPM, TILE_LEFTTOP[1]/PPM]  # Box2D to Pygame
+        self.pygame_point = [0,0]  # Box2D to Pygame
+
         '''sound'''
         self.sound_controller = sound_controller
 
@@ -52,27 +54,51 @@ class MazeMode(GameMode):
         self.handle_event()
         self._is_game_end()
         self.command = command
+        # self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
+        #                      self.car.body.position[1] + HEIGHT / 2 / PPM]
+        self.limit_pygame_screen()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
+            car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
             self.car_info.append(car.get_info())
             # self._is_car_arrive_end(car)
             car.detect_distance(self.frame, self.wall_info)
         self.all_sprites.update()
+        for sprite in self.all_sprites:
+            sprite.rect.x, sprite.rect.y = self.trnsfer_box2d_to_pygame((sprite.x + TILESIZE/2/PPM, -sprite.y - TILESIZE/2/PPM))
+            # print(sprite.rect.center)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
         if self.is_end:
             self.running = False
-        # self.viewCenter[0] += 0.1
 
-        # self.viewCenter = self.car.body.position[0], self.car.body.position[1]
-        # self.camera.update(self.car)
+    def trnsfer_box2d_to_pygame(self, coordinate):
+        '''
+        :param coordinate: vertice of body of box2d object
+        :return: center of pygame rect
+        '''
+        return ((coordinate[0]- self.pygame_point[0]) * PPM, (self.pygame_point[1] - coordinate[1])*PPM)
 
+    def limit_pygame_screen(self):
+        self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
+                             self.car.body.position[1] + HEIGHT / 2 / PPM]
+        if self.pygame_point[1] > 0:
+            self.pygame_point[1] = 0
+        elif self.pygame_point[1] < TILE_HEIGHT/PPM-self.map.tileHeight:
+            self.pygame_point[1] = TILE_HEIGHT/PPM-self.map.tileHeight
+        else:
+            pass
+        if self.pygame_point[0] >self.map.tileWidth-TILE_WIDTH/PPM:
+            self.pygame_point[0] = self.map.tileWidth-TILE_WIDTH/PPM
+        elif self.pygame_point[0] < 0:
+            self.pygame_point[0] = 0
+        else:
+            pass
     def new(self):
         self.load_data()
         self.walls = pygame.sprite.Group()
         self.get_wall_info()
-        # print(self.wall_info)
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == "1":
@@ -83,6 +109,7 @@ class MazeMode(GameMode):
                     self.end_point = End_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == "C":
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+
         self.camera = Camera(self.map.width, self.map.height)
         pass
 
@@ -99,7 +126,6 @@ class MazeMode(GameMode):
                         if col == len(tiles) -1:
                             last_tile = col
                             self.wall_vertices((first_tile, row), (last_tile, row))
-                            # wall_tiles.append([(first_tile,row), (last_tile,row)])
                             first_tile = -1
                             col += 1
                         else:
@@ -107,7 +133,6 @@ class MazeMode(GameMode):
                     elif col == len(tiles) -1:
                         last_tile = col
                         self.wall_vertices((first_tile, row), (last_tile, row))
-                        # wall_tiles.append([(first_tile,row), (last_tile,row)])
                         first_tile = -1
                         col += 1
                     else:
@@ -116,7 +141,6 @@ class MazeMode(GameMode):
                     if first_tile != -1:
                         last_tile = col - 1
                         self.wall_vertices((first_tile, row), (last_tile, row))
-                        # wall_tiles.append([(first_tile,row), (last_tile,row)])
                         first_tile = -1
                         col += 1
                     else:
@@ -143,8 +167,8 @@ class MazeMode(GameMode):
     def load_data(self):
         game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
-        # img_folder = path.join(path.dirname(__file__), "image")
         self.map = Map(path.join(map_folder, self.map_file))
+        # self.map = Map(path.join(map_folder, MAZE_TEST))
         pass
 
     def detect_collision(self):
@@ -154,7 +178,7 @@ class MazeMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.ranked_user:
-                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "frame")
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
             print("score:", self.ranked_score)
             self.x += 1
@@ -165,20 +189,13 @@ class MazeMode(GameMode):
         for i in range(user_no):
             world = Box2D.b2.world(gravity=(0, 0), doSleep=True, CollideConnected=False)
             self.worlds.append(world)
-        pass
 
     def _init_car(self):
-        # if Normal_Maze_Size[self.maze_id] == 4:
-        self.start_pos = (22, 3)
-        # elif Normal_Maze_Size[self.maze_id] == 5:
-        #     self.start_pos = (28, 3)
-        # elif Normal_Maze_Size[self.maze_id] == 6:
-        #     self.start_pos = (34, 3)
+        self.start_pos = (29, -30)
         for world in self.worlds:
             self.car = Car(world, self.start_pos, self.worlds.index(world), self.size)
             self.cars.add(self.car)
             self.car_info.append(self.car.get_info())
-            pass
 
     def _init_maze(self, maze_no):
         for world in self.worlds:
@@ -205,48 +222,37 @@ class MazeMode(GameMode):
         '''show the background and imformation on screen,call this fuction per frame'''
         super(MazeMode, self).draw_bg()
         self.screen.fill(BLACK)
+
+
+    def drawWorld(self):
+        '''show all cars and lanes on screen,call this fuction per frame'''
+        super(MazeMode, self).drawWorld()
+        for wall in self.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
+            pygame.draw.polygon(self.screen, WHITE, vertices)
+
+        # self.all_sprites.draw(self.screen)
+        self.cars.draw(self.screen)
+        '''色塊'''
+        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, TILE_LEFTTOP[0], HEIGHT))
+        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, WIDTH, TILE_LEFTTOP[1]))
+        pygame.draw.rect(self.screen, BLACK, pygame.Rect(TILE_LEFTTOP[0]+TILE_WIDTH, 0, WIDTH-TILE_LEFTTOP[0]-TILE_WIDTH, HEIGHT))
+        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, TILE_LEFTTOP[1]+TILE_HEIGHT, WIDTH, HEIGHT - TILE_LEFTTOP[1]-TILE_HEIGHT))
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
+
+
+        try:
+            self.screen.blit(self.end_point.image, self.end_point.rect)
+        except Exception:
+            pass
         if self.is_end == False:
             self.draw_time(self.frame)
         '''畫出每台車子的資訊'''
         self._draw_user_imformation()
 
-    def drawWorld(self):
-        '''show all cars and lanes on screen,call this fuction per frame'''
-        super(MazeMode, self).drawWorld()
-        # self.all_sprites.draw(self.screen)
-        try:
-            self.screen.blit(self.end_point.image, self.end_point.rect)
-        except Exception:
-            pass
         # self.draw_grid()
-        # for sprite in self.all_sprites:
-        #     pygame.draw.rect(self.screen, RED, sprite.rect, 2)
-        # for wall in self.wall_info:
-            # pygame.draw.circle(self.screen, WHITE, (0*PPM, HEIGHT - 0*PPM), 5)
-            # pygame.draw.circle(self.screen, WHITE, (1*PPM, HEIGHT - 1*PPM), 5)
-            # pygame.draw.line(self.screen, GREY, (wall[0][0]*PPM, HEIGHT - wall[0][1]*PPM), (wall[1][0]*PPM, HEIGHT - wall[1][1]*PPM), 3)
-        for wall in self.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [(v[0] - self.viewCenter[0] + WIDTH / (PPM * 2), self.viewCenter[1] - v[1] + HEIGHT / (PPM * 2))
-                        for v in vertices]
-            vertices = [(v[0] * PPM, v[1] * PPM) for v in vertices]
-            pygame.draw.polygon(self.screen, WHITE, vertices)
-        # for car in self.cars:
-            # pygame.draw.rect(self.screen, GREEN, car.rect, 2)
-            # pygame.draw.circle(self.screen, GREEN, (car.sensor.sensor_right.position[0]*PPM,HEIGHT - car.sensor.sensor_right.position[1]*PPM),
-            #                    5)
-            #
-            # pygame.draw.circle(self.screen, GREEN, (car.sensor.sensor_left.position[0]*PPM,HEIGHT - car.sensor.sensor_left.position[1]*PPM),
-            #                    5)
-            # pygame.draw.polygon(self.screen, BLUE, car.vertices)
 
-            # vertices = [(car.body.transform * v) for v in car.box.shape.vertices]
-            # vertices = [(v[0] - self.viewCenter[0] + WIDTH/(PPM * 2), self.viewCenter[1] - v[1] + HEIGHT/(PPM * 2)) for v in vertices]
-            # vertices = [(v[0] * PPM, v[1] * PPM) for v in vertices]
-            # pygame.draw.polygon(self.screen, WHITE, vertices)
-
-        self.cars.draw(self.screen)
 
     def _draw_user_imformation(self):
         for i in range(6):

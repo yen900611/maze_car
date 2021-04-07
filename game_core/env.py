@@ -12,7 +12,7 @@ TILE_HEIGHT = 480
 
 '''tile-base'''
 TILESIZE = 20
-TILE_LEFTTOP = 20, 20
+TILE_LEFTTOP = 20, 20 #pixel
 GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0])/TILESIZE
 GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1])/TILESIZE
 
@@ -50,6 +50,6 @@ info_image = "info.png"
 LOGO = "logo.png"
 
 '''map_file'''
-NORMAL_MAZE_MAPS = ["level_1.txt", "normal_map_1.txt"]
+NORMAL_MAZE_MAPS = ["level_1.txt", "normal_map_1.txt", "normal_map_2.txt"]
 MAZE_TEST = "map_test.txt"
 

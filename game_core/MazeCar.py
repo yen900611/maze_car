@@ -85,7 +85,7 @@ class MazeCar:
                 vertices = []
                 wall_vertice = [(wall.body.transform * v) for v in wall.box.shape.vertices]
                 wall_vertice = [
-                    (v[0] - self.game_mode.viewCenter[0] + WIDTH / (PPM * 2), self.game_mode.viewCenter[1] - v[1] + HEIGHT / (PPM * 2))
+                    (v[0] - self.game_mode.pygame_point[0] + WIDTH / (PPM * 2), self.game_mode.pygame_point[1] - v[1] + HEIGHT / (PPM * 2))
                     for v in wall_vertice]
                 wall_vertice = [(v[0] * PPM, v[1] * PPM) for v in wall_vertice]
                 wall_vertices.append(wall_vertice)
