@@ -35,7 +35,9 @@ class Car(pygame.sprite.Sprite):
     def update(self, commands):
         # self.get_polygon_vertice()
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
+        # last_rect = self.rect
         self.rect = self.image.get_rect()
+        # self.rect.center=last_rect.center
         if self.status and commands != None:
             if commands[0]['right_PWM'] > 255:
                 self.R_PWM = 255

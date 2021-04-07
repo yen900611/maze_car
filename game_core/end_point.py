@@ -25,7 +25,6 @@ class End_point(pygame.sprite.Sprite):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
         for hit in hits:
             if hit.status:
-                print(hit.car_no, "hit!")
                 hit.end_frame = self.game.frame
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)
@@ -45,6 +44,7 @@ class Check_point(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
+
 
     def detect_cars_collision(self):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
