@@ -65,10 +65,7 @@ class MazeMode(GameMode):
             car.detect_distance(self.frame, self.wall_info)
         self.all_sprites.update()
         for sprite in self.all_sprites:
-            sprite.rect.x, sprite.rect.y = self.trnsfer_box2d_to_pygame((sprite.x, sprite.y))
-            sprite.rect.y += 100
-            # sprite.rect.x, sprite.rect.y = (sprite.x * TILESIZE - self.pygame_point[0] * PPM,
-            #                                                 sprite.y * TILESIZE + self.pygame_point[1] * PPM - TILE_HEIGHT)
+            sprite.rect.x, sprite.rect.y = self.trnsfer_box2d_to_pygame((sprite.x + TILESIZE/2/PPM, -sprite.y - TILESIZE/2/PPM))
             # print(sprite.rect.center)
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
@@ -112,6 +109,7 @@ class MazeMode(GameMode):
                     self.end_point = End_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == "C":
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+
         self.camera = Camera(self.map.width, self.map.height)
         pass
 
@@ -234,7 +232,7 @@ class MazeMode(GameMode):
             vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
-        self.all_sprites.draw(self.screen)
+        # self.all_sprites.draw(self.screen)
         self.cars.draw(self.screen)
         '''色塊'''
         pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, TILE_LEFTTOP[0], HEIGHT))
@@ -244,16 +242,16 @@ class MazeMode(GameMode):
         self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
 
 
-        # try:
-        #     self.screen.blit(self.end_point.image, self.end_point.rect)
-        # except Exception:
-        #     pass
+        try:
+            self.screen.blit(self.end_point.image, self.end_point.rect)
+        except Exception:
+            pass
         if self.is_end == False:
             self.draw_time(self.frame)
         '''畫出每台車子的資訊'''
         self._draw_user_imformation()
 
-        self.draw_grid()
+        # self.draw_grid()
 
 
     def _draw_user_imformation(self):
