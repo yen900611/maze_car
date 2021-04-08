@@ -72,6 +72,12 @@ class MazeMode(GameMode):
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.limit_pygame_screen()
+        # wall_vertices = []
+        # for wall in self.walls:
+        #     for wall in self.walls:
+        #         wall_vertice = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+        #         wall_vertice = [self.trnsfer_box2d_to_pygame(v) for v in wall_vertice]
+        #         wall_vertices.append(wall_vertice)
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
