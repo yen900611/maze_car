@@ -3,20 +3,19 @@ import time
 import pygame
 from .env import *
 
-class End_point(pygame.sprite.Sprite):
-    def __init__(self, game, coordinate):
-        self.group = game.all_sprites
-        # super(End_point, self).__init__(self.group)
+class Point(pygame.sprite.Sprite):
+    def __init__(self,game, coordinate):
+        self.group = game.all_points
         pygame.sprite.Sprite.__init__(self, self.group)
         self.game = game
+        self.x, self.y = coordinate
+
+class End_point(Point):
+    def __init__(self, game, coordinate):
+        Point.__init__(self, game, coordinate)
         self.image = pygame.image.load(path.join(IMAGE_DIR, LOGO))
         self.image = pygame.transform.scale(self.image, (TILESIZE*2, TILESIZE* 2))
-        # self.image = pygame.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.x, self.y = coordinate
-        self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
-        pass
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
@@ -30,21 +29,16 @@ class End_point(pygame.sprite.Sprite):
                 self.game.eliminated_user.append(hit)
                 hit.status = False
 
-class Check_point(pygame.sprite.Sprite):
+class Check_point(Point):
     def __init__(self, game, coordinate):
-        self.group = game.all_sprites
-        pygame.sprite.Sprite.__init__(self, self.group)
-        self.game = game
+        Point.__init__(self, game, coordinate)
         self.image = pygame.Surface((TILESIZE*2, TILESIZE*2))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.x, self.y = coordinate
-        self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
         self.car_has_hit = []
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
-
 
     def detect_cars_collision(self):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
@@ -52,3 +46,25 @@ class Check_point(pygame.sprite.Sprite):
             if hit.status and hit not in self.car_has_hit:
                 hit.check_point += 1
                 self.car_has_hit.append(hit)
+
+class Outside_point(Point):
+    '''
+    if car colliding these point, car will be swich to start point
+    '''
+    def __init__(self, game, coordinate):
+        Point.__init__(self, game, coordinate)
+        self.image = pygame.Surface((TILESIZE, TILESIZE))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+
+    def update(self, *args, **kwargs) -> None:
+        self.detect_cars_collision()
+
+    def detect_cars_collision(self):
+        hits = pygame.sprite.spritecollide(self, self.game.cars, False)
+        for hit in hits:
+            if hit.status:
+                hit.body.position = (hit.x, hit.y)
+                hit.body.linearVelocity = 0, 0
+                pass
+

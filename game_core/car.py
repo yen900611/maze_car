@@ -17,7 +17,7 @@ class Car(pygame.sprite.Sprite):
         self.origin_image = pygame.transform.scale(
             pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
             self.size)
-        self.image = self.origin_image  # after rotatef`
+        self.image = self.origin_image  # after rotate
         self.rect = self.image.get_rect()
         self.status = True
         self.sensor_R = 0
@@ -26,6 +26,7 @@ class Car(pygame.sprite.Sprite):
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
+        self.x, self.y = coordinate
         self.body = world.CreateDynamicBody(position=coordinate)
         self.box = self.body.CreatePolygonFixture(box=(1, 1), density=1, friction=0.1, restitution=0.3)
         self.vertices = []  # pygame
