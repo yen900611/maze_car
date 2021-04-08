@@ -64,6 +64,7 @@ class Outside_point(Point):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
         for hit in hits:
             if hit.status:
+
                 hit.body.position = (hit.x, hit.y)
                 hit.body.linearVelocity = 0, 0
                 pass

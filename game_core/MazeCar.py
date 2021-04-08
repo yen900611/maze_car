@@ -156,13 +156,22 @@ class MazeCar:
             game_progress["game_user_information"].append(user_information)
             game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
                 self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
-        if self.game_type == "MOVE_MAZE":
-            wall_vertices = []
+        wall_vertices = []
+        if self.game_type == "MAZE":
+            for wall in self.game_mode.walls:
+                for wall in self.game_mode.walls:
+                    wall_vertice = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+                    wall_vertice = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in wall_vertice]
+                    wall_vertices.append(wall_vertice)
+        elif self.game_type == "MOVE_MAZE":
             for wall in self.game_mode.walls:
                 wall_vertices.append(wall.pixel_vertices)
-            game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
-        # else:
-        #     game_progress["game_object"]["logo"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
+
+        else:
+            pass
+        game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
+
+        game_progress["game_object"]["logo"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
         return game_progress
 
     def get_game_result(self):
