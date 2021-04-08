@@ -160,10 +160,10 @@ class MazeMode(GameMode):
                         col += 1
 
     def wall_vertices(self, first_tile, last_tile):
-        first_tilex = first_tile[0]+ TILESIZE/ (2*PPM) + 1
-        first_tiley = GRIDHEIGHT + TILE_LEFTTOP[1] / PPM - first_tile[1] - TILESIZE/ (2*PPM) - 1
-        last_tilex = last_tile[0]+ TILESIZE/ (2*PPM) + 1
-        last_tiley = GRIDHEIGHT + TILE_LEFTTOP[1] / PPM - last_tile[1] - TILESIZE/ (2*PPM) - 1
+        first_tilex = first_tile[0]+ TILESIZE/ (2*PPM) +1
+        first_tiley = - first_tile[1]  - TILESIZE/ (2*PPM) -1
+        last_tilex = last_tile[0]+ TILESIZE/ (2*PPM) +1
+        last_tiley =- last_tile[1] - TILESIZE/ (2*PPM) -1
         r = TILESIZE/ (2*PPM)
         vertices = [(first_tilex - r, first_tiley + r),
                     (last_tilex + r, last_tiley + r),
@@ -220,10 +220,14 @@ class MazeMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
-        for wall in self.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
+        # for wall in self.walls:
+        #     vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+        #     vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
+        #     pygame.draw.polygon(self.screen, WHITE, vertices)
+        for wall in self.wall_vertices_for_Box2D:
+            vertices = [self.trnsfer_box2d_to_pygame(v) for v in wall]
             pygame.draw.polygon(self.screen, WHITE, vertices)
+
         try:
             self.screen.blit(self.end_point.image, self.end_point.rect)
         except Exception:
