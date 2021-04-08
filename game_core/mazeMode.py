@@ -145,14 +145,16 @@ class MazeMode(GameMode):
                             col += 1
                     elif col == len(tiles) -1:
                         last_tile = col
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))first_tile = -1
+                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
+                        first_tile = -1
                         col += 1
                     else:
                         col += 1
                 else:
                     if first_tile != -1:
                         last_tile = col - 1
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))first_tile = -1
+                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
+                        first_tile = -1
                         col += 1
                     else:
                         col += 1
