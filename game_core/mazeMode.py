@@ -71,6 +71,7 @@ class MazeMode(GameMode):
 
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+        self.limit_pygame_screen()
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
