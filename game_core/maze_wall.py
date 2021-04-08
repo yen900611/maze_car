@@ -12,7 +12,7 @@ def count_position(vertices):
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, coordinate, world, map_length):
-        pygame.sprite.Sprite.__init__(self, game.walls)
+        pygame.sprite.Sprite.__init__(self)
         self.game = game
         self.world = world
         # self.image = pygame.Surface((TILESIZE, TILESIZE))

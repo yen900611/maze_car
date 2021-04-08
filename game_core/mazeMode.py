@@ -54,8 +54,11 @@ class MazeMode(GameMode):
             for col, tile in enumerate(tiles):
                 if tile == "1":
                     for world in self.worlds:
-                        Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world,
+                        wall = Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world,
                              len(self.map.data))
+                        if self.worlds.index(world)==0:
+                            self.walls.add(wall)
+
                 elif tile == "P":
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
@@ -73,12 +76,6 @@ class MazeMode(GameMode):
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.limit_pygame_screen()
-        # wall_vertices = []
-        # for wall in self.walls:
-        #     for wall in self.walls:
-        #         wall_vertice = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-        #         wall_vertice = [self.trnsfer_box2d_to_pygame(v) for v in wall_vertice]
-        #         wall_vertices.append(wall_vertice)
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''

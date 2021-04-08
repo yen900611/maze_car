@@ -82,8 +82,8 @@ class MazeCar:
         wall_vertices = []
         if self.game_type == "MAZE":
             for wall in self.game_mode.wall_vertices_for_Box2D:
-                for vertice in wall:
-                    wall_vertices.append(self.game_mode.trnsfer_box2d_to_pygame(vertice))
+                vertices = [self.trnsfer_box2d_to_pygame(v) for v in wall]
+                wall_vertices.append(vertices)
         elif self.game_type == "MOVE_MAZE":
             for wall in self.game_mode.walls:
                 wall_vertices.append(wall.pixel_vertices)
