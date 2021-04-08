@@ -27,6 +27,7 @@ class MazeMode(GameMode):
 
         '''data set'''
         self.wall_info = []
+        self.wall_vertices_for_Box2D = []
         self.car_info = []
         self.ranked_user = []  # pygame.sprite car
         self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
@@ -137,23 +138,21 @@ class MazeMode(GameMode):
                         first_tile = col
                         if col == len(tiles) -1:
                             last_tile = col
-                            self.wall_vertices((first_tile, row), (last_tile, row))
+                            self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
                             first_tile = -1
                             col += 1
                         else:
                             col += 1
                     elif col == len(tiles) -1:
                         last_tile = col
-                        self.wall_vertices((first_tile, row), (last_tile, row))
-                        first_tile = -1
+                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))first_tile = -1
                         col += 1
                     else:
                         col += 1
                 else:
                     if first_tile != -1:
                         last_tile = col - 1
-                        self.wall_vertices((first_tile, row), (last_tile, row))
-                        first_tile = -1
+                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))first_tile = -1
                         col += 1
                     else:
                         col += 1
