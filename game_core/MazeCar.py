@@ -17,7 +17,10 @@ class MazeCar:
             self.game_mode = MazeMode(user_num, map, time, self.sound_controller)
             self.game_type = "MAZE"
         elif game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
+            if map<=2:
+                self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
+            else:
+                self.game_mode = MoveMazeMode(user_num,2,time, self.sound_controller)
             self.game_type = "MOVE_MAZE"
         self.user_num = user_num
         self.sound_controller.play_music()
@@ -105,7 +108,7 @@ class MazeCar:
                 {"name": "mask2", "size": (WIDTH, TILE_LEFTTOP[1]), "color": BLACK},
                 {"name": "mask3", "size": (WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT), "color": BLACK},
                 {"name": "mask4", "size": (WIDTH, HEIGHT - TILE_LEFTTOP[1] - TILE_HEIGHT), "color": BLACK},
-                {"name": "end_point", "size": (2 * TILESIZE, 2 * TILESIZE), "color": WHITE, "image": "logo.png"},
+                {"name": "end_point", "size": (2 * TILESIZE, 2 * TILESIZE), "color": WHITE, "image": LOGO},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
 
             ],
@@ -163,13 +166,10 @@ class MazeCar:
             game_progress["game_user_information"].append(user_information)
             game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
                 self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
-        # if self.game_type == "MOVE_MAZE":
-        #     wall_vertices = []
-        #     for wall in self.game_mode.walls:
-        #         wall_vertices.append(wall.pixel_vertices)
-        #     game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
         wall_vertices = []
         if self.game_type == "MAZE":
+            game_progress["game_object"]["end_point"] = [
+                self._progress_dict(self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y)]
             for wall in self.game_mode.wall_vertices_for_Box2D:
                 vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in wall]
                 wall_vertices.append(vertices)
@@ -180,8 +180,6 @@ class MazeCar:
             game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
         else:
             pass
-        # else:
-        game_progress["game_object"]["end_point"] = [self._progress_dict(self.game_mode.end_point.rect.x,self.game_mode.end_point.rect.y)]
         return game_progress
 
     def get_game_result(self):

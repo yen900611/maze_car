@@ -228,7 +228,7 @@ class MazeMode(GameMode):
             self.screen.blit(self.end_point.image, self.end_point.rect)
         except Exception:
             pass
-        self.all_points.draw(self.screen)
+        # self.all_points.draw(self.screen)
         self.cars.draw(self.screen)
         '''色塊'''
         pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, TILE_LEFTTOP[0], HEIGHT))
