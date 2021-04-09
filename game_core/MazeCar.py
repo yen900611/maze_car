@@ -146,11 +146,11 @@ class MazeCar:
         """
         scene_info = self.get_scene_info
         game_progress = {
-            "game_object": {"info": [self._progress_dict(507, 20)],
-                            "mask1": [self._progress_dict(0, 0)],
+            "game_object": {"mask1": [self._progress_dict(0, 0)],
                             "mask2": [self._progress_dict(0, 0)],
                             "mask3": [self._progress_dict(TILE_LEFTTOP[0]+TILE_WIDTH, 0)],
                             "mask4": [self._progress_dict(0, TILE_LEFTTOP[1]+TILE_HEIGHT)],
+                            "info": [self._progress_dict(507, 20)],
                             },
             "game_user_information": []
         }
