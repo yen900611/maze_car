@@ -58,7 +58,6 @@ class MazeMode(GameMode):
                              len(self.map.data))
                         if self.worlds.index(world)==0:
                             self.walls.add(wall)
-
                 elif tile == "P":
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))

@@ -181,7 +181,7 @@ class MazeCar:
         else:
             pass
         # else:
-        game_progress["game_object"]["end_point"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
+        game_progress["game_object"]["end_point"] = [self._progress_dict(self.game_mode.end_point.rect.topleft[0],self._progress_dict(self.game_mode.end_point.rect.topleft[1])]
         return game_progress
 
     def get_game_result(self):
