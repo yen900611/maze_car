@@ -101,8 +101,13 @@ class MazeCar:
                 {"name": "player4_car", "size": self.game_mode.car.size, "color": YELLOW, "image": "car_04.png"},
                 {"name": "player5_car", "size": self.game_mode.car.size, "color": BROWN, "image": "car_05.png"},
                 {"name": "player6_car", "size": self.game_mode.car.size, "color": PINK, "image": "car_06.png"},
+                {"name": "end_point", "size": (2 * TILESIZE, 2 * TILESIZE), "color": WHITE, "image": "logo.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
-                {"name": "end_point", "size": (2*TILESIZE, 2*TILESIZE), "color": WHITE, "image": "logo.png"}
+                {"name": "mask1", "size": (TILE_LEFTTOP[0], HEIGHT), "color": BLACK},
+                {"name": "mask2", "size": (WIDTH, TILE_LEFTTOP[1]), "color": BLACK},
+                {"name": "mask3", "size": (WIDTH-TILE_LEFTTOP[0]-TILE_WIDTH, HEIGHT), "color": BLACK},
+                {"name": "mask4", "size": (WIDTH, HEIGHT - TILE_LEFTTOP[1]-TILE_HEIGHT), "color": BLACK},
+
             ],
             "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
                        LOGO
@@ -142,6 +147,10 @@ class MazeCar:
         scene_info = self.get_scene_info
         game_progress = {
             "game_object": {"info": [self._progress_dict(507, 20)],
+                            "mask1": [self._progress_dict(0, 0)],
+                            "mask2": [self._progress_dict(0, 0)],
+                            "mask3": [self._progress_dict(TILE_LEFTTOP[0]+TILE_WIDTH, 0)],
+                            "mask4": [self._progress_dict(0, TILE_LEFTTOP[1]+TILE_HEIGHT)],
                             },
             "game_user_information": []
         }
@@ -172,7 +181,7 @@ class MazeCar:
         else:
             pass
         # else:
-        #     game_progress["game_object"]["logo"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
+        game_progress["game_object"]["end_point"] = [self._progress_dict(self.game_mode.end_point.rect.topleft)]
         return game_progress
 
     def get_game_result(self):
