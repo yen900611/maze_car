@@ -2,6 +2,7 @@ import math
 import time
 import Box2D
 
+from game_core.points import End_point
 from .maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
 from .maze_wall import Move_Wall
 from .car import Car
@@ -14,6 +15,7 @@ import pygame
 class MoveMazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sound_controller):
         super(MoveMazeMode, self).__init__()
+        self.user_check_points = []
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         self.ranked_user = []  # pygame.sprite car
         self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
@@ -30,6 +32,7 @@ class MoveMazeMode(GameMode):
         self.car_info = []
         self.cars = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.all_points = pygame.sprite.Group()
         self.worlds = []
         self._init_world(user_num)
         self._init_car()
@@ -62,6 +65,7 @@ class MoveMazeMode(GameMode):
             self.car_info.append(car.get_info())
             self._is_car_arrive_end(car)
             car.detect_distance(self.frame, self.wall_information)
+        self.all_points.update()
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
@@ -75,7 +79,7 @@ class MoveMazeMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.ranked_user:
-                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frames")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
             print("score:", self.ranked_score)
             self.x += 1
@@ -91,8 +95,12 @@ class MoveMazeMode(GameMode):
     def _init_car(self):
         if Move_Maze_Size[self.maze_id] == 3:
             self.start_pos = (16, 3)
+            self.end_point = End_point(self, (0,0))
+            self.end_point.rect.center = (100, 30)
         elif Move_Maze_Size[self.maze_id] == 4:
             self.start_pos = (22, 3)
+            self.end_point = End_point(self, (0,0))
+            self.end_point.rect.center = (60, 30)
         elif Move_Maze_Size[self.maze_id] == 5:
             self.start_pos = (28, 3)
         elif Move_Maze_Size[self.maze_id] == 6:
@@ -115,9 +123,9 @@ class MoveMazeMode(GameMode):
         if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
-                    car.end_time = round(time.time() - self.start_time)
+                    car.end_frame = self.frame
                     self.eliminated_user.append(car)
-                    self.user_time.append(car.end_time)
+                    self.user_time.append(car.end_frame)
                     car.status = False
             self.is_end = True
             self.rank()
@@ -129,9 +137,9 @@ class MoveMazeMode(GameMode):
         if car.status:
             if car.body.position[1] > 6 * Move_Maze_Size[self.maze_id] + 1:
 
-                car.end_time = round(time.time() - self.start_time)
+                car.end_frame = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
-                self.user_time.append(car.end_time)
+                self.user_time.append(car.end_frame)
                 car.status = False
 
     def get_polygon_vertice(self, car):
@@ -163,6 +171,7 @@ class MoveMazeMode(GameMode):
             pygame.draw.polygon(self.screen, WHITE, vertices)
 
         self.cars.draw(self.screen)
+        self.all_points.draw(self.screen)
         pass
 
     def _draw_user_imformation(self):
@@ -178,7 +187,7 @@ class MoveMazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
                                                   178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "s",
                                                   600, 178 + 40 + 94 * (i // 2))
 
                     else:
@@ -190,23 +199,27 @@ class MoveMazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
                                                   178 + 60 + 94 * (i // 2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "s",
                                                   730, 178 + 40 + 94 * (i // 2))
 
     def rank(self):
         while len(self.eliminated_user) > 0:
             for car in self.eliminated_user:
-                if car.end_time == min(self.user_time):
+                if car.is_completed:
                     self.ranked_user.append(car)
-                    self.user_time.remove(car.end_time)
                     self.eliminated_user.remove(car)
+                else:
+                    if car.check_point == max(self.user_check_points):
+                        self.ranked_user.append(car)
+                        self.user_check_points.remove(car.check_point)
+                        self.eliminated_user.remove(car)
         for i in range(len(self.ranked_user)):
-            if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
+            if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
                 if i == 0:
                     self.ranked_user[i].score = 6
                 else:
                     for j in range(1, i + 1):
-                        if self.ranked_user[i - j].end_time == self.ranked_user[i].end_time:
+                        if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
                             if i == j:
                                 self.ranked_user[i].score = 6
                             else:
