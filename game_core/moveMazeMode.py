@@ -79,7 +79,7 @@ class MoveMazeMode(GameMode):
     def _print_result(self):
         if self.is_end and self.x == 0:
             for user in self.ranked_user:
-                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_time) + "s")
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frames")
                 self.ranked_score[str(user.car_no + 1) + "P"] = user.score
             print("score:", self.ranked_score)
             self.x += 1
@@ -123,9 +123,9 @@ class MoveMazeMode(GameMode):
         if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.status:
-                    car.end_time = round(time.time() - self.start_time)
+                    car.end_frame = self.frame
                     self.eliminated_user.append(car)
-                    self.user_time.append(car.end_time)
+                    self.user_time.append(car.end_frame)
                     car.status = False
             self.is_end = True
             self.rank()
@@ -137,9 +137,9 @@ class MoveMazeMode(GameMode):
         if car.status:
             if car.body.position[1] > 6 * Move_Maze_Size[self.maze_id] + 1:
 
-                car.end_time = round(time.time() - self.start_time)
+                car.end_frame = round(time.time() - self.start_time)
                 self.eliminated_user.append(car)
-                self.user_time.append(car.end_time)
+                self.user_time.append(car.end_frame)
                 car.status = False
 
     def get_polygon_vertice(self, car):
@@ -187,7 +187,7 @@ class MoveMazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
                                                   178 + 60 + 94 * i / 2)
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "s",
                                                   600, 178 + 40 + 94 * (i // 2))
 
                     else:
@@ -199,7 +199,7 @@ class MoveMazeMode(GameMode):
                             self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
                                                   178 + 60 + 94 * (i // 2))
                         else:
-                            self.draw_information(self.screen, WHITE, str(car.end_time) + "s",
+                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "s",
                                                   730, 178 + 40 + 94 * (i // 2))
 
     def rank(self):
@@ -214,12 +214,12 @@ class MoveMazeMode(GameMode):
                         self.user_check_points.remove(car.check_point)
                         self.eliminated_user.remove(car)
         for i in range(len(self.ranked_user)):
-            if self.ranked_user[i].end_time == self.ranked_user[i - 1].end_time:
+            if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
                 if i == 0:
                     self.ranked_user[i].score = 6
                 else:
                     for j in range(1, i + 1):
-                        if self.ranked_user[i - j].end_time == self.ranked_user[i].end_time:
+                        if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
                             if i == j:
                                 self.ranked_user[i].score = 6
                             else:
