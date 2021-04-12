@@ -124,6 +124,7 @@ class MoveMazeMode(GameMode):
                 if car not in self.eliminated_user and car.status:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
+                    self.user_check_points.append(car.check_point)
                     self.user_time.append(car.end_frame)
                     car.status = False
             self.is_end = True
