@@ -33,6 +33,7 @@ class MazeCar:
         game_object = self.game_mode.update_sprite(commands)
         self.draw(game_object)
         if not self.isRunning():
+            print(self.get_game_result())
             return "QUIT"
 
     def get_player_scene_info(self):
@@ -188,10 +189,17 @@ class MazeCar:
         """
         scene_info = self.get_scene_info
         result = self.game_mode.result
+        rank = []
+        for ranking in self.game_mode.ranked_user:
+            same_rank = []
+            for user in ranking:
+                same_rank.append({"player":str(user.car_no+1)+"P",
+                                  "game_result":str(user.end_frame) + "frames"})
+            rank.append(same_rank)
 
         return {"used_frame": scene_info["frame"],
                 "result": result, # ["1P:7s", "2P:5s"]
-                "rank": self.ranking()# by score
+                "rank": rank# by score
                 }
 
         pass
@@ -235,6 +243,8 @@ class MazeCar:
         :return: list
         [[],[],[],[],[],[]]
         '''
+        for key in self.game_mode.ranked_score.keys():
+            self.ranked_score[key] += self.game_mode.ranked_score[key]
         ranked_player = []
         scores = []
         result = []

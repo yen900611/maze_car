@@ -78,10 +78,9 @@ class MoveMazeMode(GameMode):
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for user in self.ranked_user:
-                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frames")
-                self.ranked_score[str(user.car_no + 1) + "P"] = user.score
-            print("score:", self.ranked_score)
+            for rank in self.ranked_user:
+                for user in rank:
+                    self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
             self.x += 1
             print(self.result)
         pass
@@ -128,7 +127,7 @@ class MoveMazeMode(GameMode):
                     self.user_time.append(car.end_frame)
                     car.status = False
             self.is_end = True
-            self.rank()
+            self.ranked_user = self.rank()
             self._print_result()
             self.status = "GAME OVER"
         pass
@@ -213,20 +212,31 @@ class MoveMazeMode(GameMode):
                         self.ranked_user.append(car)
                         self.user_check_points.remove(car.check_point)
                         self.eliminated_user.remove(car)
-        for i in range(len(self.ranked_user)):
-            if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
-                if i == 0:
-                    self.ranked_user[i].score = 6
-                else:
-                    for j in range(1, i + 1):
-                        if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
-                            if i == j:
-                                self.ranked_user[i].score = 6
-                            else:
-                                pass
-                            pass
-                        else:
-                            self.ranked_user[i].score = 6 - (i - j + 1)
-                            break
+        same_rank = []
+        rank_user = [] # [[sprite, sprite],[]]
+        for user in self.ranked_user:
+            if not same_rank:
+                same_rank.append(user)
             else:
-                self.ranked_user[i].score = 6 - i
+                if user.is_completed:
+                    if user.end_frame == same_rank[0].end_frame:
+                        same_rank.append(user)
+                    else:
+                        rank_user.append(same_rank)
+                        same_rank = []
+                        same_rank.append(user)
+                else:
+                    if same_rank[0].is_completed:
+                        rank_user.append(same_rank)
+                        same_rank = []
+                        same_rank.append(user)
+                    else:
+                        if user.check_point == same_rank[0].check_point:
+                            same_rank.append(user)
+                        else:
+                            rank_user.append(same_rank)
+                            same_rank = []
+                            same_rank.append(user)
+        if same_rank:
+            rank_user.append(same_rank)
+        return rank_user
