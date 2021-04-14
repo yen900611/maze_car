@@ -84,15 +84,10 @@ class MazeCar:
         Get the scene and object information for drawing on the web
         """
         wall_vertices = []
-        if self.game_type == "MAZE":
-            for wall in self.game_mode.wall_vertices_for_Box2D:
-                vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in wall]
-                wall_vertices.append(vertices)
-        elif self.game_type == "MOVE_MAZE":
-            for wall in self.game_mode.walls:
-                wall_vertices.append(wall.pixel_vertices)
-        else:
-            pass
+        for wall in self.game_mode.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            wall_vertices.append(vertices)
         game_info = {
             "scene": {
                 "size": [WIDTH, HEIGHT],
@@ -170,17 +165,11 @@ class MazeCar:
         wall_vertices = []
         game_progress["game_object"]["end_point"] = [
             self._progress_dict(self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y)]
-        if self.game_type == "MAZE":
-            for wall in self.game_mode.wall_vertices_for_Box2D:
-                vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in wall]
-                wall_vertices.append(vertices)
-            game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
-        elif self.game_type == "MOVE_MAZE":
-            for wall in self.game_mode.walls:
-                wall_vertices.append(wall.pixel_vertices)
-            game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
-        else:
-            pass
+        for wall in self.game_mode.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            wall_vertices.append(vertices)
+        game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
         return game_progress
 
     def get_game_result(self):

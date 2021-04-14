@@ -30,7 +30,6 @@ class MazeMode(GameMode):
         self.wall_vertices_for_Box2D = []
         self.car_info = []
         self.ranked_user = []  # pygame.sprite car
-        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         self.result = []
         self.eliminated_user = []
         self.user_check_points = []
@@ -49,16 +48,20 @@ class MazeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-        self.get_wall_info()
+        self.get_wall_info("1")
+        for wall_vertices in self.wall_vertices_for_Box2D:
+            for world in self.worlds:
+                wall = Wall(self, wall_vertices, world)
+                if self.worlds.index(world) == 0:
+                    self.walls.add(wall)
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                if tile == "1":
-                    for world in self.worlds:
-                        wall = Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world,
-                             len(self.map.data))
-                        if self.worlds.index(world)==0:
-                            self.walls.add(wall)
-                elif tile == "P":
+                # if tile == "1":
+                #     for world in self.worlds:
+                #         wall = Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world)
+                #         if self.worlds.index(world)==0:
+                #             self.walls.add(wall)
+                if tile == "P":
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
@@ -122,14 +125,14 @@ class MazeMode(GameMode):
         else:
             pass
 
-    def get_wall_info(self):
+    def get_wall_info(self, wall_tile):
         wall_tiles = []
         for row, tiles in enumerate(self.map.data):
             col = 0
             first_tile = -1
             last_tile = -1
             while col < (len(tiles)):
-                if tiles[col] == "1":
+                if tiles[col] == wall_tile:
                     if first_tile == -1:
                         first_tile = col
                         if col == len(tiles) -1:
@@ -176,8 +179,6 @@ class MazeMode(GameMode):
         game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
         self.map = Map(path.join(map_folder, self.map_file))
-        # self.map = Map(path.join(map_folder, MAZE_TEST))
-        pass
 
     def _print_result(self):
         if self.is_end and self.x == 0:
@@ -219,13 +220,13 @@ class MazeMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
-        # for wall in self.walls:
-        #     vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-        #     vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
-        #     pygame.draw.polygon(self.screen, WHITE, vertices)
-        for wall in self.wall_vertices_for_Box2D:
-            vertices = [self.trnsfer_box2d_to_pygame(v) for v in wall]
+        for wall in self.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
             pygame.draw.polygon(self.screen, WHITE, vertices)
+        # for wall in self.wall_vertices_for_Box2D:
+        #     vertices = [self.trnsfer_box2d_to_pygame(v) for v in wall]
+        #     pygame.draw.polygon(self.screen, WHITE, vertices)
 
         try:
             self.screen.blit(self.end_point.image, self.end_point.rect)
