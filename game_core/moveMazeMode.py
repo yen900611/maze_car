@@ -54,7 +54,7 @@ class MoveMazeMode(GameMode):
         self.get_wall_info("H")
         self.get_wall_info("1")
         for wall_vertices in self.wall_vertices_for_Box2D:
-            if wall["type"] == "1":
+            if wall_vertices["type"] == "1":
                 for world in self.worlds:
                     wall = Wall(self, wall_vertices["vertices"], world)
                     if self.worlds.index(world) == 0:
