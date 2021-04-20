@@ -15,6 +15,7 @@ class Wall(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.game = game
         self.world = world
+
         # self.image = pygame.Surface((TILESIZE, TILESIZE))
         # self.image.fill(WHITE)
         # self.rect = self.image.get_rect()

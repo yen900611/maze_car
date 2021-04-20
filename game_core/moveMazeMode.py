@@ -25,9 +25,11 @@ class MoveMazeMode(GameMode):
         self.worlds = []
         self.cars = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.wall_for_update = pygame.sprite.Group()
         self.all_points = pygame.sprite.Group() # Group inclouding end point, check points,etc.
 
         '''data set'''
+
         self.wall_info = []
         self.wall_vertices_for_Box2D = []
         self.car_info = []
@@ -62,11 +64,13 @@ class MoveMazeMode(GameMode):
             elif wall_vertices["type"] == "V":
                 for world in self.worlds:
                     wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 2, 3)
+                    self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
             elif wall_vertices["type"] == "H":
                 for world in self.worlds:
                     wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 5, 4)
+                    self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
 
@@ -98,7 +102,7 @@ class MoveMazeMode(GameMode):
         self._is_game_end()
         self.command = command
         self.limit_pygame_screen()
-        self.walls.update()
+        self.wall_for_update.update()
         self.wall_info.clear()
         for wall in self.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]

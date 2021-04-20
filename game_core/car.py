@@ -33,6 +33,7 @@ class Car(pygame.sprite.Sprite):
         self.sensor = Sensor(world, self.body)
         self.check_point = 0
 
+
     def update(self, commands):
         # self.get_polygon_vertice()
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
