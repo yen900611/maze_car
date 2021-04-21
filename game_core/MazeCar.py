@@ -17,10 +17,7 @@ class MazeCar:
             self.game_mode = MazeMode(user_num, map, time, self.sound_controller)
             self.game_type = "MAZE"
         elif game_type == "MOVE_MAZE":
-            if map<=2:
-                self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
-            else:
-                self.game_mode = MoveMazeMode(user_num,2,time, self.sound_controller)
+            self.game_mode = MoveMazeMode(user_num,2,time, self.sound_controller)
             self.game_type = "MOVE_MAZE"
         self.user_num = user_num
         self.sound_controller.play_music()
