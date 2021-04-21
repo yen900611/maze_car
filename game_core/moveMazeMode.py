@@ -65,13 +65,13 @@ class MoveMazeMode(GameMode):
                         self.walls.add(wall)
             elif wall_vertices["type"] == "V":
                 for world in self.worlds:
-                    wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 3, 5)
+                    wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 4, 5)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
             elif wall_vertices["type"] == "H":
                 for world in self.worlds:
-                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, 5)
+                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, 6)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
@@ -83,7 +83,7 @@ class MoveMazeMode(GameMode):
                         self.walls.add(wall)
             elif wall_vertices["type"] == "h":
                 for world in self.worlds:
-                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, -5)
+                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 5, -7)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
