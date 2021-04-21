@@ -15,11 +15,6 @@ class Wall(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.game = game
         self.world = world
-
-        # self.image = pygame.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(WHITE)
-        # self.rect = self.image.get_rect()
-        # self.rect.x, self.rect.y = self.x * TILESIZE, self.y * TILESIZE
         self.x, self.y = (0, 0)
         self.body = world.CreateKinematicBody(position = (0, 0))
         # self.body = world.CreateKinematicBody(position=(self.x + TILESIZE/ (2*PPM), - self.y - TILESIZE/ (2*PPM)))
@@ -29,9 +24,13 @@ class Wall(pygame.sprite.Sprite):
 class VerticalMoveWall(Wall):
     def __init__(self, game, vertices, world, velocity, distance=None):
         Wall.__init__(self, game, vertices, world)
-        self.start_coordinate = self.body.position[0], self.body.position[1]
-        self.end_coordinate = self.body.position[0], self.body.position[1] + distance
-        self.velocity = velocity
+        if distance > 0:
+            self.start_coordinate = self.body.position[0], self.body.position[1]
+            self.end_coordinate = self.body.position[0], self.body.position[1] + distance
+        elif distance < 0:
+            self.start_coordinate = self.body.position[0], self.body.position[1] + distance
+            self.end_coordinate = self.body.position[0], self.body.position[1]
+        self.velocity = abs(velocity)
         self.body.linearVelocity = (0, self.velocity)
 
     def update(self, *args, **kwargs) -> None:
@@ -43,9 +42,14 @@ class VerticalMoveWall(Wall):
 class HorizontalMoveWall(Wall):
     def __init__(self, game, vertices, world, velocity, distance):
         Wall.__init__(self, game, vertices, world)
-        self.start_coordinate = self.body.position[0], self.body.position[1]
-        self.end_coordinate = self.start_coordinate[0] + distance, self.start_coordinate[1]
-        self.velocity = velocity
+        if distance > 0:
+            self.start_coordinate = self.body.position[0], self.body.position[1]
+            self.end_coordinate = self.body.position[0] + distance, self.body.position[1]
+        elif distance < 0:
+            self.start_coordinate = self.body.position[0] + distance, self.body.position[1]
+            self.end_coordinate = self.body.position[0], self.body.position[1]
+
+        self.velocity = abs(velocity)
         self.body.linearVelocity = (self.velocity, 0)
 
     def update(self, *args, **kwargs) -> None:

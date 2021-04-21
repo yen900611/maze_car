@@ -55,6 +55,8 @@ class MoveMazeMode(GameMode):
         self.get_wall_info("V")
         self.get_wall_info("H")
         self.get_wall_info("1")
+        self.get_wall_info("v")
+        self.get_wall_info("h")
         for wall_vertices in self.wall_vertices_for_Box2D:
             if wall_vertices["type"] == "1":
                 for world in self.worlds:
@@ -63,13 +65,25 @@ class MoveMazeMode(GameMode):
                         self.walls.add(wall)
             elif wall_vertices["type"] == "V":
                 for world in self.worlds:
-                    wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 2, 3)
+                    wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 3, 5)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
             elif wall_vertices["type"] == "H":
                 for world in self.worlds:
-                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 5, 4)
+                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, 5)
+                    self.wall_for_update.add(wall)
+                    if self.worlds.index(world) == 0:
+                        self.walls.add(wall)
+            elif wall_vertices["type"] == "v":
+                for world in self.worlds:
+                    wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 3, -5)
+                    self.wall_for_update.add(wall)
+                    if self.worlds.index(world) == 0:
+                        self.walls.add(wall)
+            elif wall_vertices["type"] == "h":
+                for world in self.worlds:
+                    wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, -5)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
