@@ -1,6 +1,7 @@
 from .maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
+from .practiceMode import PracticeMode
 from .sound_controller import *
 from .gameView import PygameView
 
@@ -19,6 +20,10 @@ class MazeCar:
         elif game_type == "MOVE_MAZE":
             self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
             self.game_type = "MOVE_MAZE"
+
+        elif game_type == "PRACTICE":
+            self.game_mode = PracticeMode(user_num,map,time, self.sound_controller)
+            self.game_type = "PRECTICE"
         self.user_num = user_num
         self.sound_controller.play_music()
         # self.gameView = PygameView(self.get_game_info())

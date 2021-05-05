@@ -28,7 +28,7 @@ class Car(pygame.sprite.Sprite):
         self.rect.center = (0, 0)  # pygame
         self.x, self.y = coordinate
         self.body = world.CreateDynamicBody(position=coordinate)
-        self.box = self.body.CreatePolygonFixture(box=(1, 1), density=1, friction=0.1, restitution=0.3)
+        self.box = self.body.CreatePolygonFixture(box=(1.13, 1.13), density=1, friction=0.1, restitution=0.3)
         self.vertices = []  # pygame
         self.sensor = Sensor(world, self.body)
         self.check_point = 0

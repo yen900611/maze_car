@@ -50,7 +50,8 @@ info_image = "info.png"
 LOGO = "logo.png"
 
 '''map_file'''
-NORMAL_MAZE_MAPS = ["level_1.txt", "level_2.txt", "level_3.txt", "level_4.txt", "normal_map_2.txt", "normal_map_3.txt"]
-MOVE_MAZE_MAPS = ["move_map_0.txt", "move_map_1.txt", "move_map_2.txt", "move_map_4.txt", "move_map_3.txt"]
+PRACTICE_MAPS = ["level_1.txt", "level_2.txt", "level_3.txt", "level_4.txt", "level_5.txt", "empty.txt"]
+NORMAL_MAZE_MAPS = ["normal_map_1.txt", "normal_map_2.txt", "normal_map_3.txt", "normal_map_4.txt", "normal_map_4.txt"]
+MOVE_MAZE_MAPS = ["move_map_0.txt", "move_map_1.txt", "move_map_2.txt", "move_map_3.txt", "move_map_4.txt", "move_map_5.txt"]
 MAZE_TEST = "map_test.txt"
 
