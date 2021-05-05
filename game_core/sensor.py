@@ -70,9 +70,9 @@ class Sensor():
             if self.front_value < 0:
                 self.front_value = 0
         except TypeError:
-            self.front_value = round(random.uniform(20, 40), 1)
+            self.front_value = -1
         except ValueError:
-            self.front_value = round(random.uniform(20, 40), 1)
+            self.front_value = -1
 
     def sensor_detect(self, walls):
         r_distance = []
@@ -120,8 +120,8 @@ class Sensor():
             self.left_value = round(min(l_distance) * 5 + random.uniform(0, 3), 1)
 
         except TypeError:
-            self.right_value = round(random.uniform(20, 40), 1)
-            self.left_value = round(random.uniform(20, 40), 1)
+            self.right_value = -1
+            self.left_value = -1
         except ValueError:
-            self.right_value = round(random.uniform(20, 40), 1)
-            self.left_value = round(random.uniform(20, 40), 1)
+            self.right_value = -1
+            self.left_value = -1
