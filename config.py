@@ -25,7 +25,7 @@ GAME_PARAMS = {
                  "when either side reaches it.[default: %(default)s]")
     },
     "game_type": {
-        "choices": ("MAZE", "MOVE_MAZE"),
+        "choices": ("MAZE", "MOVE_MAZE", "PRACTICE"),
         "metavar": "game_mode",
         "nargs": "?",
         "default": "MAZE",
