@@ -165,8 +165,11 @@ class MazeCar:
             game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
                 self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
         wall_vertices = []
-        game_progress["game_object"]["end_point"] = [
-            self._progress_dict(self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y)]
+        try:
+            game_progress["game_object"]["end_point"] = [
+                self._progress_dict(self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y)]
+        except Exception:
+            pass
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
