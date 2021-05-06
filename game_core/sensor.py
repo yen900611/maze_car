@@ -66,7 +66,7 @@ class Sensor():
                 pass
 
         try:
-            self.front_value = round(min(results) * 5 + random.uniform(0, 3), 1)
+            self.front_value = round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
             if self.front_value < 0:
                 self.front_value = 0
         except TypeError:
@@ -116,8 +116,8 @@ class Sensor():
                     pass
 
         try:
-            self.right_value = round(min(r_distance) * 5 + random.uniform(0, 3), 1)
-            self.left_value = round(min(l_distance) * 5 + random.uniform(0, 3), 1)
+            self.right_value = round(min(r_distance) * 5 * random.uniform(0.95, 1.05), 1)
+            self.left_value = round(min(l_distance) * 5 * random.uniform(0.95, 1.05), 1)
 
         except TypeError:
             self.right_value = -1

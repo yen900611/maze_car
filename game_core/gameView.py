@@ -1,5 +1,6 @@
 import math
 
+from .game_object_data import *
 from .env import *
 import pygame
 
@@ -13,24 +14,11 @@ IMAGE = "image"
 RECTANGLE = "rectangle"
 VERTICES = "vertices"
 
-class Scene():
-    def __init__(self, width: int, height: int, color: str = "#e3f2fdFF"):
-        """
-        This is a value object
-        :param width:
-        :param height:
-        :param color:
-        :param image:
-        """
-        self.width = width
-        self.height = height
-        self.color = color
-        pass
-
 class PygameView():
     def __init__(self, game_info:dict):
         pygame.display.init()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.init_scene = get_scene_init_sample_data()
         self.address = "GameView"
         if "images" in game_info.keys():
             self.image_dict = self.loading_image(game_info["images"])
