@@ -13,6 +13,20 @@ IMAGE = "image"
 RECTANGLE = "rectangle"
 VERTICES = "vertices"
 
+class Scene():
+    def __init__(self, width: int, height: int, color: str = "#e3f2fdFF"):
+        """
+        This is a value object
+        :param width:
+        :param height:
+        :param color:
+        :param image:
+        """
+        self.width = width
+        self.height = height
+        self.color = color
+        pass
+
 class PygameView():
     def __init__(self, game_info:dict):
         pygame.display.init()

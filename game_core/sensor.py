@@ -18,7 +18,7 @@ class Sensor():
                                   anchorB=body.position, collideConnected=True)
         world.CreateDistanceJoint(bodyA=self.sensor_right, bodyB=body, anchorA=self.sensor_right.position,
                                   anchorB=body.position, collideConnected=True)
-        self.last_detect_sensor = 0
+        self.last_detect_sensor = -3
         pass
 
     def update(self, frame, walls):
