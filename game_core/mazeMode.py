@@ -48,6 +48,7 @@ class MazeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
+
         self.get_wall_info("1")
         for wall_vertices in self.wall_vertices_for_Box2D:
             for world in self.worlds:
@@ -77,6 +78,8 @@ class MazeMode(GameMode):
 
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+        self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
+                             self.car.body.position[1] + HEIGHT / 2 / PPM]
         self.limit_pygame_screen()
 
     def update_sprite(self, command):
@@ -110,8 +113,16 @@ class MazeMode(GameMode):
         return ((coordinate[0]- self.pygame_point[0]) * PPM, (self.pygame_point[1] - coordinate[1])*PPM)
 
     def limit_pygame_screen(self):
-        self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
-                             self.car.body.position[1] + HEIGHT / 2 / PPM]
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_w]:
+            self.pygame_point[1] += 0.2
+        elif keystate[pygame.K_s]:
+            self.pygame_point[1] -= 0.2
+        elif keystate[pygame.K_a]:
+            self.pygame_point[0] -= 0.2
+        elif keystate[pygame.K_d]:
+            self.pygame_point[0] += 0.2
+
         if self.pygame_point[1] > 0:
             self.pygame_point[1] = 0
         elif self.pygame_point[1] < TILE_HEIGHT/PPM-self.map.tileHeight:

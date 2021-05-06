@@ -14,10 +14,10 @@ keyboardSet = [
      "SPEED": pygame.K_UP,
      "BRAKE": pygame.K_DOWN},
 
-    {"TURN_LEFT": pygame.K_a,
-     "TURN_RIGHT": pygame.K_d,
-     "SPEED": pygame.K_w,
-     "BRAKE": pygame.K_s},
+    {"TURN_LEFT": pygame.K_SPACE,
+     "TURN_RIGHT": pygame.K_SPACE,
+     "SPEED": pygame.K_SPACE,
+     "BRAKE": pygame.K_SPACE},
 
     {"TURN_LEFT": pygame.K_SPACE,
      "TURN_RIGHT": pygame.K_SPACE,
