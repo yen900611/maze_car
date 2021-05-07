@@ -38,9 +38,9 @@ class Sensor():
         dots = []
         vector = None
         if self.sensor_left.position[0] == self.sensor_right.position[0]:
-            vector = (1, 0)
+            vector = [1, 0]
         elif self.sensor_left.position[1] == self.sensor_right.position[1]:
-            vector = (0, 1)
+            vector = [0, 1]
         else:
             vector = (
                 self.sensor_left.position[1] - self.sensor_right.position[1],

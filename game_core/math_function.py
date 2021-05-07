@@ -52,7 +52,12 @@ def cross_point_dot(dot1, vec1, dot2, dot3):
     y2 = dot2[1]
     x3 = dot3[0]
     y3 = dot3[1]
+    if vec1[0] == 0:
+        vec1[0] = 0.1
+    if x3 - x2 == 0:
+        x3 += 0.1
     p = cross_point(dot1, vec1, dot2, (x3 - x2, y3 - y2))
+
     if p:
         if x2 <= p[0] <= x3 or x3 <= p[0] <= x2:
             if y2 <= p[1] <= y3 or y3 <= p[1] <= y2:
