@@ -12,7 +12,7 @@ class Scene():
         """
         self.width = width
         self.height = height
-        self.color = color
+        self.color = trnsfer_hex_to_rgb(color)
         pass
 
 def get_progress_data(game_mode):
@@ -178,7 +178,7 @@ def get_rect_object(name, coordinate, width, height, color, angle = 0):
             "angle": angle,
             "width": width,
             "height": height,
-            "color": color
+            "color": trnsfer_hex_to_rgb(color)
             }
 
 def get_polygon_object(name, points, color):
@@ -192,7 +192,7 @@ def get_polygon_object(name, points, color):
         vertices.append({"x":p[0], "y":p[1]})
     return {"type": "polygon",
             "name": name,
-            "color": color,
+            "color": trnsfer_hex_to_rgb(color),
             "points": vertices
             }
 
@@ -200,7 +200,7 @@ def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
     return {
         "type": "text",
         "content": content,
-        "color": color,
+        "color": trnsfer_hex_to_rgb(color),
         "x": coordinate[0],
         "y": coordinate[1],
         "font-style": font_style
@@ -255,3 +255,7 @@ def gen_rects(rect_num: int = 1) -> list:
     for i in range(rect_num):
         result.append(gen_points(4))
     return result
+
+def trnsfer_hex_to_rgb(hex):
+    h = hex.lstrip('#')
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
