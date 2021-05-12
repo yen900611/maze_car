@@ -2,7 +2,7 @@ import random
 from .env import *
 
 class Scene():
-    def __init__(self, width: int, height: int, color: str = "#e3f2fdFF"):
+    def __init__(self, width: int, height: int, color: str = "#000000"):
         """
         This is a value object
         :param width:
@@ -14,6 +14,71 @@ class Scene():
         self.height = height
         self.color = color
         pass
+
+def get_progress_data(game_mode):
+    game_progress = {
+        "game_object_list":[],
+        "game_user_info":[],
+        "game_sys_info": {}
+    }
+    try:
+        wall_vertices = []
+        for wall in game_mode.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            game_progress["game_object_list"].append(get_polygon_object("wall", vertices, "#ffffff"))
+    except Exception:
+        pass
+
+    try:
+        game_progress["game_object_list"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
+                                                                  50, 50))
+    except Exception:
+        pass
+
+    try:
+        for car in game_mode.cars:
+            game_progress["game_object_list"].append(
+                get_image_object("car_0"+str(car.car_no+1), (car.rect.x, car.rect.y), 50, 40, car.body.angle)
+            )
+    except Exception:
+        pass
+
+    game_progress["game_object_list"].append(get_rect_object("rect", (0, 0), TILE_LEFTTOP[0], HEIGHT, "#000000"))
+    game_progress["game_object_list"].append(get_rect_object("rect", (0, 0), WIDTH, TILE_LEFTTOP[1], "#000000"))
+    game_progress["game_object_list"].append(get_rect_object("rect", (TILE_LEFTTOP[0] + TILE_WIDTH, 0),
+                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
+    game_progress["game_object_list"].append(get_rect_object("rect", (0, TILE_LEFTTOP[1] + TILE_HEIGHT),
+                                                             WIDTH, HEIGHT, "#000000"))
+    game_progress["game_object_list"].append(get_image_object("info", (507, 20), 306, 480))
+
+    for i in range(6):
+        for car in game_mode.cars:
+            if car.car_no == i:
+                if i %2 == 0:
+                    if car.status:
+                        game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (600,
+                                              178 + 20 + 94 * i / 2), "15px Arial"))
+                        game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (600,
+                                              178 + 40 + 94 * i / 2), "15px Arial"))
+                        game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (600,
+                                              178 + 60 + 94 * i / 2), "15px Arial"))
+                    else:
+                        game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
+                                              600, 178 + 40 + 94 * (i // 2)))
+
+                else:
+                    if car.status:
+                        game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (730,
+                                              178 + 20 + 94 * (i // 2)), "15px Arial"))
+                        game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (730,
+                                              178 + 40 + 94 * (i // 2)), "15px Arial"))
+                        game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (730,
+                                              178 + 60 + 94 * (i // 2)), "15px Arial"))
+                    else:
+                        game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
+                                              (730, 178 + 40 + 94 * (i // 2)), "15px Arial"))
+    return game_progress
 
 def get_scene_init_sample_data() -> dict:
     """
@@ -122,10 +187,13 @@ def get_polygon_object(name, points, color):
     points欄位至少三個 # [{"x":1,"y":2},{},{}]
     :return:dict
     """
+    vertices = []
+    for p in points:
+        vertices.append({"x":p[0], "y":p[1]})
     return {"type": "polygon",
             "name": name,
             "color": color,
-            "points": points
+            "points": vertices
             }
 
 def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
@@ -137,7 +205,6 @@ def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
         "y": coordinate[1],
         "font-style": font_style
     }
-
 
 def get_dummy_progress_data():
     pass
@@ -177,13 +244,11 @@ def get_dummy_result_data():
 
     }
 
-
 def gen_points(point_num: int = 4) -> list:
     result = []
     for i in range(point_num):
         result.append({"x": random.randint(0, 100), "y": random.randint(0, 100)})
     return result
-
 
 def gen_rects(rect_num: int = 1) -> list:
     result = []

@@ -231,59 +231,10 @@ class MazeMode(GameMode):
     def drawWorld(self):
         '''show all cars and lanes on screen,call this fuction per frame'''
         super(MazeMode, self).drawWorld()
-        for wall in self.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [self.trnsfer_box2d_to_pygame(v) for v in vertices]
-            pygame.draw.polygon(self.screen, WHITE, vertices)
-        # for wall in self.wall_vertices_for_Box2D:
-        #     vertices = [self.trnsfer_box2d_to_pygame(v) for v in wall]
-        #     pygame.draw.polygon(self.screen, WHITE, vertices)
-
-        try:
-            self.screen.blit(self.end_point.image, self.end_point.rect)
-        except Exception:
-            pass
-        # self.all_points.draw(self.screen)
-        self.cars.draw(self.screen)
-        '''色塊'''
-        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, TILE_LEFTTOP[0], HEIGHT))
-        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, 0, WIDTH, TILE_LEFTTOP[1]))
-        pygame.draw.rect(self.screen, BLACK, pygame.Rect(TILE_LEFTTOP[0]+TILE_WIDTH, 0, WIDTH-TILE_LEFTTOP[0]-TILE_WIDTH, HEIGHT))
-        pygame.draw.rect(self.screen, BLACK, pygame.Rect(0, TILE_LEFTTOP[1]+TILE_HEIGHT, WIDTH, HEIGHT - TILE_LEFTTOP[1]-TILE_HEIGHT))
-        self.screen.blit(self.info, pygame.Rect(507, 20, 306, 480))
 
         if self.is_end == False:
             self.draw_time(self.frame)
         '''畫出每台車子的資訊'''
-        self._draw_user_imformation()
-
-    def _draw_user_imformation(self):
-        for i in range(6):
-            for car in self.cars:
-                if car.car_no == i:
-                    if i % 2 == 0:
-                        if car.status:
-                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 600,
-                                                  178 + 20 + 94 * i / 2)
-                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F) + "cm", 600,
-                                                  178 + 40 + 94 * i / 2)
-                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 600,
-                                                  178 + 60 + 94 * i / 2)
-                        else:
-                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "frame",
-                                                  600, 178 + 40 + 94 * (i // 2))
-
-                    else:
-                        if car.status:
-                            self.draw_information(self.screen, YELLOW, "L:" + str(car.sensor_L) + "cm", 730,
-                                                  178 + 20 + 94 * (i // 2))
-                            self.draw_information(self.screen, RED, "F:" + str(car.sensor_F) + "cm", 730,
-                                                  178 + 40 + 94 * (i // 2))
-                            self.draw_information(self.screen, LIGHT_BLUE, "R:" + str(car.sensor_R) + "cm", 730,
-                                                  178 + 60 + 94 * (i // 2))
-                        else:
-                            self.draw_information(self.screen, WHITE, str(car.end_frame) + "frame",
-                                                  730, 178 + 40 + 94 * (i // 2))
 
     def rank(self):
         while len(self.eliminated_user) > 0:
@@ -323,26 +274,6 @@ class MazeMode(GameMode):
                             same_rank.append(user)
         if same_rank:
             rank_user.append(same_rank)
-        return rank_user
-
-
-        # for i in range(len(self.ranked_user)):
-        #     if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
-        #         if i == 0:
-        #             self.ranked_user[i].score = 6
-        #         else:
-        #             for j in range(1, i + 1):
-        #                 if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
-        #                     if i == j:
-        #                         self.ranked_user[i].score = 6
-        #                     else:
-        #                         pass
-        #                     pass
-        #                 else:
-        #                     self.ranked_user[i].score = 6 - (i - j + 1)
-        #                     break
-        #     else:
-        #         self.ranked_user[i].score = 6 - i
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):

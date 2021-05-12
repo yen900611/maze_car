@@ -4,6 +4,7 @@ from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
 from .sound_controller import *
 from .gameView import PygameView
+from .game_object_data import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
@@ -26,7 +27,7 @@ class MazeCar:
             self.game_type = "PRECTICE"
         self.user_num = user_num
         self.sound_controller.play_music()
-        # self.gameView = PygameView(self.get_game_info())
+        self.game_view = PygameView(self.get_game_info())
 
     def update(self, commands):
         self.game_mode.ticks()
@@ -35,7 +36,6 @@ class MazeCar:
         game_object = self.game_mode.update_sprite(commands)
         self.draw(game_object)
         if not self.isRunning():
-            print(self.get_game_result())
             return "QUIT"
 
     def get_player_scene_info(self):
@@ -60,12 +60,9 @@ class MazeCar:
         return self.game_mode.isRunning()
 
     def draw(self, data):
-        # self.gameView.draw_screen()
-        # self.gameView.draw(data)
-        # self.gameView.flip()
-        self.game_mode.draw_bg()
-        self.game_mode.drawWorld()
-        self.game_mode.flip()
+        self.game_view.draw(self.get_game_progress())
+        self.game_view.flip()
+
 
     @property
     def get_scene_info(self):
@@ -85,96 +82,14 @@ class MazeCar:
         """
         Get the scene and object information for drawing on the web
         """
-        wall_vertices = []
-        for wall in self.game_mode.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            wall_vertices.append(vertices)
-        game_info = {
-            "scene": {
-                "size": [WIDTH, HEIGHT],
-                "walls": wall_vertices  #pygame(pixel)
-            },
-            "game_object": [
-                {"name": "player1_car", "size": self.game_mode.car.size, "color": RED, "image": "car_01.png"},
-                {"name": "player2_car", "size": self.game_mode.car.size, "color": GREEN, "image": "car_02.png"},
-                {"name": "player3_car", "size": self.game_mode.car.size, "color": BLUE, "image": "car_03.png"},
-                {"name": "player4_car", "size": self.game_mode.car.size, "color": YELLOW, "image": "car_04.png"},
-                {"name": "player5_car", "size": self.game_mode.car.size, "color": BROWN, "image": "car_05.png"},
-                {"name": "player6_car", "size": self.game_mode.car.size, "color": PINK, "image": "car_06.png"},
-                {"name": "mask1", "size": (TILE_LEFTTOP[0], HEIGHT), "color": BLACK},
-                {"name": "mask2", "size": (WIDTH, TILE_LEFTTOP[1]), "color": BLACK},
-                {"name": "mask3", "size": (WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT), "color": BLACK},
-                {"name": "mask4", "size": (WIDTH, HEIGHT - TILE_LEFTTOP[1] - TILE_HEIGHT), "color": BLACK},
-                {"name": "end_point", "size": (2 * TILESIZE, 2 * TILESIZE), "color": WHITE, "image": LOGO},
-                {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
-
-            ],
-            "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
-                       LOGO
-                       ]
-        }
-        if self.game_type == "MOVE_MAZE":
-            game_info["game_object"].append({"name": "wall", "size": (120,10), "color": WHITE})
+        game_info = get_scene_init_sample_data()
         return game_info
-
-    def _progress_dict(self, pos_left=None, pos_top=None, vertices=None, size=None, color=None, image=None, angle=None,
-                       center=None):
-        '''
-        :return:Dictionary for game_progress
-        '''
-        object = {}
-        if pos_left != None and pos_top != None:
-            object["pos"] = [pos_left, pos_top]
-        if vertices != None:
-            object["vertices"] = vertices
-        if size != None:
-            object["size"] = size
-        if color != None:
-            object["color"] = color
-        if image != None:
-            object["image"] = image
-        if angle != None:
-            object["angle"] = angle
-        if center != None:
-            object["center"] = center
-
-        return object
 
     def get_game_progress(self):
         """
         Get the position of game objects for drawing on the web
         """
-        scene_info = self.get_scene_info
-        game_progress = {
-            "game_object": {"mask1": [self._progress_dict(0, 0)],
-                            "mask2": [self._progress_dict(0, 0)],
-                            "mask3": [self._progress_dict(TILE_LEFTTOP[0]+TILE_WIDTH, 0)],
-                            "mask4": [self._progress_dict(0, TILE_LEFTTOP[1]+TILE_HEIGHT)],
-                            "info": [self._progress_dict(507, 20)],
-                            },
-            "game_user_information": []
-        }
-        for user in self.game_mode.car_info:
-            user_information = {"right_sensor_value": user["r_sensor_value"],
-                                "left_sensor_value": user["l_sensor_value"],
-                                "front_sensor_value": user["f_sensor_value"],
-                                "L_PWM":user["L_PWM"],
-                                "R_PWM":user["R_PWM"]}
-            game_progress["game_user_information"].append(user_information)
-            game_progress["game_object"]["player" + str(user["id"] + 1) + "_car"] = [
-                self._progress_dict(vertices=user["vertices"], angle=user["angle"], center=user["center"])]
-        wall_vertices = []
-        try:
-            game_progress["game_object"]["end_point"] = [
-                self._progress_dict(self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y)]
-        except Exception:
-            pass
-        for wall in self.game_mode.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            wall_vertices.append(vertices)
-        game_progress["game_object"]["walls"] = self._progress_dict(vertices=wall_vertices)
+        game_progress = get_progress_data(self.game_mode)
         return game_progress
 
     def get_game_result(self):
@@ -192,7 +107,7 @@ class MazeCar:
             rank.append(same_rank)
 
         return {"used_frame": scene_info["frame"],
-                "result": result, # ["1P:7s", "2P:5s"]
+                # "result": result, # ["1P:7s", "2P:5s"]
                 "rank": rank# by score
                 }
 
@@ -230,56 +145,3 @@ class MazeCar:
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
-
-    def ranking(self):
-        '''
-        ranking by score
-        :return: list
-        [[],[],[],[],[],[]]
-        '''
-        for key in self.game_mode.ranked_score.keys():
-            self.ranked_score[key] += self.game_mode.ranked_score[key]
-        ranked_player = []
-        scores = []
-        result = []
-        for key in self.ranked_score.keys():
-            scores.append(self.ranked_score[key])
-            '''
-            scores = [p1_score,p2_score....,p6_score]
-            '''
-        while len(scores) != 0:
-            for key in self.ranked_score.keys():
-                try:
-                    if self.ranked_score[key] == max(scores):
-                        ranked_player.append(key)
-                        scores.remove(self.ranked_score[key])
-                except ValueError:
-                    pass
-            '''
-            ranked_player=[2P,3P,5P,1P,6P,4P] # sort from most score
-            '''
-        for i in range(len(ranked_player)):
-            same_rank = []
-            if i == len(ranked_player) - 1:
-                same_rank.append(ranked_player[i])
-                result.append(same_rank)
-            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i - 1]]:
-                pass
-            elif self.ranked_score[ranked_player[i]] == self.ranked_score[ranked_player[i + 1]]:
-                same_rank.append(ranked_player[i])
-                for j in range(1, len(ranked_player) - i):
-                    if self.ranked_score[ranked_player[i + j]] == self.ranked_score[ranked_player[i]]:
-                        if j == 0:
-                            pass
-                        else:
-                            same_rank.append(ranked_player[i + j])
-                            continue
-                        break
-                    else:
-                        break
-                result.append(same_rank)
-
-            else:
-                same_rank.append(ranked_player[i])
-                result.append(same_rank)
-        return result

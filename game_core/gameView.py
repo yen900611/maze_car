@@ -1,8 +1,10 @@
 import math
 
-from .game_object_data import *
-from .env import *
+from os import path
+# from .game_object_data import *
 import pygame
+
+from .env import IMAGE_DIR
 
 NAME = "name"
 TYPE = "type"
@@ -11,24 +13,28 @@ SIZE = "size"
 COLOR = "color"
 CORDINATE = "coordinate"
 IMAGE = "image"
-RECTANGLE = "rectangle"
-VERTICES = "vertices"
+RECTANGLE = "rect"
+POLYGON = "polygon"
 
 class PygameView():
     def __init__(self, game_info:dict):
         pygame.display.init()
-        self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
-        self.init_scene = get_scene_init_sample_data()
+        self.scene_init_data = game_info
+        self.width = self.scene_init_data["scene"]["width"]
+        self.height = self.scene_init_data["scene"]["height"]
+        self.background_color = self.scene_init_data["scene"]["color"]
+        self.screen = pygame.display.set_mode((self.width,self.height))
         self.address = "GameView"
-        if "images" in game_info.keys():
-            self.image_dict = self.loading_image(game_info["images"])
+        self.image_dict = self.loading_image()
+        # if "images" in game_info.keys():
+        #     self.image_dict = self.loading_image(game_info["images"])
 
-    def loading_image(self,dict):
+    def loading_image(self):
         result = {}
-        for file_name in dict:
-            image = pygame.image.load(path.join(IMAGE_DIR, file_name))
-            result[file_name]=image
-            pass
+        for file in self.scene_init_data["assets"]:
+            if file[TYPE] == IMAGE:
+                image = pygame.image.load(path.join(IMAGE_DIR, file["image_id"]+".png"))
+                result[file["image_id"]]=image
         return result
 
     def draw(self, object_imformation):
@@ -37,64 +43,55 @@ class PygameView():
         :param all_sprite:
         :return:
         '''
-        object_imformation = self.check_game_object_information(object_imformation)
-        for game_object in object_imformation["game_object"]:
+        self.draw_screen()
+        for game_object in object_imformation["game_object_list"]:
             if game_object[TYPE] == IMAGE:
-                if ANGLE in game_object.keys():
-                    image = pygame.transform.rotate(pygame.transform.scale(self.image_dict[game_object[IMAGE]], game_object[
-                        SIZE]), (game_object[ANGLE] * 180 / math.pi) % 360)
-                    rect = image.get_rect()
-                    rect.center = game_object[CORDINATE]
-                    self.screen.blit(image, rect)
+                self.draw_image(game_object["image_id"], game_object["x"], game_object["y"],
+                                game_object["width"], game_object["height"], game_object["angle"])
 
-                else:
-                    self.screen.blit(pygame.transform.scale(self.image_dict[game_object[IMAGE]], game_object[SIZE]), game_object[
-                        CORDINATE])
             elif game_object[TYPE] == RECTANGLE:
-                pygame.draw.rect(self.screen, game_object[COLOR],
-                                 pygame.Rect(game_object[CORDINATE], game_object[SIZE]))
-                pass
-            elif game_object[TYPE] == VERTICES:
-                pygame.draw.polygon(self.screen, game_object[COLOR], game_object[VERTICES])
-                pass
+                self.draw_rect(game_object["x"], game_object["y"], game_object["width"], game_object["height"],
+                               game_object[COLOR])
+
+            elif game_object[TYPE] == POLYGON:
+                self.draw_polygon(game_object["points"], game_object[COLOR])
+
+            elif game_object[TYPE] == "text":
+                self.draw_text(game_object["content"], game_object["font-style"],
+                               game_object["x"], game_object["y"], game_object[COLOR])
+
             else:
                 pass
-            pass
+
 
     def draw_screen(self):
-        self.screen.fill(BLACK)
-        pass
+        self.screen.fill(self.background_color) # hex # need turn to RGB
+
+    def draw_image(self, image_id, x, y, width, height, angle):
+        image = pygame.transform.rotate(pygame.transform.scale(self.image_dict[image_id], (width, height)),
+                                        (angle * 180 / math.pi) % 360)
+        rect = image.get_rect()
+        rect.x, rect.y = x, y
+        self.screen.blit(image, rect)
+
+    def draw_rect(self, x, y, width, height, color):
+        pygame.draw.rect(self.screen, color, pygame.Rect(x, y, width, height))
+
+    def draw_polygon(self, points, color):
+        vertices = []
+        for p in points:
+            vertices.append((p["x"], p["y"]))
+        pygame.draw.polygon(self.screen, color, vertices)
 
     def flip(self):
         pygame.display.flip()
 
-    def draw_information(self, surf, text, size, x, y):
-        font = pygame.font.Font(pygame.font.match_font("arial"), size)
-        text_surface = font.render(text , True , WHITE)
+    def draw_text(self, text, font_style, x, y, color):
+        list = font_style.split(" ", -1)
+        size = int(list[0].replace("px", "", 1))
+        font_type = list[1].lower()
+        font = pygame.font.Font(pygame.font.match_font(font_type), size)
+        text_surface = font.render(text , True , color)
         text_rect = text_surface.get_rect()
-        text_rect.center = (x, y)
-        surf.blit(text_surface , text_rect)
-
-    def check_game_object_information(self, data: dict):
-        object_information = data
-        if "game_object" in object_information.keys():
-            for game_object in object_information["game_object"]:
-                if (NAME or TYPE or CORDINATE) not in game_object.keys():
-                    object_information["game_object"].remove(game_object)
-                else:
-                    if game_object[TYPE] == IMAGE:
-                        if IMAGE not in game_object.keys():
-                            object_information["game_object"].remove(game_object)
-                    elif game_object[TYPE] == RECTANGLE:
-                        if (SIZE or COLOR) not in game_object.keys():
-                            object_information["game_object"].remove(game_object)
-                    elif game_object[TYPE] == VERTICES:
-                        if VERTICES not in game_object.keys():
-                            object_information["game_object"].remove(game_object)
-                    else:
-                        object_information["game_object"].remove(game_object)
-        # print(object_information)
-        else:
-            object_information["game_object"] = []
-
-        return object_information
+        text_rect.x, text_rect.y = (x, y)
+        self.screen.blit(text_surface , text_rect)
