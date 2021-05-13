@@ -85,7 +85,7 @@ def get_progress_data(game_mode):
             "R_sensor":user.sensor_R,
             "L_sensor":user.sensor_L,
             "R_PWM":user.R_PWM,
-            "L_PWM":user.LPWM,
+            "L_PWM":user.L_PWM,
         })
 
     game_progress["game_sys_info"]["frame"] = game_mode.frame
