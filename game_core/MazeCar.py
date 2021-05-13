@@ -106,9 +106,9 @@ class MazeCar:
                                   "game_result":str(user.end_frame) + "frames"})
             rank.append(same_rank)
 
-        return {"used_frame": scene_info["frame"],
+        return {"frame_used": scene_info["frame"],
                 # "result": result, # ["1P:7s", "2P:5s"]
-                "rank": rank# by score
+                "ranks": rank# by score
                 }
 
         pass
