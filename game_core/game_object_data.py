@@ -93,7 +93,7 @@ def get_scene_init_sample_data() -> dict:
             "image_id": 'car_01',
             "width": 50,
             "height": 50,
-            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/car_01.png'
+            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/car_02.png'
         }, {
             "type": "image",
             "image_id": 'car_02',
@@ -129,13 +129,13 @@ def get_scene_init_sample_data() -> dict:
             "image_id": 'info',
             "width": 306,
             "height": 480,
-            "url": 'https://github.com/yen900611/Maze_Car/blob/master/game_core/image/info.png'
+            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/info.png'
         }, {
             "type": "image",
             "image_id": 'logo',
             "width": 40,
             "height": 40,
-            "url": 'https://github.com/yen900611/Maze_Car/blob/master/game_core/image/logo.png'
+            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/logo.png'
         }
     ]
     return {"scene": scene.__dict__,

@@ -24,7 +24,7 @@ class MazeCar:
 
         elif game_type == "PRACTICE":
             self.game_mode = PracticeMode(user_num,map,time, self.sound_controller)
-            self.game_type = "PRECTICE"
+            self.game_type = "PRACTICE"
         self.user_num = user_num
         self.sound_controller.play_music()
         self.game_view = PygameView(self.get_game_info())
