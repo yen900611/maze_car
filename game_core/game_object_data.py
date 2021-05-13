@@ -13,7 +13,6 @@ class Scene():
         self.width = width
         self.height = height
         self.color = trnsfer_hex_to_rgb(color)
-        pass
 
 def get_progress_data(game_mode):
     game_progress = {
@@ -78,6 +77,18 @@ def get_progress_data(game_mode):
                     else:
                         game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
                                               (730, 178 + 40 + 94 * (i // 2)), "15px Arial"))
+
+    for user in game_mode.cars:
+        game_progress["game_user_info"].append({
+            "player":str(user.car_no+1)+"P",
+            "F_sensor":user.sensor_F,
+            "R_sensor":user.sensor_R,
+            "L_sensor":user.sensor_L,
+            "R_PWM":user.R_PWM,
+            "L_PWM":user.LPWM,
+        })
+
+    game_progress["game_sys_info"]["frame"] = game_mode.frame
     return game_progress
 
 def get_scene_init_sample_data() -> dict:
