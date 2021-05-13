@@ -274,6 +274,7 @@ class MazeMode(GameMode):
                             same_rank.append(user)
         if same_rank:
             rank_user.append(same_rank)
+        return rank_user
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):

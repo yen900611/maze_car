@@ -64,7 +64,7 @@ def get_progress_data(game_mode):
                                               178 + 60 + 94 * i / 2), "15px Arial"))
                     else:
                         game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
-                                              600, 178 + 40 + 94 * (i // 2)))
+                                              (600, 178 + 40 + 94 * (i // 2))))
 
                 else:
                     if car.status:
