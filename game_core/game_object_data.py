@@ -12,7 +12,7 @@ class Scene():
         """
         self.width = width
         self.height = height
-        self.color = trnsfer_hex_to_rgb(color)
+        self.color = color
 
 def get_progress_data(game_mode):
     game_progress = {
@@ -189,7 +189,7 @@ def get_rect_object(name, coordinate, width, height, color, angle = 0):
             "angle": angle,
             "width": width,
             "height": height,
-            "color": trnsfer_hex_to_rgb(color)
+            "color": color
             }
 
 def get_polygon_object(name, points, color):
@@ -203,7 +203,7 @@ def get_polygon_object(name, points, color):
         vertices.append({"x":p[0], "y":p[1]})
     return {"type": "polygon",
             "name": name,
-            "color": trnsfer_hex_to_rgb(color),
+            "color": color,
             "points": vertices
             }
 
@@ -211,7 +211,7 @@ def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
     return {
         "type": "text",
         "content": content,
-        "color": trnsfer_hex_to_rgb(color),
+        "color": color,
         "x": coordinate[0],
         "y": coordinate[1],
         "font-style": font_style

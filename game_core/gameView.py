@@ -4,6 +4,7 @@ from os import path
 # from .game_object_data import *
 import pygame
 
+from .game_object_data import trnsfer_hex_to_rgb
 from .env import IMAGE_DIR
 
 NAME = "name"
@@ -22,7 +23,7 @@ class PygameView():
         self.scene_init_data = game_info
         self.width = self.scene_init_data["scene"]["width"]
         self.height = self.scene_init_data["scene"]["height"]
-        self.background_color = self.scene_init_data["scene"]["color"]
+        self.background_color = trnsfer_hex_to_rgb(self.scene_init_data["scene"][COLOR])
         self.screen = pygame.display.set_mode((self.width,self.height))
         self.address = "GameView"
         self.image_dict = self.loading_image()
@@ -51,14 +52,14 @@ class PygameView():
 
             elif game_object[TYPE] == RECTANGLE:
                 self.draw_rect(game_object["x"], game_object["y"], game_object["width"], game_object["height"],
-                               game_object[COLOR])
+                               trnsfer_hex_to_rgb(game_object[COLOR]))
 
             elif game_object[TYPE] == POLYGON:
-                self.draw_polygon(game_object["points"], game_object[COLOR])
+                self.draw_polygon(game_object["points"], trnsfer_hex_to_rgb(game_object[COLOR]))
 
             elif game_object[TYPE] == "text":
                 self.draw_text(game_object["content"], game_object["font-style"],
-                               game_object["x"], game_object["y"], game_object[COLOR])
+                               game_object["x"], game_object["y"], trnsfer_hex_to_rgb(game_object[COLOR]))
 
             else:
                 pass
