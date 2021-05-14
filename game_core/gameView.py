@@ -27,6 +27,7 @@ class PygameView():
         self.screen = pygame.display.set_mode((self.width,self.height))
         self.address = "GameView"
         self.image_dict = self.loading_image()
+        self.font = {}
         # if "images" in game_info.keys():
         #     self.image_dict = self.loading_image(game_info["images"])
 
@@ -88,10 +89,14 @@ class PygameView():
         pygame.display.flip()
 
     def draw_text(self, text, font_style, x, y, color):
-        list = font_style.split(" ", -1)
-        size = int(list[0].replace("px", "", 1))
-        font_type = list[1].lower()
-        font = pygame.font.Font(pygame.font.match_font(font_type), size)
+        if font_style in self.font.keys():
+            font = self.font[font_style]
+        else:
+            list = font_style.split(" ", -1)
+            size = int(list[0].replace("px", "", 1))
+            font_type = list[1].lower()
+            font = pygame.font.Font(pygame.font.match_font(font_type), size)
+            self.font[font_style] = font
         text_surface = font.render(text , True , color)
         text_rect = text_surface.get_rect()
         text_rect.x, text_rect.y = (x, y)

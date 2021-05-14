@@ -32,7 +32,6 @@ class MazeMode(GameMode):
         self.ranked_user = []  # pygame.sprite car
         self.result = []
         self.eliminated_user = []
-        self.user_check_points = []
 
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         pygame.font.init()
@@ -216,7 +215,6 @@ class MazeMode(GameMode):
                 if car not in self.eliminated_user and car.status:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
-                    self.user_check_points.append(car.check_point)
                     car.status = False
             self.is_end = True
             self.ranked_user = self.rank()
@@ -237,41 +235,50 @@ class MazeMode(GameMode):
         '''畫出每台車子的資訊'''
 
     def rank(self):
-        while len(self.eliminated_user) > 0:
-            for car in self.eliminated_user:
-                if car.is_completed:
-                    self.ranked_user.append(car)
-                    self.eliminated_user.remove(car)
-                else:
-                    if car.check_point == max(self.user_check_points):
-                        self.ranked_user.append(car)
-                        self.user_check_points.remove(car.check_point)
-                        self.eliminated_user.remove(car)
+        completed_game_user = []
+        unfinish_game_user = []
+        user_end_frame = []
+        user_check_point = []
+        for car in self.eliminated_user:
+            if car.is_completed:
+                user_end_frame.append(car.end_frame)
+                completed_game_user.append(car)
+            else:
+                user_check_point.append(car.check_point)
+                unfinish_game_user.append(car)
         same_rank = []
         rank_user = [] # [[sprite, sprite],[]]
-        for user in self.ranked_user:
-            if not same_rank:
-                same_rank.append(user)
+
+        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(completed_game_user[result[i]])
             else:
-                if user.is_completed:
-                    if user.end_frame == same_rank[0].end_frame:
+                for user in completed_game_user:
+                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
                         same_rank.append(user)
                     else:
-                        rank_user.append(same_rank)
-                        same_rank = []
-                        same_rank.append(user)
-                else:
-                    if same_rank[0].is_completed:
-                        rank_user.append(same_rank)
-                        same_rank = []
+                        pass
+        if same_rank:
+            rank_user.append(same_rank)
+
+        same_rank = []
+        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(unfinish_game_user[result[i]])
+            else:
+                for user in unfinish_game_user:
+                    if user.check_point == same_rank[0].check_point and user not in same_rank:
                         same_rank.append(user)
                     else:
-                        if user.check_point == same_rank[0].check_point:
-                            same_rank.append(user)
-                        else:
-                            rank_user.append(same_rank)
-                            same_rank = []
-                            same_rank.append(user)
+                        pass
         if same_rank:
             rank_user.append(same_rank)
         return rank_user

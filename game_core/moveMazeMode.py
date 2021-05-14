@@ -324,63 +324,53 @@ class MoveMazeMode(GameMode):
                                                   730, 178 + 40 + 94 * (i // 2))
 
     def rank(self):
-        while len(self.eliminated_user) > 0:
-            for car in self.eliminated_user:
-                if car.is_completed:
-                    self.ranked_user.append(car)
-                    self.eliminated_user.remove(car)
-                else:
-                    if car.check_point == max(self.user_check_points):
-                        self.ranked_user.append(car)
-                        self.user_check_points.remove(car.check_point)
-                        self.eliminated_user.remove(car)
+        completed_game_user = []
+        unfinish_game_user = []
+        user_end_frame = []
+        user_check_point = []
+        for car in self.eliminated_user:
+            if car.is_completed:
+                user_end_frame.append(car.end_frame)
+                completed_game_user.append(car)
+            else:
+                user_check_point.append(car.check_point)
+                unfinish_game_user.append(car)
         same_rank = []
         rank_user = [] # [[sprite, sprite],[]]
-        for user in self.ranked_user:
-            if not same_rank:
-                same_rank.append(user)
+
+        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(completed_game_user[result[i]])
             else:
-                if user.is_completed:
-                    if user.end_frame == same_rank[0].end_frame:
+                for user in completed_game_user:
+                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
                         same_rank.append(user)
                     else:
-                        rank_user.append(same_rank)
-                        same_rank = []
-                        same_rank.append(user)
-                else:
-                    if same_rank[0].is_completed:
-                        rank_user.append(same_rank)
-                        same_rank = []
+                        pass
+        if same_rank:
+            rank_user.append(same_rank)
+
+        same_rank = []
+        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(unfinish_game_user[result[i]])
+            else:
+                for user in unfinish_game_user:
+                    if user.check_point == same_rank[0].check_point and user not in same_rank:
                         same_rank.append(user)
                     else:
-                        if user.check_point == same_rank[0].check_point:
-                            same_rank.append(user)
-                        else:
-                            rank_user.append(same_rank)
-                            same_rank = []
-                            same_rank.append(user)
+                        pass
         if same_rank:
             rank_user.append(same_rank)
         return rank_user
-
-
-        # for i in range(len(self.ranked_user)):
-        #     if self.ranked_user[i].end_frame == self.ranked_user[i - 1].end_frame:
-        #         if i == 0:
-        #             self.ranked_user[i].score = 6
-        #         else:
-        #             for j in range(1, i + 1):
-        #                 if self.ranked_user[i - j].end_frame == self.ranked_user[i].end_frame:
-        #                     if i == j:
-        #                         self.ranked_user[i].score = 6
-        #                     else:
-        #                         pass
-        #                     pass
-        #                 else:
-        #                     self.ranked_user[i].score = 6 - (i - j + 1)
-        #                     break
-        #     else:
-        #         self.ranked_user[i].score = 6 - i
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
