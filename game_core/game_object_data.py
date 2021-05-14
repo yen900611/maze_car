@@ -51,32 +51,31 @@ def get_progress_data(game_mode):
                                                              WIDTH, HEIGHT, "#000000"))
     game_progress["game_object_list"].append(get_image_object("info", (507, 20), 306, 480))
 
-    for i in range(6):
-        for car in game_mode.cars:
-            if car.car_no == i:
-                if i %2 == 0:
-                    if car.status:
-                        game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (600,
-                                              178 + 20 + 94 * i / 2), "15px Arial"))
-                        game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (600,
-                                              178 + 40 + 94 * i / 2), "15px Arial"))
-                        game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (600,
-                                              178 + 60 + 94 * i / 2), "15px Arial"))
-                    else:
-                        game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
-                                              (600, 178 + 40 + 94 * (i // 2))))
-
+    for car in game_mode.cars:
+            if car.car_no %2 == 0:
+                if car.status:
+                    #TODO #合併左右兩排的繪圖位置
+                    game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (600,
+                                          178 + 20 + 94 * car.car_no / 2), "15px Arial"))
+                    game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (600,
+                                          178 + 40 + 94 * car.car_no / 2), "15px Arial"))
+                    game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (600,
+                                          178 + 60 + 94 * car.car_no / 2), "15px Arial"))
                 else:
-                    if car.status:
-                        game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (730,
-                                              178 + 20 + 94 * (i // 2)), "15px Arial"))
-                        game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (730,
-                                              178 + 40 + 94 * (i // 2)), "15px Arial"))
-                        game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (730,
-                                              178 + 60 + 94 * (i // 2)), "15px Arial"))
-                    else:
-                        game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
-                                              (730, 178 + 40 + 94 * (i // 2)), "15px Arial"))
+                    game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
+                                          (600, 178 + 40 + 94 * (car.car_no // 2)), "15px Arial"))
+
+            else:
+                if car.status:
+                    game_progress["game_object_list"].append(get_dummy_text("L:" + str(car.sensor_L) + "cm", "#FFFF00", (730,
+                                          178 + 20 + 94 * (car.car_no // 2)), "15px Arial"))
+                    game_progress["game_object_list"].append(get_dummy_text("F:" + str(car.sensor_F) + "cm", "#FF0000", (730,
+                                          178 + 40 + 94 * (car.car_no // 2)), "15px Arial"))
+                    game_progress["game_object_list"].append(get_dummy_text("R:" + str(car.sensor_R) + "cm", "#21A1F1", (730,
+                                          178 + 60 + 94 * (car.car_no // 2)), "15px Arial"))
+                else:
+                    game_progress["game_object_list"].append(get_dummy_text(str(car.end_frame) + "frame", "#FFFFFF",
+                                          (730, 178 + 40 + 94 * (car.car_no // 2)), "15px Arial"))
 
     for user in game_mode.cars:
         game_progress["game_user_info"].append({

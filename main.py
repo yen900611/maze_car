@@ -7,7 +7,7 @@ if __name__ == '__main__':
     pygame.init()
     display = pygame.display.init()
     sound_controller = sound_controller.SoundController("OFF")
-    game = mazeMode.MazeMode(1, 4, 2, sound_controller)
+    game = mazeMode.MazeMode(3, 5, 2, sound_controller)
     # game = moveMazeMode.MoveMazeMode(2, 6, 120, sound_controller)
     # game = practiceMode.PracticeMode(1, 5, 120, sound_controller)
     sound_controller.play_music()
