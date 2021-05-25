@@ -26,13 +26,12 @@ class MazeCar:
             self.game_type = "PRACTICE"
         self.user_num = user_num
         self.game_mode.sound_controller.play_music()
-        self.game_view = PygameView(self.get_game_info())
 
     def update(self, commands):
         self.game_mode.ticks()
         self.game_mode.handle_event()
         self.game_mode.update_sprite(commands)
-        self.draw()
+        # self.draw()
         if not self.isRunning():
             return "QUIT"
 
@@ -56,11 +55,6 @@ class MazeCar:
 
     def isRunning(self):
         return self.game_mode.isRunning()
-
-    def draw(self):
-        self.game_view.draw(self.get_game_progress())
-        self.game_view.flip()
-
 
     @property
     def get_scene_info(self):
