@@ -58,7 +58,6 @@ class KeyBoardCommander(I_Commander):
                        "RIGHT": keys[self.moveRightKey],
                        "SPEED_UP": keys[self.speedKey],
                        "BRAKEDOWN": keys[self.brakeKey]}
-        # TODO 調整參數
 
         if control_dic["SPEED_UP"]:
             control_list[0]["left_PWM"] = self.speed

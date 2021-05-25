@@ -1,6 +1,6 @@
 import time
 import Box2D
-
+from .sound_controller import SoundController
 from .points import End_point, Check_point, Outside_point
 from .maze_wall import Wall
 from .tilemap import Map, Camera
@@ -41,7 +41,7 @@ class MazeMode(GameMode):
         self._init_world(user_num)
         self.new()
         '''sound'''
-        self.sound_controller = sound_controller
+        self.sound_controller = SoundController(sound_controller)
         '''image'''
         self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
 

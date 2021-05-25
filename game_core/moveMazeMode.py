@@ -2,6 +2,7 @@ import math
 import time
 import Box2D
 
+from .sound_controller import SoundController
 from .tilemap import Map
 from .points import *
 from .maze_imformation import Move_Maze_Size, Move_Maze, Normal_Maze_Size
@@ -46,7 +47,7 @@ class MoveMazeMode(GameMode):
         self._init_world(user_num)
         self.new()
         '''sound'''
-        self.sound_controller = sound_controller
+        self.sound_controller = SoundController(sound_controller)
         '''image'''
         self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
 

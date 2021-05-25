@@ -14,27 +14,25 @@ class MazeCar:
         self.maze_id = map - 1
         self.game_end_time = time
         self.is_sound = sound
-        self.sound_controller = SoundController(self.is_sound)
         if game_type == "MAZE":
-            self.game_mode = MazeMode(user_num, map, time, self.sound_controller)
+            self.game_mode = MazeMode(user_num, map, time, self.is_sound)
             self.game_type = "MAZE"
         elif game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(user_num,map,time, self.sound_controller)
+            self.game_mode = MoveMazeMode(user_num,map,time, self.is_sound)
             self.game_type = "MOVE_MAZE"
 
         elif game_type == "PRACTICE":
-            self.game_mode = PracticeMode(user_num,map,time, self.sound_controller)
+            self.game_mode = PracticeMode(user_num,map,time, self.is_sound)
             self.game_type = "PRACTICE"
         self.user_num = user_num
-        self.sound_controller.play_music()
+        self.game_mode.sound_controller.play_music()
         self.game_view = PygameView(self.get_game_info())
 
     def update(self, commands):
         self.game_mode.ticks()
         self.game_mode.handle_event()
-        self.game_mode.detect_collision()
-        game_object = self.game_mode.update_sprite(commands)
-        self.draw(game_object)
+        self.game_mode.update_sprite(commands)
+        self.draw()
         if not self.isRunning():
             return "QUIT"
 
@@ -59,7 +57,7 @@ class MazeCar:
     def isRunning(self):
         return self.game_mode.isRunning()
 
-    def draw(self, data):
+    def draw(self):
         self.game_view.draw(self.get_game_progress())
         self.game_view.flip()
 
