@@ -1,11 +1,7 @@
 import math
 
 from os import path
-# from .game_object_data import *
 import pygame
-
-from .game_object_data import trnsfer_hex_to_rgb
-from .env import IMAGE_DIR
 
 NAME = "name"
 TYPE = "type"
@@ -16,6 +12,13 @@ CORDINATE = "coordinate"
 IMAGE = "image"
 RECTANGLE = "rect"
 POLYGON = "polygon"
+
+'''data path'''
+IMAGE_DIR = path.join(path.dirname(__file__), 'image')
+
+def trnsfer_hex_to_rgb(hex):
+    h = hex.lstrip('#')
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 class PygameView():
     def __init__(self, game_info:dict):

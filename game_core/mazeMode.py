@@ -42,8 +42,6 @@ class MazeMode(GameMode):
         self.new()
         '''sound'''
         self.sound_controller = SoundController(sound_controller)
-        '''image'''
-        self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
 
     def new(self):
         # initialize all variables and do all setup for a new game
