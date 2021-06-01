@@ -18,11 +18,11 @@ class Sensor():
                                   anchorB=body.position, collideConnected=True)
         world.CreateDistanceJoint(bodyA=self.sensor_right, bodyB=body, anchorA=self.sensor_right.position,
                                   anchorB=body.position, collideConnected=True)
-        self.last_detect_sensor = -3
+        self.last_detect_sensor = -2
         pass
 
     def update(self, frame, walls):
-        if frame - self.last_detect_sensor > FPS / 15:
+        if frame - self.last_detect_sensor >= 2:
             self.front_sensor_detect(walls)
             self.sensor_detect(walls)
             self.last_detect_sensor = frame
