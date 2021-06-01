@@ -42,8 +42,6 @@ class MazeMode(GameMode):
         self.new()
         '''sound'''
         self.sound_controller = SoundController(sound_controller)
-        '''image'''
-        self.info = pygame.image.load(path.join(IMAGE_DIR, info_image))
 
     def new(self):
         # initialize all variables and do all setup for a new game
@@ -65,7 +63,7 @@ class MazeMode(GameMode):
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), 1)
+                                       self.worlds.index(world))
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
                         # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
@@ -195,10 +193,6 @@ class MazeMode(GameMode):
             for rank in self.ranked_user:
                 for user in rank:
                     self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
-            # for user in self.ranked_user:
-            #
-            #     self.ranked_score[str(user.car_no + 1) + "P"] = user.score
-            # print("score:", self.ranked_score)
             self.x += 1
             print(self.result)
         pass
@@ -220,68 +214,6 @@ class MazeMode(GameMode):
             self.ranked_user = self.rank()
             self._print_result()
             self.status = "GAME OVER"
-
-    def draw_bg(self):
-        '''show the background and imformation on screen,call this fuction per frame'''
-        super(MazeMode, self).draw_bg()
-        self.screen.fill(BLACK)
-
-    def drawWorld(self):
-        '''show all cars and lanes on screen,call this fuction per frame'''
-        super(MazeMode, self).drawWorld()
-
-        if self.is_end == False:
-            self.draw_time(self.frame)
-        '''畫出每台車子的資訊'''
-
-    def rank(self):
-        completed_game_user = []
-        unfinish_game_user = []
-        user_end_frame = []
-        user_check_point = []
-        for car in self.eliminated_user:
-            if car.is_completed:
-                user_end_frame.append(car.end_frame)
-                completed_game_user.append(car)
-            else:
-                user_check_point.append(car.check_point)
-                unfinish_game_user.append(car)
-        same_rank = []
-        rank_user = [] # [[sprite, sprite],[]]
-
-        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
-        for i in range(len(result)):
-            if result[i] != result[i-1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(completed_game_user[result[i]])
-            else:
-                for user in completed_game_user:
-                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
-
-        same_rank = []
-        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
-        for i in range(len(result)):
-            if result[i] != result[i-1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(unfinish_game_user[result[i]])
-            else:
-                for user in unfinish_game_user:
-                    if user.check_point == same_rank[0].check_point and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
-        return rank_user
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):

@@ -71,31 +71,53 @@ class GameMode(object):
     def isRunning(self) -> bool:
         return self.running
 
-    def draw_time(self,present_frame):
-        now_time = present_frame / FPS
-        min = round(now_time // 60)
-        if min//10 <1:
-            min_str = "0"+str(min)
-        else:
-            min_str = str(min)
-        sec = math.floor(now_time)%60
-        if sec//10 <1:
-            sec_str = "0"+str(sec)
-        else:
-            sec_str = str(sec)
-        ms = round(round(now_time - math.floor(now_time), 2)*100)
-        if ms//10 <1:
-            ms_str = "0"+str(ms)
-        else:
-            ms_str = str(ms)
-        text_surface = self.time_font.render(min_str+" : "+sec_str+" : "+ms_str, True , WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.center= (660, 100)
-        self.screen.blit(text_surface , text_rect)
 
-    def draw_information(self, surf, color, text, x, y):
-        text_surface = self.font.render(text , True , color)
-        text_rect = text_surface.get_rect()
-        text_rect.left,text_rect.top = (x, y)
-        surf.blit(text_surface , text_rect)
+    def rank(self):
+        completed_game_user = []
+        unfinish_game_user = []
+        user_end_frame = []
+        user_check_point = []
+        for car in self.eliminated_user:
+            if car.is_completed:
+                user_end_frame.append(car.end_frame)
+                completed_game_user.append(car)
+            else:
+                user_check_point.append(car.check_point)
+                unfinish_game_user.append(car)
+        same_rank = []
+        rank_user = [] # [[sprite, sprite],[]]
+
+        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(completed_game_user[result[i]])
+            else:
+                for user in completed_game_user:
+                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
+                        same_rank.append(user)
+                    else:
+                        pass
+        if same_rank:
+            rank_user.append(same_rank)
+
+        same_rank = []
+        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
+        for i in range(len(result)):
+            if result[i] != result[i-1] or i == 0:
+                if same_rank:
+                    rank_user.append(same_rank)
+                same_rank = []
+                same_rank.append(unfinish_game_user[result[i]])
+            else:
+                for user in unfinish_game_user:
+                    if user.check_point == same_rank[0].check_point and user not in same_rank:
+                        same_rank.append(user)
+                    else:
+                        pass
+        if same_rank:
+            rank_user.append(same_rank)
+        return rank_user
 

@@ -1,11 +1,7 @@
 import math
 
 from os import path
-# from .game_object_data import *
 import pygame
-
-from .game_object_data import trnsfer_hex_to_rgb
-from .env import IMAGE_DIR
 
 NAME = "name"
 TYPE = "type"
@@ -16,6 +12,13 @@ CORDINATE = "coordinate"
 IMAGE = "image"
 RECTANGLE = "rect"
 POLYGON = "polygon"
+
+'''data path'''
+IMAGE_DIR = path.join(path.dirname(__file__), 'image')
+
+def trnsfer_hex_to_rgb(hex):
+    h = hex.lstrip('#')
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 class PygameView():
     def __init__(self, game_info:dict):
@@ -46,7 +49,7 @@ class PygameView():
         :return:
         '''
         self.draw_screen()
-        for game_object in object_imformation["game_object_list"]:
+        for game_object in (object_imformation["game_object_list"] + object_imformation["game_background"]):
             if game_object[TYPE] == IMAGE:
                 self.draw_image(game_object["image_id"], game_object["x"], game_object["y"],
                                 game_object["width"], game_object["height"], game_object["angle"])
@@ -61,6 +64,8 @@ class PygameView():
             elif game_object[TYPE] == "text":
                 self.draw_text(game_object["content"], game_object["font-style"],
                                game_object["x"], game_object["y"], trnsfer_hex_to_rgb(game_object[COLOR]))
+            elif game_object[TYPE] == "line":
+                self.draw_line(game_object["x1"], game_object["y1"], game_object["x2"], game_object["y2"], game_object["width"], game_object[COLOR])
 
             else:
                 pass
@@ -78,6 +83,9 @@ class PygameView():
 
     def draw_rect(self, x, y, width, height, color):
         pygame.draw.rect(self.screen, color, pygame.Rect(x, y, width, height))
+
+    def draw_line(self, x1, y1, x2, y2, width, color):
+        pygame.draw.line(self.screen, color, (x1, y1), (x2, y2), width)
 
     def draw_polygon(self, points, color):
         vertices = []
