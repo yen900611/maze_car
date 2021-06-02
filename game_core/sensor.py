@@ -14,6 +14,7 @@ class Sensor():
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
         self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 1, body.position[1]))
         ball = self.sensor_left.CreateCircleFixture(radius=0.1)
+
         world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, anchorA=self.sensor_left.position,
                                   anchorB=body.position, collideConnected=True)
         world.CreateDistanceJoint(bodyA=self.sensor_right, bodyB=body, anchorA=self.sensor_right.position,
@@ -26,6 +27,8 @@ class Sensor():
             self.front_sensor_detect(walls)
             self.sensor_detect(walls)
             self.last_detect_sensor = frame
+            self.sensor_right.position = self.car.GetWorldVector(localVector=(1, 0)) + self.car.position
+            self.sensor_left.position = self.car.GetWorldVector(localVector=(-1, 0)) + self.car.position
             pass
         return {"right_value": self.right_value,
                 "left_value": self.left_value,
