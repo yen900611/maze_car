@@ -5,6 +5,7 @@ import math
 import time
 
 import pygame
+
 from .env import *
 
 class GameMode(object):
@@ -121,3 +122,9 @@ class GameMode(object):
             rank_user.append(same_rank)
         return rank_user
 
+    def trnsfer_box2d_to_pygame(self, coordinate):
+        '''
+        :param coordinate: vertice of body of box2d object
+        :return: center of pygame rect
+        '''
+        return ((coordinate[0]- self.pygame_point[0]) * PPM, (self.pygame_point[1] - coordinate[1])*PPM)

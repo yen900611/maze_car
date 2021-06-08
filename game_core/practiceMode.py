@@ -100,13 +100,6 @@ class PracticeMode(GameMode):
         if self.is_end:
             self.running = False
 
-    def trnsfer_box2d_to_pygame(self, coordinate):
-        '''
-        :param coordinate: vertice of body of box2d object
-        :return: center of pygame rect
-        '''
-        return ((coordinate[0]- self.pygame_point[0]) * PPM, (self.pygame_point[1] - coordinate[1])*PPM)
-
     def limit_pygame_screen(self):
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_w]:
@@ -217,55 +210,6 @@ class PracticeMode(GameMode):
             self.ranked_user = self.rank()
             self._print_result()
             self.status = "GAME OVER"
-
-    def rank(self):
-        completed_game_user = []
-        unfinish_game_user = []
-        user_end_frame = []
-        user_check_point = []
-        for car in self.eliminated_user:
-            if car.is_completed:
-                user_end_frame.append(car.end_frame)
-                completed_game_user.append(car)
-            else:
-                user_check_point.append(car.check_point)
-                unfinish_game_user.append(car)
-        same_rank = []
-        rank_user = [] # [[sprite, sprite],[]]
-
-        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
-        for i in range(len(result)):
-            if result[i] != result[i-1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(completed_game_user[result[i]])
-            else:
-                for user in completed_game_user:
-                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
-
-        same_rank = []
-        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
-        for i in range(len(result)):
-            if result[i] != result[i-1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(unfinish_game_user[result[i]])
-            else:
-                for user in unfinish_game_user:
-                    if user.check_point == same_rank[0].check_point and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
-        return rank_user
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
