@@ -1,3 +1,5 @@
+import math
+
 from .maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
@@ -43,7 +45,7 @@ class MazeCar:
             player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
                                                              "status": scene_info["status"],
                                                              "coordinate": car["coordinate"],
-                                                             "angle": car["angle"],
+                                                             "angle": (car["angle"] * 180 / math.pi) % 360,
                                                              "R_sensor": car["r_sensor_value"],
                                                              "L_sensor": car["l_sensor_value"],
                                                              "F_sensor": car["f_sensor_value"],
