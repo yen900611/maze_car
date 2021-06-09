@@ -49,7 +49,8 @@ class PracticeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-        self.get_wall_info("1")
+        self.get_wall_info_h("1")
+        self.get_wall_info_v("1")
         for wall_vertices in self.wall_vertices_for_Box2D:
             for world in self.worlds:
                 wall = Wall(self, wall_vertices, world)
@@ -123,56 +124,6 @@ class PracticeMode(GameMode):
             self.pygame_point[0] = 0
         else:
             pass
-
-    def get_wall_info(self, wall_tile):
-        wall_tiles = []
-        for row, tiles in enumerate(self.map.data):
-            col = 0
-            first_tile = -1
-            last_tile = -1
-            while col < (len(tiles)):
-                if tiles[col] == wall_tile:
-                    if first_tile == -1:
-                        first_tile = col
-                        if col == len(tiles) -1:
-                            last_tile = col
-                            self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                            first_tile = -1
-                            col += 1
-                        else:
-                            col += 1
-                    elif col == len(tiles) -1:
-                        last_tile = col
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                        first_tile = -1
-                        col += 1
-                    else:
-                        col += 1
-                else:
-                    if first_tile != -1:
-                        last_tile = col - 1
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                        first_tile = -1
-                        col += 1
-                    else:
-                        col += 1
-
-    def wall_vertices(self, first_tile, last_tile):
-        first_tilex = first_tile[0]+ TILESIZE/ (2*PPM) +1
-        first_tiley = - first_tile[1]  - TILESIZE/ (2*PPM) -1
-        last_tilex = last_tile[0]+ TILESIZE/ (2*PPM) +1
-        last_tiley =- last_tile[1] - TILESIZE/ (2*PPM) -1
-        r = TILESIZE/ (2*PPM)
-        vertices = [(first_tilex - r, first_tiley + r),
-                    (last_tilex + r, last_tiley + r),
-                    (last_tilex + r, last_tiley - r),
-                    (first_tilex - r, first_tiley -r)
-                    ] #Box2D
-        self.wall_info.append([vertices[0],vertices[1]])
-        self.wall_info.append([vertices[2],vertices[1]])
-        self.wall_info.append([vertices[3],vertices[0]])
-        self.wall_info.append([vertices[2],vertices[3]])
-        return vertices
 
     def load_data(self):
         game_folder = path.dirname(__file__)

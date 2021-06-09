@@ -53,11 +53,12 @@ class MoveMazeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-        self.get_wall_info("V")
-        self.get_wall_info("H")
-        self.get_wall_info("1")
-        self.get_wall_info("v")
-        self.get_wall_info("h")
+        self.get_wall_info_v("V")
+        self.get_wall_info_h("H")
+        self.get_wall_info_h("1")
+        self.get_wall_info_v("1")
+        self.get_wall_info_v("v")
+        self.get_wall_info_h("h")
         for wall_vertices in self.wall_vertices_for_Box2D:
             if wall_vertices["type"] == "1":
                 for world in self.worlds:
@@ -89,7 +90,6 @@ class MoveMazeMode(GameMode):
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
 
-        # print(self.wall_vertices_for_Box2D)
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == "P":
