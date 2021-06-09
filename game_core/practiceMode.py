@@ -53,7 +53,7 @@ class PracticeMode(GameMode):
         self.get_wall_info_v("1")
         for wall_vertices in self.wall_vertices_for_Box2D:
             for world in self.worlds:
-                wall = Wall(self, wall_vertices, world)
+                wall = Wall(self, wall_vertices["vertices"], world)
                 if self.worlds.index(world) == 0:
                     self.walls.add(wall)
         for row, tiles in enumerate(self.map.data):
@@ -129,19 +129,6 @@ class PracticeMode(GameMode):
         game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
         self.map = Map(path.join(map_folder, self.map_file))
-
-    def _print_result(self):
-        if self.is_end and self.x == 0:
-            for rank in self.ranked_user:
-                for user in rank:
-                    self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
-            # for user in self.ranked_user:
-            #
-            #     self.ranked_score[str(user.car_no + 1) + "P"] = user.score
-            # print("score:", self.ranked_score)
-            self.x += 1
-            print(self.result)
-        pass
 
     def _init_world(self, user_no: int):
         for i in range(user_no):

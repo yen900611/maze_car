@@ -142,14 +142,19 @@ class GameMode(object):
                         first_tile = row
                         if row == len(self.map.data) -1:
                             last_tile = row
-                            self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
+                            self.wall_vertices_for_Box2D.append(
+                                {"type": wall_tile, "vertices": self.wall_vertices_v((col, first_tile), (col, last_tile))})
+
+                            # self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
                             first_tile = -1
                             row += 1
                         else:
                             row += 1
                     elif row == len(self.map.data) -1:
                         last_tile = row
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
+                        self.wall_vertices_for_Box2D.append(
+                            {"type": wall_tile, "vertices": self.wall_vertices_v((col, first_tile), (col, last_tile))})
+                        # self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
                         first_tile = -1
                         row += 1
                     else:
@@ -157,11 +162,14 @@ class GameMode(object):
                 else:
                     if first_tile != -1:
                         last_tile = row - 1
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
+                        self.wall_vertices_for_Box2D.append(
+                            {"type": wall_tile, "vertices": self.wall_vertices_v((col, first_tile), (col, last_tile))})
+                        # self.wall_vertices_for_Box2D.append(self.wall_vertices_v((col, first_tile), (col, last_tile)))
                         first_tile = -1
                         row += 1
                     else:
                         row += 1
+
     def get_wall_info_h(self, wall_tile):
         wall_tiles = []
         for row, tiles in enumerate(self.map.data):
@@ -179,7 +187,9 @@ class GameMode(object):
                             col += 1
                     elif col == len(tiles) -1:
                         last_tile = col
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices_h((first_tile, row), (last_tile, row)))
+                        self.wall_vertices_for_Box2D.append(
+                            {"type": wall_tile, "vertices": self.wall_vertices_h((first_tile, row), (last_tile, row))})
+                        # self.wall_vertices_for_Box2D.append(self.wall_vertices_h((first_tile, row), (last_tile, row)))
                         for i in range(first_tile, last_tile + 1):
                             tiles[i] = "0"
                         first_tile = -1
@@ -193,7 +203,8 @@ class GameMode(object):
                             first_tile = -1
                             col += 1
                         else:
-                            self.wall_vertices_for_Box2D.append(self.wall_vertices_h((first_tile, row), (last_tile, row)))
+                            self.wall_vertices_for_Box2D.append(
+                                {"type": wall_tile, "vertices": self.wall_vertices_h((first_tile, row), (last_tile, row))})
                             for i in range(first_tile, last_tile+1):
                                 tiles[i] = "0"
                             first_tile = -1
@@ -220,7 +231,6 @@ class GameMode(object):
         self.wall_info.append([vertices[2],vertices[3]])
         return vertices
 
-
     def wall_vertices_v(self, first_tile, last_tile):
         first_tilex = first_tile[0]+ TILESIZE/ (2*PPM) +1
         first_tiley = - first_tile[1]  - TILESIZE/ (2*PPM) -1
@@ -239,3 +249,11 @@ class GameMode(object):
         self.wall_info.append([vertices[3],vertices[0]])
         self.wall_info.append([vertices[2],vertices[3]])
         return vertices
+
+    def _print_result(self):
+        if self.is_end and self.x == 0:
+            for rank in self.ranked_user:
+                for user in rank:
+                    self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
+            self.x += 1
+            print(self.result)
