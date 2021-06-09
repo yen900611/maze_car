@@ -18,9 +18,9 @@ class Car(pygame.sprite.Sprite):
         self.image = self.origin_image  # after rotate
         self.rect = self.image.get_rect()
         self.status = True
-        self.sensor_R = {"coordinate":(0, 0), "distance":0}
-        self.sensor_L = {"coordinate":(0, 0), "distance":0}
-        self.sensor_F = {"coordinate":(0, 0), "distance":0}
+        self.sensor_R = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
+        self.sensor_L = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
+        self.sensor_F = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
@@ -79,6 +79,7 @@ class Car(pygame.sprite.Sprite):
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
+                         "coordiinate":self.body.position,
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,

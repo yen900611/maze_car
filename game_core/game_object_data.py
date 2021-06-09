@@ -53,11 +53,11 @@ def get_progress_data(game_mode):
             x = 730
 
         if car["status"]:
-            game_progress["game_object_list"].append(get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
+            game_progress["game_background"].append(get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
                                   178 + 20 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["game_object_list"].append(get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
+            game_progress["game_background"].append(get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
                                   178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["game_object_list"].append(get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
+            game_progress["game_background"].append(get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
                                   178 + 60 + 94 * (car["id"] // 2)), "15px Arial"))
             game_progress["game_object_list"].append(get_line_object("l_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["l_sensor_value"]["coordinate"]), "#FFFF00",5))
@@ -66,7 +66,7 @@ def get_progress_data(game_mode):
             game_progress["game_object_list"].append(get_line_object("r_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["r_sensor_value"]["coordinate"]), "#21A1F1",5))
         else:
-            game_progress["game_object_list"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
+            game_progress["game_background"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
                                   (x, 178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
     try:
         for car in game_mode.car_info:

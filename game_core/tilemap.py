@@ -6,7 +6,11 @@ class Map:
         self.data = []
         with open(filename,'rt') as f:
             for line in f:
-                self.data.append(line.strip()) # ignore"\n"
+                data = []
+                line.strip() # ignore"\n"
+                for c in line:
+                    data.append(c)
+                self.data.append(data)
         self.tileWidth = len(self.data[0])
         self.tileHeight = len(self.data)
         self.width = self.tileWidth * TILESIZE

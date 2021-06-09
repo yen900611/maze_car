@@ -10,6 +10,11 @@ class Point(pygame.sprite.Sprite):
         self.game = game
         self.x, self.y = coordinate
 
+    def get_info(self):
+        return {
+            "coordinate":(self.x, self.y)
+        }
+
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)

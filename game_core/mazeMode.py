@@ -46,19 +46,15 @@ class MazeMode(GameMode):
     def new(self):
         # initialize all variables and do all setup for a new game
 
-        self.get_wall_info("1")
+        self.get_wall_info_h("1")
+        self.get_wall_info_v("1")
         for wall_vertices in self.wall_vertices_for_Box2D:
             for world in self.worlds:
-                wall = Wall(self, wall_vertices, world)
+                wall = Wall(self, wall_vertices["vertices"], world)
                 if self.worlds.index(world) == 0:
                     self.walls.add(wall)
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                # if tile == "1":
-                #     for world in self.worlds:
-                #         wall = Wall(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), world)
-                #         if self.worlds.index(world)==0:
-                #             self.walls.add(wall)
                 if tile == "P":
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
@@ -102,13 +98,6 @@ class MazeMode(GameMode):
         if self.is_end:
             self.running = False
 
-    def trnsfer_box2d_to_pygame(self, coordinate):
-        '''
-        :param coordinate: vertice of body of box2d object
-        :return: center of pygame rect
-        '''
-        return ((coordinate[0]- self.pygame_point[0]) * PPM, (self.pygame_point[1] - coordinate[1])*PPM)
-
     def limit_pygame_screen(self):
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_w]:
@@ -133,69 +122,10 @@ class MazeMode(GameMode):
         else:
             pass
 
-    def get_wall_info(self, wall_tile):
-        wall_tiles = []
-        for row, tiles in enumerate(self.map.data):
-            col = 0
-            first_tile = -1
-            last_tile = -1
-            while col < (len(tiles)):
-                if tiles[col] == wall_tile:
-                    if first_tile == -1:
-                        first_tile = col
-                        if col == len(tiles) -1:
-                            last_tile = col
-                            self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                            first_tile = -1
-                            col += 1
-                        else:
-                            col += 1
-                    elif col == len(tiles) -1:
-                        last_tile = col
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                        first_tile = -1
-                        col += 1
-                    else:
-                        col += 1
-                else:
-                    if first_tile != -1:
-                        last_tile = col - 1
-                        self.wall_vertices_for_Box2D.append(self.wall_vertices((first_tile, row), (last_tile, row)))
-                        first_tile = -1
-                        col += 1
-                    else:
-                        col += 1
-
-    def wall_vertices(self, first_tile, last_tile):
-        first_tilex = first_tile[0]+ TILESIZE/ (2*PPM) +1
-        first_tiley = - first_tile[1]  - TILESIZE/ (2*PPM) -1
-        last_tilex = last_tile[0]+ TILESIZE/ (2*PPM) +1
-        last_tiley =- last_tile[1] - TILESIZE/ (2*PPM) -1
-        r = TILESIZE/ (2*PPM)
-        vertices = [(first_tilex - r, first_tiley + r),
-                    (last_tilex + r, last_tiley + r),
-                    (last_tilex + r, last_tiley - r),
-                    (first_tilex - r, first_tiley -r)
-                    ] #Box2D
-        self.wall_info.append([vertices[0],vertices[1]])
-        self.wall_info.append([vertices[2],vertices[1]])
-        self.wall_info.append([vertices[3],vertices[0]])
-        self.wall_info.append([vertices[2],vertices[3]])
-        return vertices
-
     def load_data(self):
         game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
         self.map = Map(path.join(map_folder, self.map_file))
-
-    def _print_result(self):
-        if self.is_end and self.x == 0:
-            for rank in self.ranked_user:
-                for user in rank:
-                    self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
-            self.x += 1
-            print(self.result)
-        pass
 
     def _init_world(self, user_no: int):
         for i in range(user_no):
