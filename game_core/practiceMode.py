@@ -56,6 +56,12 @@ class PracticeMode(GameMode):
                 wall = Wall(self, wall_vertices["vertices"], world)
                 if self.worlds.index(world) == 0:
                     self.walls.add(wall)
+        for wall in self.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            self.wall_info.append([vertices[0], vertices[1]])
+            self.wall_info.append([vertices[2], vertices[1]])
+            self.wall_info.append([vertices[3], vertices[0]])
+            self.wall_info.append([vertices[2], vertices[3]])
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == "P":

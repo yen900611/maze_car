@@ -59,10 +59,16 @@ def cross_point_dot(dot1, vec1, dot2, dot3):
     p = cross_point(dot1, vec1, dot2, (x3 - x2, y3 - y2))
 
     if p:
-        if x2 <= p[0] <= x3 or x3 <= p[0] <= x2:
-            if y2 <= p[1] <= y3 or y3 <= p[1] <= y2:
+        if x2 -0.1 <= p[0] <= x3 + 0.1 or x3 - 0.1 <= p[0] <= x2 + 0.1:
+            if y2 - 0.1 <= p[1] <= y3 + 0.1 or y3 - 0.1 <= p[1] <= y2 + 0.1:
                 return p
             else:
                 return None
     else:
         return None
+
+if __name__ == '__main__':
+    # p = cross_point((6.55931, -18.08653), (0.72216, 1.87358), (1.0, -12.0), (26.0, 0.0))
+    # print(p)
+    p = cross_point_dot((6.55931, -18.08654), (0.72215, 1.87358), (1.0, -12.0), (27.0, -12.0))
+    print(p)

@@ -225,10 +225,10 @@ class GameMode(object):
 
                     ] #Box2D
 
-        self.wall_info.append([vertices[0],vertices[1]])
-        self.wall_info.append([vertices[2],vertices[1]])
-        self.wall_info.append([vertices[3],vertices[0]])
-        self.wall_info.append([vertices[2],vertices[3]])
+        # self.wall_info.append([vertices[0],vertices[1]])
+        # self.wall_info.append([vertices[2],vertices[1]])
+        # self.wall_info.append([vertices[3],vertices[0]])
+        # self.wall_info.append([vertices[2],vertices[3]])
         return vertices
 
     def wall_vertices_v(self, first_tile, last_tile):
@@ -244,10 +244,10 @@ class GameMode(object):
 
                     ] #Box2D
 
-        self.wall_info.append([vertices[0],vertices[1]])
-        self.wall_info.append([vertices[2],vertices[1]])
-        self.wall_info.append([vertices[3],vertices[0]])
-        self.wall_info.append([vertices[2],vertices[3]])
+        # self.wall_info.append([vertices[0],vertices[1]])
+        # self.wall_info.append([vertices[2],vertices[1]])
+        # self.wall_info.append([vertices[3],vertices[0]])
+        # self.wall_info.append([vertices[2],vertices[3]])
         return vertices
 
     def _print_result(self):

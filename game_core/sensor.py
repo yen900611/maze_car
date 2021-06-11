@@ -25,6 +25,7 @@ class Sensor():
     def update(self, frame, walls):
         self.front_sensor_detect(walls)
         self.sensor_detect(walls)
+
         self.last_detect_sensor = frame
         if frame - self.last_detect_sensor > 2:
             self.sensor_right.position = self.car.GetWorldVector(localVector=(1, 0)) + self.car.position
@@ -46,13 +47,13 @@ class Sensor():
             vector = [0, 1]
         else:
             vector = (
-                self.sensor_left.position[1] - self.sensor_right.position[1],
-                self.sensor_right.position[0] - self.sensor_left.position[0])
+                round(self.sensor_left.position[1] - self.sensor_right.position[1], 5),
+                round(self.sensor_right.position[0] - self.sensor_left.position[0], 5))
 
         for wall in walls:
             distance.append(cross_point_dot(car_center,
                                             vector,
-                                            wall[0], wall[1]))
+                                            tuple(wall[0]), tuple(wall[1])))
         for dot in distance:
             if dot:
                 if dot[0] - car_center[0] > 0 and vector[0] > 0:
@@ -70,6 +71,7 @@ class Sensor():
 
         try:
             self.front_value = {"coordinate":dots[results.index(min(results))],
+                                # "distance":min(results),
                                 "distance":round(min(results) * 5 * random.uniform(0.95, 1.05), 1),
                                 "all_dots":dots}
             # self.front_value = round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
