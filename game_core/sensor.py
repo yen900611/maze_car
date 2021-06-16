@@ -46,14 +46,14 @@ class Sensor():
         elif self.sensor_left.position[1] == self.sensor_right.position[1]:
             vector = [0, 1]
         else:
-            vector = (
+            vector = [
                 round(self.sensor_left.position[1] - self.sensor_right.position[1], 5),
-                round(self.sensor_right.position[0] - self.sensor_left.position[0], 5))
+                round(self.sensor_right.position[0] - self.sensor_left.position[0], 5)]
 
         for wall in walls:
             distance.append(cross_point_dot(car_center,
                                             vector,
-                                            tuple(wall[0]), tuple(wall[1])))
+                                            wall[0], wall[1]))
         for dot in distance:
             if dot:
                 if dot[0] - car_center[0] > 0 and vector[0] > 0:

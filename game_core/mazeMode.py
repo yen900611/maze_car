@@ -4,7 +4,6 @@ from .sound_controller import SoundController
 from .points import End_point, Check_point, Outside_point
 from .maze_wall import Wall
 from .tilemap import Map, Camera
-from .maze_imformation import Normal_Maze_Size, Normal_Maze_Map
 from .car import Car
 from .gameMode import GameMode
 from .env import *
@@ -77,9 +76,8 @@ class MazeMode(GameMode):
 
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-        self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
-                             self.car.body.position[1] + HEIGHT / 2 / PPM]
-        self.limit_pygame_screen()
+        self.pygame_point = [0,0]
+        # self.limit_pygame_screen()
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
@@ -88,7 +86,7 @@ class MazeMode(GameMode):
         self.handle_event()
         self._is_game_end()
         self.command = command
-        self.limit_pygame_screen()
+        # self.limit_pygame_screen()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)

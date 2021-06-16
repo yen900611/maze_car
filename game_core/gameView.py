@@ -31,6 +31,9 @@ class PygameView():
         self.address = "GameView"
         self.image_dict = self.loading_image()
         self.font = {}
+        self.map_width = game_info["map_width"]
+        self.map_height = game_info["map_height"]
+        self.pygame_point = [500 - self.map_width, 480 - self.map_height]
         # if "images" in game_info.keys():
         #     self.image_dict = self.loading_image(game_info["images"])
 
@@ -49,7 +52,8 @@ class PygameView():
         :return:
         '''
         self.draw_screen()
-        for game_object in (object_imformation["game_object_list"] + object_imformation["game_background"]):
+        self.limit_pygame_screen()
+        for game_object in object_imformation["game_object_list"]:
             if game_object[TYPE] == IMAGE:
                 self.draw_image(game_object["image_id"], game_object["x"], game_object["y"],
                                 game_object["width"], game_object["height"], game_object["angle"])
@@ -70,6 +74,20 @@ class PygameView():
             else:
                 pass
 
+        for game_object in object_imformation["game_background"]:
+            if game_object[TYPE] == IMAGE:
+                self.draw_image(game_object["image_id"], game_object["x"] - self.pygame_point[0], game_object["y"] - self.pygame_point[1],
+                                game_object["width"], game_object["height"], game_object["angle"])
+
+            elif game_object[TYPE] == RECTANGLE:
+                self.draw_rect(game_object["x"] - self.pygame_point[0], game_object["y"] - self.pygame_point[1], game_object["width"], game_object["height"],
+                               trnsfer_hex_to_rgb(game_object[COLOR]))
+
+            elif game_object[TYPE] == "text":
+                self.draw_text(game_object["content"], game_object["font-style"],
+                               game_object["x"] - self.pygame_point[0], game_object["y"] - self.pygame_point[1], trnsfer_hex_to_rgb(game_object[COLOR]))
+            else:
+                pass
 
     def draw_screen(self):
         self.screen.fill(self.background_color) # hex # need turn to RGB
@@ -78,19 +96,20 @@ class PygameView():
         image = pygame.transform.rotate(pygame.transform.scale(self.image_dict[image_id], (width, height)),
                                         (angle * 180 / math.pi) % 360)
         rect = image.get_rect()
-        rect.x, rect.y = x, y
+        rect.x, rect.y = x + self.pygame_point[0], y + self.pygame_point[1]
         self.screen.blit(image, rect)
 
     def draw_rect(self, x, y, width, height, color):
-        pygame.draw.rect(self.screen, color, pygame.Rect(x, y, width, height))
+        pygame.draw.rect(self.screen, color, pygame.Rect(x + self.pygame_point[0], y + self.pygame_point[1], width, height))
 
     def draw_line(self, x1, y1, x2, y2, width, color):
-        pygame.draw.line(self.screen, color, (x1, y1), (x2, y2), width)
+        pygame.draw.line(self.screen, color, (x1 + self.pygame_point[0], y1 + self.pygame_point[1]),
+                         (x2 + self.pygame_point[0], y2 + self.pygame_point[1]), width)
 
     def draw_polygon(self, points, color):
         vertices = []
         for p in points:
-            vertices.append((p["x"], p["y"]))
+            vertices.append((p["x"] + self.pygame_point[0], p["y"] + self.pygame_point[1]))
         pygame.draw.polygon(self.screen, color, vertices)
 
     def flip(self):
@@ -107,5 +126,29 @@ class PygameView():
             self.font[font_style] = font
         text_surface = font.render(text , True , color)
         text_rect = text_surface.get_rect()
-        text_rect.x, text_rect.y = (x, y)
+        text_rect.x, text_rect.y = (x + self.pygame_point[0], y + self.pygame_point[1])
         self.screen.blit(text_surface , text_rect)
+
+    def limit_pygame_screen(self):
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_w]:
+            self.pygame_point[1] += 2
+        elif keystate[pygame.K_s]:
+            self.pygame_point[1] -= 2
+        elif keystate[pygame.K_a]:
+            self.pygame_point[0] += 2
+        elif keystate[pygame.K_d]:
+            self.pygame_point[0] -= 2
+
+        if self.pygame_point[1] < 480 - self.map_height:
+            self.pygame_point[1] = 480 - self.map_height
+        elif self.pygame_point[1] > 0:
+            self.pygame_point[1] = 0
+        else:
+            pass
+        if self.pygame_point[0] < 500 - self.map_width:
+            self.pygame_point[0] = 500 - self.map_width
+        elif self.pygame_point[0] > 0:
+            self.pygame_point[0] = 0
+        else:
+            pass

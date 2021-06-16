@@ -4,8 +4,7 @@ import Box2D
 from .sound_controller import SoundController
 from .points import End_point, Check_point, Outside_point
 from .maze_wall import Wall
-from .tilemap import Map, Camera
-from .maze_imformation import Normal_Maze_Size, Normal_Maze_Map
+from .tilemap import Map
 from .car import Car
 from .gameMode import GameMode
 from .env import *
@@ -82,7 +81,6 @@ class PracticeMode(GameMode):
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
                              self.car.body.position[1] + HEIGHT / 2 / PPM]
-        self.limit_pygame_screen()
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
@@ -91,7 +89,6 @@ class PracticeMode(GameMode):
         self.handle_event()
         self._is_game_end()
         self.command = command
-        self.limit_pygame_screen()
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
@@ -106,30 +103,6 @@ class PracticeMode(GameMode):
             world.ClearForces()
         if self.is_end:
             self.running = False
-
-    def limit_pygame_screen(self):
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_w]:
-            self.pygame_point[1] += 0.2
-        elif keystate[pygame.K_s]:
-            self.pygame_point[1] -= 0.2
-        elif keystate[pygame.K_a]:
-            self.pygame_point[0] -= 0.2
-        elif keystate[pygame.K_d]:
-            self.pygame_point[0] += 0.2
-
-        if self.pygame_point[1] > 0:
-            self.pygame_point[1] = 0
-        elif self.pygame_point[1] < TILE_HEIGHT/PPM-self.map.tileHeight:
-            self.pygame_point[1] = TILE_HEIGHT/PPM-self.map.tileHeight
-        else:
-            pass
-        if self.pygame_point[0] >self.map.tileWidth-TILE_WIDTH/PPM:
-            self.pygame_point[0] = self.map.tileWidth-TILE_WIDTH/PPM
-        elif self.pygame_point[0] < 0:
-            self.pygame_point[0] = 0
-        else:
-            pass
 
     def load_data(self):
         game_folder = path.dirname(__file__)

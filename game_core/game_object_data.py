@@ -21,6 +21,7 @@ def get_progress_data(game_mode):
         "game_user_info":[],
         "game_sys_info": {}
     }
+
     try:
         wall_vertices = []
         for wall in game_mode.walls:
@@ -31,7 +32,7 @@ def get_progress_data(game_mode):
         pass
 
     try:
-        game_progress["game_background"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
+        game_progress["game_object_list"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
                                                                   50, 50))
     except Exception:
         pass

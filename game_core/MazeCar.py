@@ -1,6 +1,5 @@
 import math
 
-from .maze_imformation import Normal_Maze_Map
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
@@ -44,7 +43,7 @@ class MazeCar:
             # type of car is dictionary
             player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
                                                              "status": scene_info["status"],
-                                                             "coordinate": car["coordinate"],
+                                                             "coordinate": car["coordinate"], #TODO x,y分開
                                                              "angle": (car["angle"] * 180 / math.pi) % 360,
                                                              "R_sensor": car["r_sensor_value"],
                                                              "L_sensor": car["l_sensor_value"],
@@ -70,6 +69,7 @@ class MazeCar:
             "frame": self.game_mode.frame,
             "status": self.game_mode.status,
         }
+
         for car in self.game_mode.car_info:
             # type of car is dictionary
             scene_info[str(car["id"]) + "P_position"] = car["topleft"]
@@ -80,6 +80,8 @@ class MazeCar:
         Get the scene and object information for drawing on the web
         """
         game_info = get_scene_init_sample_data()
+        game_info["map_width"] = self.game_mode.map.tileWidth * 20
+        game_info["map_height"] =self.game_mode.map.tileHeight * 20
         return game_info
 
     def get_game_progress(self):
