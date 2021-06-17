@@ -5,13 +5,14 @@ import Box2D
 from .env import *
 
 class Sensor():
-    def __init__(self, world, body):
+    def __init__(self, world, body, sensor_num):
         self.car = body
         self.right_value = {}
         self.right_top_value = {}
         self.left_value = {}
         self.left__top_value = {}
         self.front_value = {}
+        self.sensor_num = sensor_num
         self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + 1, body.position[1]))
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
         self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 1, body.position[1]))
@@ -28,8 +29,14 @@ class Sensor():
         self.front_value = self.sensor_detect(walls, (0, 1))
         self.right_value = self.sensor_detect(walls, (1, 0))
         self.left_value = self.sensor_detect(walls, (-1, 0))
-        self.right_top_value = self.sensor_detect(walls, (1, 1))
-        self.left_top_value = self.sensor_detect(walls, (-1, 1))
+        if self.sensor_num == 5:
+            self.right_top_value = self.sensor_detect(walls, (1, 1))
+            self.left_top_value = self.sensor_detect(walls, (-1, 1))
+        else:
+            self.right_top_value = {"coordinate":self.car.position,
+                            "distance":(0,0)}
+            self.left_top_value = {"coordinate":self.car.position,
+                            "distance":(0,0)}
 
         self.last_detect_sensor = frame
         if frame - self.last_detect_sensor > 2:

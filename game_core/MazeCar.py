@@ -10,20 +10,20 @@ from .game_object_data import *
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
 class MazeCar:
-    def __init__(self, user_num, game_type, map, time, sound):
+    def __init__(self, user_num, game_type, map, time, sensor, sound):
         self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
         self.maze_id = map - 1
         self.game_end_time = time
         self.is_sound = sound
         if game_type == "MAZE":
-            self.game_mode = MazeMode(user_num, map, time, self.is_sound)
+            self.game_mode = MazeMode(user_num, map, time, sensor, self.is_sound)
             self.game_type = "MAZE"
         elif game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(user_num,map,time, self.is_sound)
+            self.game_mode = MoveMazeMode(user_num,map,time, sensor, self.is_sound)
             self.game_type = "MOVE_MAZE"
 
         elif game_type == "PRACTICE":
-            self.game_mode = PracticeMode(user_num,map,time, self.is_sound)
+            self.game_mode = PracticeMode(user_num,map,time, sensor, self.is_sound)
             self.game_type = "PRACTICE"
         self.user_num = user_num
         self.game_mode.sound_controller.play_music()

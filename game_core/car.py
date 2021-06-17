@@ -6,7 +6,7 @@ import pygame
 from .env import *
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, world, coordinate: tuple, car_no: int):
+    def __init__(self, world, coordinate: tuple, car_no: int, sensor_num):
         pygame.sprite.Sprite.__init__(self)
         self.car_no = car_no  # From 0 to 5
         self.size =  (50, 40)  # car size
@@ -29,7 +29,7 @@ class Car(pygame.sprite.Sprite):
         self.x, self.y = coordinate
         self.body = world.CreateDynamicBody(position=coordinate)
         self.box = self.body.CreatePolygonFixture(box=(1.13, 1.13), density=1, friction=0.1, restitution=0.3)
-        self.sensor = Sensor(world, self.body)
+        self.sensor = Sensor(world, self.body, sensor_num)
         self.check_point = 0
 
     def update(self, commands):
