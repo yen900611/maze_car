@@ -6,7 +6,7 @@ import pygame
 from .env import *
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, world, coordinate: tuple, car_no: int):
+    def __init__(self, world, coordinate: tuple, car_no: int, sensor_num):
         pygame.sprite.Sprite.__init__(self)
         self.car_no = car_no  # From 0 to 5
         self.size =  (50, 40)  # car size
@@ -20,6 +20,8 @@ class Car(pygame.sprite.Sprite):
         self.status = True
         self.sensor_R = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
         self.sensor_L = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
+        self.sensor_R_T = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
+        self.sensor_L_T = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
         self.sensor_F = {"coordinate":(0, 0), "distance":0,"all_dots":[(0,0)]}
         self.L_PWM = 0
         self.R_PWM = 0
@@ -27,7 +29,7 @@ class Car(pygame.sprite.Sprite):
         self.x, self.y = coordinate
         self.body = world.CreateDynamicBody(position=coordinate)
         self.box = self.body.CreatePolygonFixture(box=(1.13, 1.13), density=1, friction=0.1, restitution=0.3)
-        self.sensor = Sensor(world, self.body)
+        self.sensor = Sensor(world, self.body, sensor_num)
         self.check_point = 0
 
     def update(self, commands):
@@ -56,6 +58,8 @@ class Car(pygame.sprite.Sprite):
         sensor_value = self.sensor.update(frame, walls)
         self.sensor_R = sensor_value["right_value"]
         self.sensor_L = sensor_value["left_value"]
+        self.sensor_R_T = sensor_value["right_top_value"]
+        self.sensor_L_T = sensor_value["left_top_value"]
         self.sensor_F = sensor_value["front_value"]
 
     def left_move(self, pwm: int):
@@ -79,10 +83,12 @@ class Car(pygame.sprite.Sprite):
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
-                         "coordiinate":self.body.position,
+                         "coordinate":self.body.position,
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
+                         "r_t_sensor_value": self.sensor_R_T,
+                         "l_t_sensor_value": self.sensor_L_T,
                          "f_sensor_value": self.sensor_F,
                          "L_PWM": self.L_PWM,
                          "R_PWM":self.R_PWM,

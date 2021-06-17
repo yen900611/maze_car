@@ -62,10 +62,16 @@ def get_progress_data(game_mode):
                                   178 + 60 + 94 * (car["id"] // 2)), "15px Arial"))
             game_progress["game_object_list"].append(get_line_object("l_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["l_sensor_value"]["coordinate"]), "#FFFF00",5))
-            game_progress["game_object_list"].append(get_line_object("f_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["f_sensor_value"]["coordinate"]), "#FF0000",5))
+
+            game_progress["game_object_list"].append(get_line_object("l_top_sensor", car["center"],
+                                                                     trnsfer_box2d_to_pygame(game_mode, car["l_t_sensor_value"]["coordinate"]), "#FFFF00",5))
+
+            game_progress["game_object_list"].append(get_line_object("r_top_sensor", car["center"],
+                                                                     trnsfer_box2d_to_pygame(game_mode, car["r_t_sensor_value"]["coordinate"]), "#21A1F1",5))
             game_progress["game_object_list"].append(get_line_object("r_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["r_sensor_value"]["coordinate"]), "#21A1F1",5))
+            game_progress["game_object_list"].append(get_line_object("f_sensor", car["center"],
+                                                                     trnsfer_box2d_to_pygame(game_mode, car["f_sensor_value"]["coordinate"]), "#FF0000",5))
         else:
             game_progress["game_background"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
                                   (x, 178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))

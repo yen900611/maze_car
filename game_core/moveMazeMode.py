@@ -13,7 +13,7 @@ import pygame
 # from .maze_wall import Wall
 
 class MoveMazeMode(GameMode):
-    def __init__(self, user_num: int, maze_no, time, sound_controller):
+    def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
         super(MoveMazeMode, self).__init__()
         '''load map data'''
         self.user_num = user_num
@@ -42,6 +42,7 @@ class MoveMazeMode(GameMode):
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
+        self.sensor_num = sensor
         self.x = 0
         self._init_world(user_num)
         self.new()
@@ -95,7 +96,7 @@ class MoveMazeMode(GameMode):
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world))
+                                       self.worlds.index(world), self.sensor_num)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
                 elif tile == "E":

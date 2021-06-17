@@ -16,7 +16,7 @@ def positive_int(string):
 GAME_PARAMS = {
     "()": {
         "prog": "Maze_Car",
-        "game_usage": "%(prog)s <user_num> [game_type]" #TODO
+        "game_usage": "%(prog)s [user_num] [game_type] [map] [time] [sensor] [sound]"
     },
     "user_num": {
         "type": positive_int,
@@ -34,12 +34,18 @@ GAME_PARAMS = {
     "map": {
         "type": positive_int,
         "default": 1,
-        "help": "Specify the game style. Choices: %(choices)s"
+        "help": "Specify the game mpa. Choices: %(choices)s"
     },
     "time": {
         "type": positive_int,
         "default": 120,
-        "help": "Specify the game style. Choices: %(choices)s"
+        "help": "Specify the game time. Choices: %(choices)s"
+    },
+    "sensor": {
+        "choices": (3, 5),
+        "type": positive_int,
+        "default": 3,
+        "help": "Specify the number of sensor. Choices: %(choices)s"
     },
     "sound":{
         "choices":("ON","OFF"),

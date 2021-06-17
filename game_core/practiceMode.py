@@ -11,7 +11,7 @@ from .env import *
 import pygame
 
 class PracticeMode(GameMode):
-    def __init__(self, user_num: int, maze_no, time, sound_controller):
+    def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
         super(PracticeMode, self).__init__()
         '''load map data'''
         self.user_num = user_num
@@ -38,6 +38,7 @@ class PracticeMode(GameMode):
         pygame.font.init()
         self.status = "GAME_PASS"
         self.is_end = False
+        self.sensor_num = sensor
         self.x = 0
         self._init_world(user_num)
         self.new()
@@ -67,7 +68,7 @@ class PracticeMode(GameMode):
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world))
+                                       self.worlds.index(world), self.sensor_num)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
                         # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
@@ -79,8 +80,7 @@ class PracticeMode(GameMode):
 
                 elif tile == "O":
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-        self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
-                             self.car.body.position[1] + HEIGHT / 2 / PPM]
+        self.pygame_point = [0, 0]
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''

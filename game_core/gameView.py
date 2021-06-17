@@ -130,6 +130,7 @@ class PygameView():
         self.screen.blit(text_surface , text_rect)
 
     def limit_pygame_screen(self):
+
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_w]:
             self.pygame_point[1] += 2
@@ -139,6 +140,7 @@ class PygameView():
             self.pygame_point[0] += 2
         elif keystate[pygame.K_d]:
             self.pygame_point[0] -= 2
+
 
         if self.pygame_point[1] < 480 - self.map_height:
             self.pygame_point[1] = 480 - self.map_height
