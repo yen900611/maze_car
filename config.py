@@ -16,7 +16,7 @@ def positive_int(string):
 GAME_PARAMS = {
     "()": {
         "prog": "Maze_Car",
-        "game_usage": "%(prog)s <user_num> [game_type]" #TODO
+        "game_usage": "%(prog)s [user_num] [game_type] [map] [time] [sound]"
     },
     "user_num": {
         "type": positive_int,
