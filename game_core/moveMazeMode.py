@@ -53,37 +53,37 @@ class MoveMazeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-        self.get_wall_info_v("V")
-        self.get_wall_info_h("H")
-        self.get_wall_info_h("1")
-        self.get_wall_info_v("1")
-        self.get_wall_info_v("v")
-        self.get_wall_info_h("h")
+        self.get_wall_info_v(2)
+        self.get_wall_info_h(3)
+        self.get_wall_info_h(1)
+        self.get_wall_info_v(1)
+        self.get_wall_info_v(4)
+        self.get_wall_info_h(5)
         for wall_vertices in self.wall_vertices_for_Box2D:
-            if wall_vertices["type"] == "1":
+            if wall_vertices["type"] == 1:
                 for world in self.worlds:
                     wall = Wall(self, wall_vertices["vertices"], world)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
-            elif wall_vertices["type"] == "V":
+            elif wall_vertices["type"] == 2:
                 for world in self.worlds:
                     wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 4, 5)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
-            elif wall_vertices["type"] == "H":
+            elif wall_vertices["type"] == 3:
                 for world in self.worlds:
                     wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 3, 6)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
-            elif wall_vertices["type"] == "v":
+            elif wall_vertices["type"] == 4:
                 for world in self.worlds:
                     wall = VerticalMoveWall(self, wall_vertices["vertices"], world, 3, -5)
                     self.wall_for_update.add(wall)
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
-            elif wall_vertices["type"] == "h":
+            elif wall_vertices["type"] == 5:
                 for world in self.worlds:
                     wall = HorizontalMoveWall(self, wall_vertices["vertices"], world, 5, -7)
                     self.wall_for_update.add(wall)
@@ -92,20 +92,20 @@ class MoveMazeMode(GameMode):
 
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                if tile == "P":
+                if tile == 6:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
                                        self.worlds.index(world), self.sensor_num)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
-                elif tile == "E":
+                elif tile == 7:
                     self.end_point = End_point(self,
                                                (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == "C":
+                elif tile == 8:
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
 
-                elif tile == "O":
+                elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         # self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
         #                      self.car.body.position[1] + HEIGHT / 2 / PPM]
@@ -146,6 +146,7 @@ class MoveMazeMode(GameMode):
         game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
         self.map = Map(path.join(map_folder, self.map_file))
+        # print(self.map.data)
 
     def _init_world(self, user_no: int):
         for i in range(user_no):

@@ -3,9 +3,9 @@ from game_core import I_Commander, MazeCar, gameView
 
 if __name__ == '__main__':
     pygame.init()
-    game = MazeCar.MazeCar(1, "MAZE",3, 120, 5, "OFF")
-    # game = MazeCar.MazeCar(1, "MOVE_MAZE", 3, 120, 3, "OFF")
-    # game = MazeCar.MazeCar(1, "PRACTICE", 4, 120, 5, "OFF")
+    # game = MazeCar.MazeCar(3, "MAZE",4, 120, 5, "OFF")
+    game = MazeCar.MazeCar(1, "MOVE_MAZE", 4, 120, 3, "OFF")
+    # game = MazeCar.MazeCar(1, "PRACTICE", 6, 120, 5, "OFF")
     scene_init_info_dict = game.get_game_info()
     game_view = gameView.PygameView(scene_init_info_dict)
 

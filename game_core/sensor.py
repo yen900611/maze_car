@@ -86,10 +86,10 @@ class Sensor():
             return sensor_value
         except TypeError:
             sensor_value["distance"] = -1
-            sensor_value["coordinate"] = self.car.car_info["coordiinate"]
+            sensor_value["coordinate"] = self.car.position
             return sensor_value
         except ValueError:
             sensor_value["distance"] = -1
-            sensor_value["coordinate"] = self.car.car_info["coordiinate"]
+            sensor_value["coordinate"] = self.car.position
             return sensor_value
 

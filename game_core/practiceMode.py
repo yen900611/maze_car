@@ -49,8 +49,8 @@ class PracticeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-        self.get_wall_info_h("1")
-        self.get_wall_info_v("1")
+        self.get_wall_info_h(1)
+        self.get_wall_info_v(1)
         for wall_vertices in self.wall_vertices_for_Box2D:
             for world in self.worlds:
                 wall = Wall(self, wall_vertices["vertices"], world)
@@ -64,7 +64,7 @@ class PracticeMode(GameMode):
             self.wall_info.append([vertices[2], vertices[3]])
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                if tile == "P":
+                if tile == 6:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
@@ -72,13 +72,13 @@ class PracticeMode(GameMode):
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
                         # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
-                elif tile == "E":
+                elif tile == 7:
                     self.end_point = End_point(self,
                                                (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == "C":
+                elif tile == 8:
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
 
-                elif tile == "O":
+                elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.pygame_point = [0, 0]
 
