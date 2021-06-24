@@ -43,7 +43,8 @@ class MazeCar:
             # type of car is dictionary
             player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
                                                              "status": scene_info["status"],
-                                                             "coordinate": car["coordinate"], #TODO x,y分開
+                                                             "x": car["coordinate"][0],
+                                                             "y": car["coordinate"][1],
                                                              "angle": (car["angle"] * 180 / math.pi) % 360,
                                                              "R_sensor": car["r_sensor_value"],
                                                              "L_sensor": car["l_sensor_value"],
