@@ -48,8 +48,8 @@ GAME_PARAMS = {
         "help": "Specify the number of sensor. Choices: %(choices)s"
     },
     "sound":{
-        "choices":("ON","OFF"),
-        "default":"OFF"
+        "choices":("on","off"),
+        "default":"off"
     }
 }
 
