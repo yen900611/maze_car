@@ -6,17 +6,17 @@ if __name__ == '__main__':
     game = MazeCar.MazeCar(3, "MAZE",4, 120, 5, "OFF")
     # game = MazeCar.MazeCar(1, "MOVE_MAZE", 4, 120, 3, "OFF")
     # game = MazeCar.MazeCar(1, "PRACTICE", 6, 120, 5, "OFF")
-    scene_init_info_dict = game.get_game_info()
-    game_view = gameView.PygameView(scene_init_info_dict)
+    # scene_init_info_dict = game.get_game_info()
+    # game_view = gameView.PygameView(scene_init_info_dict)
 
     while game.isRunning():
         commands = {}
         for i in range(6):
             commands["ml_" + str(i + 1) + "P"] = I_Commander.KeyBoardCommander(i).getControlDict()
         game.update(commands)
-        game_progress_data = game.get_game_progress()
-        game_view.draw_screen()
-        game_view.draw(game_progress_data)
-        game_view.flip()
+        # game_progress_data = game.get_game_progress()
+        # game_view.draw_screen()
+        # game_view.draw(game_progress_data)
+        # game_view.flip()
 
     pygame.quit()
