@@ -50,11 +50,11 @@ class MazeCar:
                                                              "x": car["coordinate"][0],
                                                              "y": car["coordinate"][1],
                                                              "angle": (car["angle"] * 180 / math.pi) % 360,
-                                                             "R_sensor": car["r_sensor_value"],
-                                                             "L_sensor": car["l_sensor_value"],
-                                                             "F_sensor": car["f_sensor_value"],
-                                                             "L_T_sensor": car["l_t_sensor_value"],
-                                                             "R_T_sensor": car["r_t_sensor_value"],
+                                                             "R_sensor": car["r_sensor_value"]["distance"],
+                                                             "L_sensor": car["l_sensor_value"]["distance"],
+                                                             "F_sensor": car["f_sensor_value"]["distance"],
+                                                             "L_T_sensor": car["l_t_sensor_value"]["distance"],
+                                                             "R_T_sensor": car["r_t_sensor_value"]["distance"],
                                                              "end":self.game_mode.end_point.get_info()["coordinate"]}
         return player_info
 
