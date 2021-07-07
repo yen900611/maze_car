@@ -108,7 +108,7 @@ def get_scene_init_sample_data() -> dict:
             "image_id": 'car_01',
             "width": 50,
             "height": 50,
-            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/car_02.png'
+            "url": 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_core/image/car_01.png'
         }, {
             "type": "image",
             "image_id": 'car_02',

@@ -34,9 +34,9 @@ class Sensor():
             self.left_top_value = self.sensor_detect(walls, (-1, 1))
         else:
             self.right_top_value = {"coordinate":self.car.position,
-                            "distance":(0,0)}
+                            "distance": -1}
             self.left_top_value = {"coordinate":self.car.position,
-                            "distance":(0,0)}
+                            "distance": -1}
 
         self.last_detect_sensor = frame
         if frame - self.last_detect_sensor > 2:
