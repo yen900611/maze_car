@@ -114,8 +114,9 @@ class MazeCar(PaiaGame):
             "toggle": [],
             "foreground": [],
             "user_info": [],
-            "game_sys_info": {}
+            "game_sys_info": {"view_center_coordinate":self.game_mode.car_info[0]["center"]}
         }
+
         # wall
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
