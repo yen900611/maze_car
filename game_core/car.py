@@ -74,16 +74,13 @@ class Car(pygame.sprite.Sprite):
         else:
             self.sensor.sensor_right.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
-    def keep_in_screen(self):
-        pass
-
     def get_info(self):
         self.car_info = {"id": self.car_no,
                          "status":self.status,
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
-                         "coordinate":self.body.position,
+                         "coordinate":(round(self.body.position[0], 3), round(self.body.position[1], 3)),
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,

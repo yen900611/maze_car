@@ -77,9 +77,10 @@ class Sensor():
                 pass
 
         try:
-            sensor_value = {"coordinate":dots[results.index(min(results))],
-                            "distance":round(min(results) * 5 * random.uniform(0.95, 1.05), 1),
-                            "all_dots":dots}
+            coordinate = dots[results.index(min(results))]
+            sensor_value = {"coordinate":(round(coordinate[0], 3), round(coordinate[1], 3)),
+                            "distance":round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
+                            }
             # self.front_value = round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
             if sensor_value["distance"] < 0:
                 sensor_value["distance"] = 0

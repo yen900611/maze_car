@@ -16,36 +16,38 @@ class Scene():
 
 def get_progress_data(game_mode):
     game_progress = {
-        "game_background":[],
-        "game_object_list":[],
-        "game_user_info":[],
+        "background":[],
+        "object_list":[],
+        "toggle":[],
+        "foreground":[],
+        "user_info":[],
         "game_sys_info": {}
     }
 
-    try:
-        wall_vertices = []
-        for wall in game_mode.walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_progress["game_object_list"].append(get_polygon_object("wall", vertices, "#ffffff"))
-    except Exception:
-        pass
+    # try:
+    #     wall_vertices = []
+    #     for wall in game_mode.walls:
+    #         vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+    #         vertices = [game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+    #         game_progress["game_object_list"].append(get_polygon_object("wall", vertices, "#ffffff"))
+    # except Exception:
+    #     pass
+    #
+    # try:
+    #     game_progress["game_object_list"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
+    #                                                               50, 50))
+    # except Exception:
+    #     pass
 
-    try:
-        game_progress["game_object_list"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
-                                                                  50, 50))
-    except Exception:
-        pass
 
 
-
-    game_progress["game_background"].append(get_rect_object("rect", (0, 0), TILE_LEFTTOP[0], HEIGHT, "#000000"))
-    game_progress["game_background"].append(get_rect_object("rect", (0, 0), WIDTH, TILE_LEFTTOP[1], "#000000"))
-    game_progress["game_background"].append(get_rect_object("rect", (TILE_LEFTTOP[0] + TILE_WIDTH, 0),
-                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
-    game_progress["game_background"].append(get_rect_object("rect", (0, TILE_LEFTTOP[1] + TILE_HEIGHT),
-                                                             WIDTH, HEIGHT, "#000000"))
-    game_progress["game_background"].append(get_image_object("info", (507, 20), 306, 480))
+    # game_progress["background"].append(get_rect_object("rect", (0, 0), TILE_LEFTTOP[0], HEIGHT, "#000000"))
+    # game_progress["background"].append(get_rect_object("rect", (0, 0), WIDTH, TILE_LEFTTOP[1], "#000000"))
+    # game_progress["background"].append(get_rect_object("rect", (TILE_LEFTTOP[0] + TILE_WIDTH, 0),
+    #                                                          WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
+    # game_progress["background"].append(get_rect_object("rect", (0, TILE_LEFTTOP[1] + TILE_HEIGHT),
+    #                                                          WIDTH, HEIGHT, "#000000"))
+    # game_progress["background"].append(get_image_object("info", (507, 20), 306, 480))
 
     for car in game_mode.car_info:
         if car["id"] %2 == 0:
@@ -54,36 +56,36 @@ def get_progress_data(game_mode):
             x = 730
 
         if car["status"]:
-            game_progress["game_background"].append(get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
+            game_progress["background"].append(get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
                                   178 + 20 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["game_background"].append(get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
+            game_progress["background"].append(get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
                                   178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["game_background"].append(get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
+            game_progress["background"].append(get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
                                   178 + 60 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["game_object_list"].append(get_line_object("l_sensor", car["center"],
+            game_progress["object_list"].append(get_line_object("l_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["l_sensor_value"]["coordinate"]), "#FFFF00",5))
 
-            game_progress["game_object_list"].append(get_line_object("l_top_sensor", car["center"],
+            game_progress["object_list"].append(get_line_object("l_top_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["l_t_sensor_value"]["coordinate"]), "#FFFF00",5))
 
-            game_progress["game_object_list"].append(get_line_object("r_top_sensor", car["center"],
+            game_progress["object_list"].append(get_line_object("r_top_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["r_t_sensor_value"]["coordinate"]), "#21A1F1",5))
-            game_progress["game_object_list"].append(get_line_object("r_sensor", car["center"],
+            game_progress["object_list"].append(get_line_object("r_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["r_sensor_value"]["coordinate"]), "#21A1F1",5))
-            game_progress["game_object_list"].append(get_line_object("f_sensor", car["center"],
+            game_progress["object_list"].append(get_line_object("f_sensor", car["center"],
                                                                      trnsfer_box2d_to_pygame(game_mode, car["f_sensor_value"]["coordinate"]), "#FF0000",5))
         else:
-            game_progress["game_background"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
+            game_progress["background"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
                                   (x, 178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
-    try:
-        for car in game_mode.car_info:
-            game_progress["game_object_list"].append(
-                get_image_object("car_0"+str(car["id"]+1), (car["topleft"][0], car["topleft"][1]), 50, 40, car["angle"])
-            )
-    except Exception:
-        pass
+    # try:
+    #     for car in game_mode.car_info:
+    #         game_progress["object_list"].append(
+    #             get_image_object("car_0"+str(car["id"]+1), (car["topleft"][0], car["topleft"][1]), 50, 40, car["angle"])
+    #         )
+    # except Exception:
+    #     pass
     for user in game_mode.car_info:
-        game_progress["game_user_info"].append({
+        game_progress["user_info"].append({
             "player":str(user["id"]+1)+"P",
             "F_sensor":user["f_sensor_value"]["distance"],
             "R_sensor":user["r_sensor_value"]["distance"],
@@ -173,7 +175,7 @@ def get_image_object(image_id, coordinate, width, height, angle = 0):
             "width": width,
             "height": height,
             "image_id": image_id,
-            "angle": angle}
+            "angle": int(angle)}
 
 def get_rect_object(name, coordinate, width, height, color, angle = 0):
     """
@@ -190,7 +192,7 @@ def get_rect_object(name, coordinate, width, height, color, angle = 0):
             "name": name,
             "x": coordinate[0],
             "y": coordinate[1],
-            "angle": angle,
+            "angle": int(angle),
             "width": width,
             "height": height,
             "color": color
@@ -209,10 +211,10 @@ def get_line_object(name, dot1, dot2, color, width = 2):
     """
     return {"type": "line",
             "name": name,
-            "x1": dot1[0],
-            "y1": dot1[1],
-            "x2": dot2[0],
-            "y2": dot2[1],
+            "x1": int(dot1[0]),
+            "y1": int(dot1[1]),
+            "x2": int(dot2[0]),
+            "y2": int(dot2[1]),
             "width": width,
             "color": color
             }

@@ -1,17 +1,19 @@
 import math
 
+from mlgame.view.test_decorator import check_game_progress
+from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
+    create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data
+from mlgame.gamedev.game_interface import PaiaGame
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
 from .sound_controller import *
-from .gameView import PygameView
-from .game_object_data import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
-class MazeCar:
+class MazeCar(PaiaGame):
     def __init__(self, user_num, game_type, map, time, sensor, sound):
-        self.ranked_score = {"1P": 0, "2P": 0, "3P": 0, "4P": 0, "5P": 0, "6P": 0}  # 積分
+        super().__init__()
         self.maze_id = map - 1
         self.game_end_time = time
         self.is_sound = sound
@@ -27,20 +29,16 @@ class MazeCar:
             self.game_type = "PRACTICE"
         self.user_num = user_num
         self.game_mode.sound_controller.play_music()
-        self.gameView = PygameView(self.get_game_info())
+        self.is_running = self.isRunning()
 
     def update(self, commands):
         self.game_mode.ticks()
         self.game_mode.handle_event()
         self.game_mode.update_sprite(commands)
-        self.gameView.draw_screen()
-        self.gameView.draw(self.get_game_progress())
-        self.gameView.flip()
-        # self.draw()
         if not self.isRunning():
             return "QUIT"
 
-    def get_player_scene_info(self):
+    def game_to_player_data(self):
         scene_info = self.get_scene_info
         player_info = {}
         for car in self.game_mode.car_info:
@@ -59,9 +57,7 @@ class MazeCar:
         return player_info
 
     def reset(self):
-        for key in self.game_mode.ranked_score.keys():
-            self.ranked_score[key] += self.game_mode.ranked_score[key]
-        print(self.ranked_score)
+        pass
         # self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
 
     def isRunning(self):
@@ -82,20 +78,107 @@ class MazeCar:
             scene_info[str(car["id"]) + "P_position"] = car["topleft"]
         return scene_info
 
-    def get_game_info(self):
+    def get_scene_init_data(self) -> dict:
         """
         Get the scene and object information for drawing on the web
         """
-        game_info = get_scene_init_sample_data()
+        game_info = {"scene": self.scene.__dict__,
+                     "assets":[]}
         game_info["map_width"] = self.game_mode.map.tileWidth * 20
         game_info["map_height"] =self.game_mode.map.tileHeight * 20
+        info_path = path.join(IMAGE_DIR, INFO_NAME)
+        info_url = INFO_URL
+        game_info["assets"].append(create_asset_init_data("info", 306, 480, info_path, info_url))
+        logo_path = path.join(IMAGE_DIR, LOGO)
+        logo_url = LOGO_URL
+        game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
+
+        for car in self.game_mode.car_info:
+            file_path = path.join(IMAGE_DIR, CARS_NAME[car["id"]])
+            url = CARS_URL[car["id"]]
+            car_init_info = create_asset_init_data("car_0" + str(car["id"]+1), 50, 50, file_path, url)
+            game_info["assets"].append(car_init_info)
         return game_info
 
-    def get_game_progress(self):
+    @check_game_progress
+    def get_scene_progress_data(self) -> dict:
         """
         Get the position of game objects for drawing on the web
         """
-        game_progress = get_progress_data(self.game_mode)
+        game_progress = {
+            "background": [],
+            "object_list": [],
+            "toggle": [],
+            "foreground": [],
+            "user_info": [],
+            "game_sys_info": {}
+        }
+        # wall
+        for wall in self.game_mode.walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            game_progress["object_list"].append(create_polygon_view_data("wall", vertices, "#ffffff"))
+        # end point
+        game_progress["object_list"].append(create_image_view_data("logo", self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y,
+                             50, 50))
+        # rect
+        game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
+        game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
+        game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
+                                                           WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
+        game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
+                                                           WIDTH, HEIGHT, "#000000"))
+        # info
+        game_progress["toggle"].append(create_image_view_data("info", 507, 20, 306, 480))
+        # car
+        for car in self.game_mode.car_info:
+            game_progress["object_list"].append(
+                create_image_view_data("car_0"+str(car["id"]+1), car["topleft"][0], car["topleft"][1], 50, 40, car["angle"])
+            )
+
+        # text
+        for car in self.game_mode.car_info:
+            if car["id"] % 2 == 0:
+                x = 600
+            else:
+                x = 730
+
+            if car["status"]:
+                game_progress["toggle"].append(
+                    create_text_view_data("L:" + str(car["l_sensor_value"]["distance"]) + "cm", x, 178 + 20 + 94 * (car["id"] // 2), "#FFFF00",
+                                   "15px Arial"))
+                game_progress["toggle"].append(
+                    create_text_view_data("F:" + str(car["f_sensor_value"]["distance"]) + "cm", x, 178 + 40 + 94 * (car["id"] // 2), "#FF0000",
+                                   "15px Arial"))
+                game_progress["toggle"].append(
+                    create_text_view_data("R:" + str(car["r_sensor_value"]["distance"]) + "cm", x, 178 + 60 + 94 * (car["id"] // 2), "#21A1F1",
+                                   "15px Arial"))
+                game_progress["object_list"].append(create_line_view_data("l_sensor", car["center"][0], car["center"][1],
+                                                                    self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[0],
+                                                                    self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[1],
+                                                                    "#FFFF00", 5))
+
+                game_progress["object_list"].append(create_line_view_data("l_top_sensor", car["center"][0], car["center"][1],
+                                                                    self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[0],
+                                                                    self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[1],
+                                                                    "#FFFF00", 5))
+
+                game_progress["object_list"].append(create_line_view_data("r_top_sensor", car["center"][0], car["center"][1],
+                                                                    self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[0],
+                                                                    self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[1],
+                                                                    "#21A1F1", 5))
+                game_progress["object_list"].append(create_line_view_data("r_sensor", car["center"][0], car["center"][1],
+                                                                    self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[0],
+                                                                    self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[1],
+                                                                    "#21A1F1", 5))
+                game_progress["object_list"].append(create_line_view_data("f_sensor", car["center"][0], car["center"][1],
+                                                                    self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[0],
+                                                                    self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
+                                                                    "#FF0000", 5))
+            else:
+                game_progress["toggle"].append(create_text_view_data(str(car["end_frame"]) + "frame",
+                                                                  x, 178 + 40 + 94 * (car["id"] // 2), "#FFFFFF", "15px Arial"))
+
         return game_progress
 
     def get_game_result(self):
@@ -139,15 +222,22 @@ class MazeCar:
             cmd_1P[0]["left_PWM"] += 100
 
         if key_pressed_list[pygame.K_w]:
-            cmd_2P[0]["left_PWM"] = 100
-            cmd_2P[0]["right_PWM"] = 100
+            cmd_2P[0]["left_PWM"] = 0
+            cmd_2P[0]["right_PWM"] = 0
         if key_pressed_list[pygame.K_s]:
-            cmd_2P[0]["left_PWM"] = -100
-            cmd_2P[0]["right_PWM"] = -100
+            cmd_2P[0]["left_PWM"] = 0
+            cmd_2P[0]["right_PWM"] = 0
         if key_pressed_list[pygame.K_a]:
-            cmd_2P[0]["right_PWM"] += 100
+            cmd_2P[0]["right_PWM"] += 0
         if key_pressed_list[pygame.K_d]:
-            cmd_2P[0]["left_PWM"] += 100
+            cmd_2P[0]["left_PWM"] += 0
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
+
+    def trnsfer_box2d_to_pygame(self, coordinate):
+        '''
+        :param coordinate: vertice of body of box2d object
+        :return: center of pygame rect
+        '''
+        return ((coordinate[0] - self.game_mode.pygame_point[0]) * PPM, (self.game_mode.pygame_point[1] - coordinate[1]) * PPM)
