@@ -30,6 +30,9 @@ class MazeCar(PaiaGame):
         self.user_num = user_num
         self.game_mode.sound_controller.play_music()
         self.is_running = self.isRunning()
+        self.map_width = self.game_mode.map.width
+        self.map_height = self.game_mode.map.height
+        self.scene = Scene(WIDTH, HEIGHT, "#000000", 500 - self.map_width, 480 - self.map_height)
 
     def update(self, commands):
         self.game_mode.ticks()
