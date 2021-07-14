@@ -34,10 +34,10 @@ class MazeCar(PaiaGame):
         self.map_height = self.game_mode.map.height
         self.scene = Scene(WIDTH, HEIGHT, "#000000", 500 - self.map_width, 480 - self.map_height)
 
-    def update(self, commands):
-        self.game_mode.ticks()
+    def update(self, cmd_dict):
+        # self.game_mode.ticks()
         self.game_mode.handle_event()
-        self.game_mode.update_sprite(commands)
+        self.game_mode.update_sprite(cmd_dict)
         if not self.isRunning():
             return "QUIT"
 
@@ -132,6 +132,8 @@ class MazeCar(PaiaGame):
                                                            WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
                                                            WIDTH, HEIGHT, "#000000"))
+        p = self.game_mode.trnsfer_box2d_to_pygame((0,0))
+        game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
         game_progress["toggle"].append(create_image_view_data("info", 507, 20, 306, 480))
         # car

@@ -1,5 +1,7 @@
 import pygame
 from game_core import MazeCar, gameView
+
+from games.Maze_Car.game_core.env import FPS
 from mlgame.view.view import PygameView
 from mlgame.gamedev.generic import quit_or_esc
 
@@ -14,6 +16,7 @@ if __name__ == '__main__':
     frame_count = 0
 
     while game.is_running and not quit_or_esc():
+        pygame.time.Clock().tick_busy_loop(FPS)
         game.update(game.get_keyboard_command())
         game_progress_data = game.get_scene_progress_data()
         game_view.draw_screen()
