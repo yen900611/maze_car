@@ -8,7 +8,7 @@ class Point(pygame.sprite.Sprite):
         self.group = game.all_points
         pygame.sprite.Sprite.__init__(self, self.group)
         self.game = game
-        self.x, self.y = coordinate
+        self.x, self.y = (coordinate[0] + TILESIZE / (2 * PPM), - coordinate[1] - TILESIZE / (2 * PPM))
 
     def get_info(self):
         return {
