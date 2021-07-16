@@ -10,9 +10,9 @@
 ## 運行於MLGame之下
 * 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
     * 手動模式：
-`python MLGame.py -m Maze_Car <the number of user> [game_mode] <map> [sound]`
+`python MLGame.py -m Maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
     * 機器學習模式：
-`python MLGame.py -i ml_play_template.py Maze_Car <the number of user> [game_mode] <map> [sound]`
+`python MLGame.py -i ml_play_template.py Maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
 
 ### 遊戲參數
 
@@ -67,7 +67,9 @@ def __init__(self, player):
 * `"R_sensor"`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
 * `x`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，x軸向右為正。
 * `y`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，y軸向上為正。
+![](https://i.imgur.com/4dcUjgr.png)
 * `angle`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，y軸向上為正。
+![](https://i.imgur.com/CjycT8e.png)
 
 ### 遊戲指令
 
