@@ -114,7 +114,7 @@ class MazeCar(PaiaGame):
             "toggle": [],
             "foreground": [],
             "user_info": [],
-            "game_sys_info": {"view_center_coordinate":self.game_mode.car_info[0]["center"]}
+            "game_sys_info": {"view_center_coordinate":[250 - self.game_mode.car_info[0]["center"][0], 240 - self.game_mode.car_info[0]["center"][1]]}
         }
 
         # wall
