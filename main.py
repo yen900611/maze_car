@@ -1,5 +1,5 @@
 import pygame
-from game_core import MazeCar, gameView
+from game_core import MazeCar
 
 from games.Maze_Car.game_core.env import FPS
 from mlgame.view.view import PygameView
