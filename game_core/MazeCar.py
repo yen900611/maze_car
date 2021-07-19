@@ -203,7 +203,8 @@ class MazeCar(PaiaGame):
 
         return {"frame_used": scene_info["frame"],
                 # "result": result, # ["1P:7s", "2P:5s"]
-                "ranks": rank# by score
+                "ranks": rank, # by score
+                "attachment": {},
                 }
 
         pass
