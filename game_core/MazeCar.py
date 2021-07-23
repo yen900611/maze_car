@@ -1,6 +1,6 @@
 import math
 
-from mlgame.view.test_decorator import check_game_progress
+from mlgame.view.test_decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
     create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data
 from mlgame.gamedev.game_interface import PaiaGame
@@ -61,7 +61,6 @@ class MazeCar(PaiaGame):
 
     def reset(self):
         pass
-        # self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -198,13 +197,14 @@ class MazeCar(PaiaGame):
             same_rank = []
             for user in ranking:
                 same_rank.append({"player":str(user.car_no+1)+"P",
-                                  "game_result":str(user.end_frame) + "frames"})
+                                  "frame_used":user.end_frame} )
             rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],
+                "states":"GAME_PASS",
                 # "result": result, # ["1P:7s", "2P:5s"]
-                "ranks": rank, # by score
-                "attachment": {},
+                #"ranks": rank, # by score
+                "attachment": rank,
                 }
 
         pass
@@ -229,15 +229,15 @@ class MazeCar(PaiaGame):
             cmd_1P[0]["left_PWM"] += 100
 
         if key_pressed_list[pygame.K_w]:
-            cmd_2P[0]["left_PWM"] = 0
-            cmd_2P[0]["right_PWM"] = 0
+            cmd_2P[0]["left_PWM"] = 100
+            cmd_2P[0]["right_PWM"] = 100
         if key_pressed_list[pygame.K_s]:
-            cmd_2P[0]["left_PWM"] = 0
-            cmd_2P[0]["right_PWM"] = 0
+            cmd_2P[0]["left_PWM"] = -100
+            cmd_2P[0]["right_PWM"] = -100
         if key_pressed_list[pygame.K_a]:
-            cmd_2P[0]["right_PWM"] += 0
+            cmd_2P[0]["right_PWM"] += 100
         if key_pressed_list[pygame.K_d]:
-            cmd_2P[0]["left_PWM"] += 0
+            cmd_2P[0]["left_PWM"] += 100
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
