@@ -186,6 +186,7 @@ class MazeCar(PaiaGame):
 
         return game_progress
 
+    @check_game_result
     def get_game_result(self):
         """
         Get the game result for the web
@@ -201,9 +202,7 @@ class MazeCar(PaiaGame):
             rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],
-                "states":"GAME_PASS",
-                # "result": result, # ["1P:7s", "2P:5s"]
-                #"ranks": rank, # by score
+                "state":self.game_result_state,
                 "attachment": rank,
                 }
 
