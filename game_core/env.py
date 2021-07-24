@@ -62,7 +62,7 @@ CARS_URL = ['https://raw.githubusercontent.com/yen900611/Maze_Car/master/game_co
             ]
 
 '''map_file'''
-PRACTICE_MAPS = ["level_1.json", "level_2.json", "level_3.json", "level_4.json", "level_5.json", "empty.json"]
+PRACTICE_MAPS = ["level_1.json", "level_2.json", "level_3.json", "level_4.json", "level_5.json", "level_6.json"]
 NORMAL_MAZE_MAPS = ["normal_map_1.json", "normal_map_2.json", "normal_map_3.json", "normal_map_3.json", "normal_map_3.json", "normal_map_3.json"]
 MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move_map_4.json", "move_map_4.json", "move_map_4.json"]
 

@@ -16,7 +16,7 @@ class PracticeMode(GameMode):
         '''load map data'''
         self.user_num = user_num
         self.maze_id = maze_no - 1
-        self.map_file = PRACTICE_MAPS[self.maze_id]
+        self.map_file = "level_"+ str(maze_no) + ".json"
         self.load_data()
 
         '''group of sprites'''

@@ -15,7 +15,7 @@ class MazeMode(GameMode):
         '''load map data'''
         self.user_num = user_num
         self.maze_id = maze_no - 1
-        self.map_file = NORMAL_MAZE_MAPS[self.maze_id]
+        self.map_file = "normal_map_"+ str(maze_no) + ".json"
         self.load_data()
 
         '''group of sprites'''
