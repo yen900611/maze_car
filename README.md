@@ -1,6 +1,6 @@
 ---
 Title: Maze Car
-version: 3.0.3
+version: 3.0.4
 ---
 # Maze Car
 想要訓練屬於自己的迷宮自走車嗎？
@@ -9,12 +9,12 @@ version: 3.0.3
 
 帶上你的自走車往終點衝刺吧！
 
-* 遊戲版本：`3.0.3`
+* 遊戲版本：`3.0.4`
 
 ![](https://i.imgur.com/ymZZMyO.png)
 
 # 更新內容
-- 配合MLGame系統改動(9.0.6-beta)
+- 配合MLGame系統改動(9.0.8-beta)
 - 修改迷宮地圖資料格式為JSON檔
 - 修改sensor偵測時的Bug
 - 增加車子與終點的絕對座標(回傳給玩家)
