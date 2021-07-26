@@ -1,6 +1,6 @@
 ---
 Title: Maze Car
-version: 3.0.0
+version: 3.0.3
 ---
 # Maze Car
 想要訓練屬於自己的迷宮自走車嗎？
@@ -9,7 +9,7 @@ version: 3.0.0
 
 帶上你的自走車往終點衝刺吧！
 
-* 遊戲版本：`3.0.0`
+* 遊戲版本：`3.0.3`
 
 ![](https://i.imgur.com/ymZZMyO.png)
 

@@ -94,10 +94,11 @@ class PracticeMode(GameMode):
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
             self.car_info.append(car.get_info())
             car.detect_distance(self.frame, self.wall_info)
+        # print(self.car.get_info()["coordinate"])
 
         self.all_points.update()
         for point in self.all_points:
-            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x + TILESIZE/2/PPM, -point.y - TILESIZE/2/PPM))
+            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()

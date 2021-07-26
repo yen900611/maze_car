@@ -96,7 +96,7 @@ class MazeMode(GameMode):
 
         self.all_points.update()
         for point in self.all_points:
-            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x + TILESIZE/2/PPM, -point.y - TILESIZE/2/PPM))
+            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
