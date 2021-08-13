@@ -1,6 +1,6 @@
 ---
 Title: Maze Car
-version: 3.0.4
+version: 3.0.5
 ---
 # Maze Car
 想要訓練屬於自己的迷宮自走車嗎？

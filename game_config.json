@@ -1,0 +1,70 @@
+{
+  "game_name": "maze_car",
+  "version": "3.0.5",
+  "url": "None",
+  "game_params": [
+    {
+      "name": "user_num",
+      "verbose": "參賽人數",
+      "type": "int",
+      "max": 6,
+      "min": 1,
+      "default": 1,
+      "help": "set the number of user."
+    },
+    {
+      "name": "game_type",
+      "verbose": "遊戲模式",
+      "type": "str",
+      "choices": [
+        {
+          "verbose": "MAZE",
+          "value": "MAZE"
+        },
+        {
+          "verbose": "MOVE_MAZE",
+          "value": "MOVE_MAZE"
+        },
+        {
+          "verbose": "PRACTICE",
+          "value": "PRACTICE"
+        }
+      ],
+      "help": "choose the type of game",
+      "default": "MAZE"
+    },
+    {
+      "name": "map",
+      "verbose": "地圖",
+      "type": "int",
+      "min": 1,
+      "max": 6,
+      "default": 1,
+      "help": "choose a map for game",
+    },
+    {
+      "name": "time_to_play",
+      "verbose": "遊戲總幀數",
+      "type": "int",
+      "choices":[ 450 ,900 ,1350,1800,270],
+      "help": "set the limit of frame count , actually time will be revised according to your FPS .",
+      "default": 450
+    },
+    {
+      "name": "sensor_num",
+      "verbose": "感測器數量",
+      "type": "int",
+      "choices":[3 ,5],
+      "help": "set the number of senser .",
+      "default": 3
+    },
+    {
+      "name": "sound",
+      "verbose": "遊戲音效",
+      "type": "str",
+      "choices":["on" ,"off"],
+      "help": "set the number of senser .",
+      "default": "on"
+    }
+  ]
+}

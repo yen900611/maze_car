@@ -1,15 +1,15 @@
 import pygame
-from game_core import MazeCar
+from src import MazeCar
 
-from games.Maze_Car.game_core.env import FPS
+from games.maze_car.src.env import FPS
 from mlgame.view.view import PygameView
 from mlgame.gamedev.generic import quit_or_esc
 
 if __name__ == '__main__':
     pygame.init()
-    game = MazeCar.MazeCar(2, "MAZE",2, 120, 5, "off")
-    # game = MazeCar.MazeCar(1, "MOVE_MAZE", 1, 120, 3, "off")
-    # game = MazeCar.MazeCar(1, "PRACTICE", 5, 120, 5, "off")
+    # game = MazeCar.MazeCar(2, "MAZE",2, 1, 5, "off")
+    # game = MazeCar.MazeCar(1, "MOVE_MAZE", 1, 2, 3, "off")
+    game = MazeCar.MazeCar(2, "PRACTICE", 1, 5, 5, "off")
     scene_init_info_dict = game.get_scene_init_data()
     game_view = PygameView(scene_init_info_dict)
     interval = 1 / 30

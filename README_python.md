@@ -10,9 +10,9 @@
 ## 運行於MLGame之下
 * 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
     * 手動模式：
-`python MLGame.py -m Maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
+`python MLGame.py -m maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
     * 機器學習模式：
-`python MLGame.py -i ml_play_template.py Maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
+`python MLGame.py -i ml_play_template.py maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
 
 ### 遊戲參數
 
@@ -61,12 +61,15 @@ def __init__(self, player):
 以下是該字典物件的鍵值對應：
 
 * `"frame"`：整數。紀錄的是第幾影格的場景資訊
-* `status`：遊戲狀態
+* `status`：玩家的遊戲狀態，一般情況為"GAME_ALIVE"，通過關卡則為"GAME_PASS"，到遊戲結束時尚未通關為"GAME_OVER"
+* `"L_T_sensor"`：玩家自己車子左前超聲波感測器的值，資料型態為數值
+* `"R_T_sensor"`：玩家自己車子右前超聲波感測器的值，資料型態為數值
 * `"L_sensor"`：玩家自己車子左邊超聲波感測器的值，資料型態為數值
 * `"F_sensor"`：玩家自己車子前面超聲波感測器的值，資料型態為數值
 * `"R_sensor"`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
-* `x`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，x軸向右為正。
-* `y`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，y軸向上為正。
+* `"x"`：玩家自己車子的x座標，該座標系統原點位於迷宮左上角，x軸向右為正。
+* `"y"`：玩家自己車子的y座標，該座標系統原點位於迷宮左上角，y軸向上為正。
+* `"angle"`：玩家自己車子的朝向，車子向上為0度，數值逆時鐘遞增至360
 ![](https://i.imgur.com/4dcUjgr.png)
 * `angle`：玩家自己車子的絕對座標，該座標系統原點位於迷宮左上角，y軸向上為正。
 ![](https://i.imgur.com/CjycT8e.png)

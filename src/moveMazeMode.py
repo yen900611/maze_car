@@ -48,8 +48,6 @@ class MoveMazeMode(GameMode):
         self.new()
         '''sound'''
         self.sound_controller = SoundController(sound_controller)
-        '''image'''
-        self.info = pygame.image.load(path.join(IMAGE_DIR, INFO_NAME))
 
     def new(self):
         # initialize all variables and do all setup for a new game
@@ -155,17 +153,17 @@ class MoveMazeMode(GameMode):
 
     def _is_game_end(self):
         if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
-            print("game end")
             for car in self.cars:
-                if car not in self.eliminated_user and car.status:
+                if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
                     self.user_check_points.append(car.check_point)
-                    car.status = False
+                    car.is_running = False
+                    car.status = "GAME_OVER"
             self.is_end = True
             self.ranked_user = self.rank()
             self._print_result()
-            self.status = "GAME OVER"
+            self.status = "END"
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):

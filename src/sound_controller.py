@@ -4,7 +4,7 @@ from .env import *
 
 class SoundController():
     def __init__(self, is_sound_on):
-        if is_sound_on == "ON":
+        if is_sound_on == "on":
             self.is_sound_on = True
             pygame.mixer.init()
             pygame.mixer.music.load(path.join(SOUND_DIR, "BGM.mp3"))

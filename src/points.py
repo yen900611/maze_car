@@ -18,8 +18,7 @@ class Point(pygame.sprite.Sprite):
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.image = pygame.image.load(path.join(IMAGE_DIR, LOGO))
-        self.image = pygame.transform.scale(self.image, (TILESIZE*2, TILESIZE* 2))
+        self.image = pygame.Surface( (TILESIZE*2, TILESIZE* 2))
         self.rect = self.image.get_rect()
 
     def update(self, *args, **kwargs) -> None:
@@ -32,7 +31,8 @@ class End_point(Point):
                 hit.end_frame = self.game.frame
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)
-                hit.status = False
+                hit.is_running = False
+                hit.status = "GAME_PASS"
 
 class Check_point(Point):
     def __init__(self, game, coordinate):

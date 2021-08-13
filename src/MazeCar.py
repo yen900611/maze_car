@@ -39,6 +39,7 @@ class MazeCar(PaiaGame):
         self.game_mode.handle_event()
         self.game_mode.update_sprite(cmd_dict)
         if not self.isRunning():
+            self.is_running = False
             return "QUIT"
 
     def game_to_player_data(self):
@@ -47,7 +48,7 @@ class MazeCar(PaiaGame):
         for car in self.game_mode.car_info:
             # type of car is dictionary
             player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
-                                                             "status": scene_info["status"],
+                                                             "status": car["status"],
                                                              "x": car["coordinate"][0],
                                                              "y": car["coordinate"][1],
                                                              "angle": (car["angle"] * 180 / math.pi) % 360,
@@ -88,15 +89,15 @@ class MazeCar(PaiaGame):
                      "assets":[]}
         game_info["map_width"] = self.game_mode.map.tileWidth * 20
         game_info["map_height"] =self.game_mode.map.tileHeight * 20
-        info_path = path.join(IMAGE_DIR, INFO_NAME)
+        info_path = path.join(ASSET_IMAGE_DIR, INFO_NAME)
         info_url = INFO_URL
         game_info["assets"].append(create_asset_init_data("info", 306, 480, info_path, info_url))
-        logo_path = path.join(IMAGE_DIR, LOGO)
+        logo_path = path.join(ASSET_IMAGE_DIR, LOGO)
         logo_url = LOGO_URL
         game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
 
         for car in self.game_mode.car_info:
-            file_path = path.join(IMAGE_DIR, CARS_NAME[car["id"]])
+            file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
             url = CARS_URL[car["id"]]
             car_init_info = create_asset_init_data("car_0" + str(car["id"]+1), 50, 50, file_path, url)
             game_info["assets"].append(car_init_info)

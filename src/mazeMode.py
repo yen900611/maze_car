@@ -139,16 +139,16 @@ class MazeMode(GameMode):
 
     def _is_game_end(self):
         if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
-            print("game end")
             for car in self.cars:
-                if car not in self.eliminated_user and car.status:
+                if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
-                    car.status = False
+                    car.is_running = False
+                    car.status = "GAME_OVER"
             self.is_end = True
             self.ranked_user = self.rank()
             self._print_result()
-            self.status = "GAME OVER"
+            self.status = "END"
 
     def draw_grid(self):
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):

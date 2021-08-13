@@ -1,0 +1,34 @@
+{
+
+      "GAME_STATUS": [
+        ["GAME_ALIVE", "alive", "存活"],
+        ["GAME_PASS", "pass", "通關"],
+        ["GAME OVER", "over", "已結束"]
+    ],
+    "SCENE_INFO": [
+        ["scene_info['frame']", "# frame", "# 幀數"],
+        ["scene_info['status']", "game status", "遊戲狀態"],
+        ["scene_info['x']", "x position of the car", "車子的 x 座標"],
+        ["scene_info['y']", "y position of the car", "車子的 y 座標"],
+        ["scene_info['angle']", "angle of the car", "車子的角度"],
+        ["scene_info['end']", "end position", "終點位置"],
+        ["scene_info['R_sensor']", "right sensor value", "右超聲波值"],
+        ["scene_info['F_sensor']", "front sensor value", "前超聲波值"],
+        ["scene_info['L_sensor']", "left sensor value", "左超聲波值"],
+        ["scene_info['R_T_sensor']", "right front sensor value", "右前超聲波值"],
+        ["scene_info['L_T_sensor']", "left front sensor value", "左前超聲波值"]
+    ],
+    "CONSTANT": [
+        [0, "left boundary", "左邊界"],
+        [820, "right boundary", "右邊界"],
+        [0, "top boundary", "上邊界"],
+        [520, "bottom boundary", "下邊界"]
+    ],
+    "ACTION": [
+        ["[{'left_PWM':75,'right_PWM':75}]", "move forward", "向前移動"],
+        ["[{'left_PWM':-75,'right_PWM':-75}]", "move backwards", "向後移動"],
+        ["[{'left_PWM':0,'right_PWM':60}]", "turn left", "向左旋轉"],
+        ["[{'left_PWM':60,'right_PWM':0}]", "turn right", "向右旋轉"]
+    ],
+
+}

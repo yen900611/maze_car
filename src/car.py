@@ -13,11 +13,12 @@ class Car(pygame.sprite.Sprite):
         self.is_completed = False
         self.end_frame = 0
         self.origin_image = pygame.transform.scale(
-            pygame.image.load(path.join(IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
+            pygame.image.load(path.join(ASSET_IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
             self.size)
         self.image = self.origin_image  # after rotate
         self.rect = self.image.get_rect()
-        self.status = True
+        self.is_running = True
+        self.status = "GAME_ALIVE"
         self.sensor_R = {"coordinate":(0, 0), "distance":-1}
         self.sensor_L = {"coordinate":(0, 0), "distance":-1}
         self.sensor_R_T = {"coordinate":(0, 0), "distance":-1}
@@ -35,7 +36,7 @@ class Car(pygame.sprite.Sprite):
     def update(self, commands):
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
         self.rect = self.image.get_rect()
-        if self.status and commands != None:
+        if self.is_running and commands != None:
             if commands[0]['right_PWM'] > 255:
                 self.R_PWM = 255
             elif commands[0]['right_PWM'] < -255:
