@@ -1,59 +1,24 @@
-GAME_VERSION = "3.0.1"
-
+from os import path
+from .src.MazeCar import MazeCar
+from mlgame.utils.parse_config import read_json_file, parse_config
 from argparse import ArgumentTypeError
 
 # test to push
 # test to push again
 # test to push and build
 # test to push , build and run
-def positive_int(string):
-    value = int(string)
-    if value < 1:
-        raise ArgumentTypeError()
-    return value
+# def positive_int(string):
+#     value = int(string)
+#     if value < 1:
+#         raise ArgumentTypeError()
+#     return value
 
+config_file = path.join(path.dirname(__file__), "game_config.json")
 
-GAME_PARAMS = {
-    "()": {
-        "prog": "maze_car",
-        "game_usage": "%(prog)s [user_num] [game_type] [map] [time] [sensor] [sound]"
-    },
-    "user_num": {
-        "type": positive_int,
-        "default": 2,
-        "help": ("[Optional] The score that the game will be exited "
-                 "when either side reaches it.[default: %(default)s]")
-    },
-    "game_type": {
-        "choices": ("MAZE", "MOVE_MAZE", "PRACTICE"),
-        "metavar": "game_mode",
-        "nargs": "?",
-        "default": "MAZE",
-        "help": "Specify the game style. Choices: %(choices)s"
-    },
-    "map": {
-        "type": positive_int,
-        "default": 1,
-        "help": "Specify the game mpa. Choices: %(choices)s"
-    },
-    "time_to_play": {
-        "type": positive_int,
-        "default": 450,
-        "help": "Specify the game time. Choices: %(choices)s"
-    },
-    "sensor_num": {
-        "choices": (3, 5),
-        "type": positive_int,
-        "default": 3,
-        "help": "Specify the number of sensor. Choices: %(choices)s"
-    },
-    "sound":{
-        "choices":("on","off"),
-        "default":"off"
-    }
-}
+config_data = read_json_file(config_file)
+GAME_VERSION = config_data["version"]
+GAME_PARAMS = parse_config(config_data)
 
-from .src.MazeCar import MazeCar
 
 GAME_SETUP = {
     "game": MazeCar,
