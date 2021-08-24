@@ -1,7 +1,7 @@
 {
   "game_name": "maze_car",
   "version": "3.0.5",
-  "url": "None",
+  "url": "https://github.com/yen900611/RacingCar",
   "game_params": [
     {
       "name": "user_num",
@@ -63,7 +63,7 @@
       "verbose": "遊戲音效",
       "type": "str",
       "choices":["on" ,"off"],
-      "help": "set the number of senser .",
+      "help": "'on' can turn on the sound.",
       "default": "on"
     }
   ]
