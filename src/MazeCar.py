@@ -14,20 +14,13 @@ from .sound_controller import *
 class MazeCar(PaiaGame):
     def __init__(self, user_num, game_type, map, time, sensor, sound):
         super().__init__()
+        self.game_type = game_type
+        self.user_num = user_num
         self.maze_id = map - 1
         self.game_end_time = time
+        self.sensor_num = sensor
         self.is_sound = sound
-        if game_type == "MAZE":
-            self.game_mode = MazeMode(user_num, map, time, sensor, self.is_sound)
-            self.game_type = "MAZE"
-        elif game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(user_num,map,time, sensor, self.is_sound)
-            self.game_type = "MOVE_MAZE"
-
-        elif game_type == "PRACTICE":
-            self.game_mode = PracticeMode(user_num,map,time, sensor, self.is_sound)
-            self.game_type = "PRACTICE"
-        self.user_num = user_num
+        self.set_game_mode()
         self.game_mode.sound_controller.play_music()
         self.is_running = self.isRunning()
         self.map_width = self.game_mode.map.width
@@ -40,7 +33,7 @@ class MazeCar(PaiaGame):
         self.game_mode.update_sprite(cmd_dict)
         if not self.isRunning():
             self.is_running = False
-            return "QUIT"
+            return "RESET"
 
     def game_to_player_data(self):
         scene_info = self.get_scene_info
@@ -61,7 +54,8 @@ class MazeCar(PaiaGame):
         return player_info
 
     def reset(self):
-        pass
+        self.frame_count = 0
+        self.set_game_mode()
 
     def isRunning(self):
         return self.game_mode.isRunning()
@@ -213,6 +207,14 @@ class MazeCar(PaiaGame):
         """
         Get the command according to the pressed keys
         """
+        if not self.isRunning():
+            return {"1P": "RESET",
+                    "2P": "RESET",
+                    "3P": "RESET",
+                    "4P": "RESET",
+                    "5P": "RESET",
+                    "6P": "RESET",
+                    }
         key_pressed_list = pygame.key.get_pressed()
         cmd_1P = [{"left_PWM": 0, "right_PWM": 0}]
         cmd_2P = [{"left_PWM": 0, "right_PWM": 0}]
@@ -241,6 +243,18 @@ class MazeCar(PaiaGame):
 
         return {"ml_1P": cmd_1P,
                 "ml_2P": cmd_2P}
+
+    def set_game_mode(self):
+        if self.game_type == "MAZE":
+            self.game_mode = MazeMode(self.user_num, self.maze_id+1, self.game_end_time, self.sensor_num, self.is_sound)
+            self.game_type = "MAZE"
+        elif self.game_type == "MOVE_MAZE":
+            self.game_mode = MoveMazeMode(self.user_num,self.maze_id+1,self.game_end_time, self.sensor_num, self.is_sound)
+            self.game_type = "MOVE_MAZE"
+
+        elif self.game_type == "PRACTICE":
+            self.game_mode = PracticeMode(self.user_num,self.maze_id+1,self.game_end_time, self.sensor_num, self.is_sound)
+            self.game_type = "PRACTICE"
 
     def trnsfer_box2d_to_pygame(self, coordinate):
         '''
