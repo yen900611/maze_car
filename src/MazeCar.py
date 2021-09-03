@@ -110,22 +110,24 @@ class MazeCar(PaiaGame):
             "user_info": [],
             "game_sys_info": {"view_center_coordinate":[250 - self.game_mode.car_info[0]["center"][0], 240 - self.game_mode.car_info[0]["center"][1]]}
         }
+        for p in self.game_mode.all_points:
+            game_progress["object_list"].append(p.get_progress_data())
 
         # wall
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
             game_progress["object_list"].append(create_polygon_view_data("wall", vertices, "#ffffff"))
+
         # end point
-        game_progress["object_list"].append(create_image_view_data("logo", self.game_mode.end_point.rect.x, self.game_mode.end_point.rect.y,
-                             50, 50))
+        game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
         # rect
         game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
-                                                           WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
+                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
-                                                           WIDTH, HEIGHT, "#000000"))
+                                                             WIDTH, HEIGHT, "#000000"))
         p = self.game_mode.trnsfer_box2d_to_pygame((0,0))
         game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
@@ -146,38 +148,38 @@ class MazeCar(PaiaGame):
             if car["status"]:
                 game_progress["toggle"].append(
                     create_text_view_data("L:" + str(car["l_sensor_value"]["distance"]) + "cm", x, 178 + 20 + 94 * (car["id"] // 2), "#FFFF00",
-                                   "15px Arial"))
+                                          "15px Arial"))
                 game_progress["toggle"].append(
                     create_text_view_data("F:" + str(car["f_sensor_value"]["distance"]) + "cm", x, 178 + 40 + 94 * (car["id"] // 2), "#FF0000",
-                                   "15px Arial"))
+                                          "15px Arial"))
                 game_progress["toggle"].append(
                     create_text_view_data("R:" + str(car["r_sensor_value"]["distance"]) + "cm", x, 178 + 60 + 94 * (car["id"] // 2), "#21A1F1",
-                                   "15px Arial"))
+                                          "15px Arial"))
                 game_progress["object_list"].append(create_line_view_data("l_sensor", car["center"][0], car["center"][1],
-                                                                    self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[0],
-                                                                    self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[1],
-                                                                    "#FFFF00", 5))
+                                                                          self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[0],
+                                                                          self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[1],
+                                                                          "#FFFF00", 5))
 
                 game_progress["object_list"].append(create_line_view_data("l_top_sensor", car["center"][0], car["center"][1],
-                                                                    self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[0],
-                                                                    self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[1],
-                                                                    "#FFFF00", 5))
+                                                                          self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[0],
+                                                                          self.trnsfer_box2d_to_pygame(car["l_t_sensor_value"]["coordinate"])[1],
+                                                                          "#FFFF00", 5))
 
                 game_progress["object_list"].append(create_line_view_data("r_top_sensor", car["center"][0], car["center"][1],
-                                                                    self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[0],
-                                                                    self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[1],
-                                                                    "#21A1F1", 5))
+                                                                          self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[0],
+                                                                          self.trnsfer_box2d_to_pygame(car["r_t_sensor_value"]["coordinate"])[1],
+                                                                          "#21A1F1", 5))
                 game_progress["object_list"].append(create_line_view_data("r_sensor", car["center"][0], car["center"][1],
-                                                                    self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[0],
-                                                                    self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[1],
-                                                                    "#21A1F1", 5))
+                                                                          self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[0],
+                                                                          self.trnsfer_box2d_to_pygame(car["r_sensor_value"]["coordinate"])[1],
+                                                                          "#21A1F1", 5))
                 game_progress["object_list"].append(create_line_view_data("f_sensor", car["center"][0], car["center"][1],
-                                                                    self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[0],
-                                                                    self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
-                                                                    "#FF0000", 5))
+                                                                          self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[0],
+                                                                          self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
+                                                                          "#FF0000", 5))
             else:
                 game_progress["toggle"].append(create_text_view_data(str(car["end_frame"]) + "frame",
-                                                                  x, 178 + 40 + 94 * (car["id"] // 2), "#FFFFFF", "15px Arial"))
+                                                                     x, 178 + 40 + 94 * (car["id"] // 2), "#FFFFFF", "15px Arial"))
 
         return game_progress
 

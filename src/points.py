@@ -3,8 +3,9 @@ import time
 import pygame
 from .env import *
 
+
 class Point(pygame.sprite.Sprite):
-    def __init__(self,game, coordinate):
+    def __init__(self, game, coordinate):
         self.group = game.all_points
         pygame.sprite.Sprite.__init__(self, self.group)
         self.game = game
@@ -12,13 +13,18 @@ class Point(pygame.sprite.Sprite):
 
     def get_info(self):
         return {
-            "coordinate":(self.x, self.y)
+            "coordinate": (self.x, self.y)
         }
+
+    def get_progress_data(self):
+        asset_data = {}
+        return asset_data
+
 
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE*2, TILESIZE*2)
+        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 2, TILESIZE * 2)
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
@@ -33,12 +39,21 @@ class End_point(Point):
                 hit.is_running = False
                 hit.status = "GAME_PASS"
 
+    def get_progress_data(self):
+        asset_data = {"type": "image",
+                      "x": self.rect.x,
+                      "y": self.rect.y,
+                      "width": 50,
+                      "height": 50,
+                      "image_id": "logo",
+                      "angle": 0}
+        return asset_data
+
+
 class Check_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.image = pygame.Surface((TILESIZE*2, TILESIZE*2))
-        self.image.fill(RED)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE*2.5, TILESIZE*2.5)
+        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 2, TILESIZE * 2)
         self.car_has_hit = []
 
     def update(self, *args, **kwargs) -> None:
@@ -51,10 +66,22 @@ class Check_point(Point):
                 hit.check_point += 1
                 self.car_has_hit.append(hit)
 
+    def get_progress_data(self):
+        asset_data = {"type": "rect",
+                      "x": self.rect.x,
+                      "y": self.rect.y,
+                      "width": 40,
+                      "height": 40,
+                      "color": RED,
+                      "angle": 0}
+        return asset_data
+
+
 class Outside_point(Point):
     '''
     if car colliding these point, car will be swich to start point
     '''
+
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
         self.image = pygame.Surface((TILESIZE, TILESIZE))
@@ -68,8 +95,6 @@ class Outside_point(Point):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
         for hit in hits:
             if hit.status:
-
                 hit.body.position = (hit.x, hit.y)
                 hit.body.linearVelocity = 0, 0
                 pass
-

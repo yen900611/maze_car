@@ -74,7 +74,6 @@ class MazeMode(GameMode):
                                                (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == 8:
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-
                 elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.pygame_point = [0,0]
