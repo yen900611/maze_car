@@ -17,7 +17,7 @@ class MazeCar(PaiaGame):
         self.game_type = game_type
         self.user_num = user_num
         self.maze_id = map - 1
-        self.game_end_time = time
+        self.game_end_time = time/FPS
         self.sensor_num = sensor
         self.is_sound = sound
         self.set_game_mode()

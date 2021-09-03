@@ -46,7 +46,13 @@
       "name": "time_to_play",
       "verbose": "遊戲總幀數",
       "type": "int",
-      "choices":[ 450 ,900 ,1350,1800,270],
+      "choices": [
+        450,
+        900,
+        1350,
+        1800,
+        2700
+      ],
       "help": "set the limit of frame count , actually time will be revised according to your FPS .",
       "default": 450
     },
@@ -54,7 +60,10 @@
       "name": "sensor_num",
       "verbose": "感測器數量",
       "type": "int",
-      "choices":[3 ,5],
+      "choices": [
+        3,
+        5
+      ],
       "help": "set the number of senser .",
       "default": 3
     },
@@ -62,7 +71,10 @@
       "name": "sound",
       "verbose": "遊戲音效",
       "type": "str",
-      "choices":["on" ,"off"],
+      "choices": [
+        "on",
+        "off"
+      ],
       "help": "'on' can turn on the sound.",
       "default": "on"
     }
