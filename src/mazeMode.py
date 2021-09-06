@@ -8,6 +8,7 @@ from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
+from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
 
 class MazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
@@ -34,7 +35,7 @@ class MazeMode(GameMode):
 
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         pygame.font.init()
-        self.status = "GAME_PASS"
+        self.state = GameResultState.FAIL
         self.is_end = False
         self.sensor_num = sensor
         self.x = 0

@@ -2,7 +2,7 @@ import time
 
 import pygame
 from .env import *
-
+from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
 
 class Point(pygame.sprite.Sprite):
     def __init__(self, game, coordinate):
@@ -20,7 +20,6 @@ class Point(pygame.sprite.Sprite):
         asset_data = {}
         return asset_data
 
-
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
@@ -36,8 +35,9 @@ class End_point(Point):
                 hit.end_frame = self.game.frame
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)
+                self.game.state = GameResultState.FINISH
                 hit.is_running = False
-                hit.status = "GAME_PASS"
+                hit.status = GameStatus.GAME_PASS
 
     def get_progress_data(self):
         asset_data = {"type": "image",
@@ -75,7 +75,6 @@ class Check_point(Point):
                       "color": RED,
                       "angle": 0}
         return asset_data
-
 
 class Outside_point(Point):
     '''
