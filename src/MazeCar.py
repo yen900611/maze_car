@@ -30,6 +30,7 @@ class MazeCar(PaiaGame):
 
     def update(self, cmd_dict):
         # self.game_mode.ticks()
+        self.frame_count += 1
         self.game_mode.handle_event()
         self.game_mode.update_sprite(cmd_dict)
         if not self.isRunning():
@@ -141,6 +142,7 @@ class MazeCar(PaiaGame):
             )
 
         # text
+        game_progress["toggle"].append(create_text_view_data(f"{self.frame_count} frames", 618, 80, WHITE))
         for car in self.game_mode.car_info:
             if car["id"] % 2 == 0:
                 x = 600
