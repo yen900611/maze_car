@@ -132,8 +132,9 @@ class MazeMode(GameMode):
         try:
             self.map = Map(path.join(map_folder, self.map_file))
         except Exception:
-            print("Map load error")
-            self.running = False
+            print(f"File '{self.map_file}' is not found.We will load first map for you.")
+            self.map_file = "normal_map_1.json"
+            self.map = Map(path.join(map_folder, self.map_file))
 
     def _init_world(self, user_no: int):
         for i in range(user_no):

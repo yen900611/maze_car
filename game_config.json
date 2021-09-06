@@ -38,7 +38,7 @@
       "verbose": "地圖",
       "type": "int",
       "min": 1,
-      "max": 6,
+      "max": 100,
       "default": 1,
       "help": "choose a map for game"
     },
@@ -46,13 +46,8 @@
       "name": "time_to_play",
       "verbose": "遊戲總幀數",
       "type": "int",
-      "choices": [
-        450,
-        900,
-        1350,
-        1800,
-        2700
-      ],
+      "min": 60,
+      "max": 5400,
       "help": "set the limit of frame count , actually time will be revised according to your FPS .",
       "default": 450
     },

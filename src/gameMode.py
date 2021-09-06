@@ -32,9 +32,7 @@ class GameMode(object):
         """ Handle the event from window , mouse or button.
         :return: None
         """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
+        pass
 
     def detect_collision(self):
         """ Detect the collision event between sprites.
