@@ -128,9 +128,12 @@ class MazeMode(GameMode):
             pass
 
     def load_data(self):
-        game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
-        self.map = Map(path.join(map_folder, self.map_file))
+        try:
+            self.map = Map(path.join(map_folder, self.map_file))
+        except Exception:
+            print("Map load error")
+            self.running = False
 
     def _init_world(self, user_no: int):
         for i in range(user_no):

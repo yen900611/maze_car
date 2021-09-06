@@ -11,7 +11,8 @@ class MLPlay:
         """
         Generate the command according to the received scene information
         """
-        # TODO # reset
+        if scene_info["status"] != "GAME_ALIVE":
+            return "RESET"
         self.r_sensor_value = scene_info["R_sensor"]
         self.l_sensor_value = scene_info["L_sensor"]
         self.f_sensor_value = scene_info["F_sensor"]
