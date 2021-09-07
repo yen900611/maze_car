@@ -48,6 +48,7 @@
       "type": "int",
       "min": 60,
       "max": 5400,
+      "step": 30,
       "help": "set the limit of frame count , actually time will be revised according to your FPS .",
       "default": 450
     },
@@ -60,7 +61,7 @@
         5
       ],
       "help": "set the number of senser .",
-      "default": 3
+      "default": 5
     },
     {
       "name": "sound",

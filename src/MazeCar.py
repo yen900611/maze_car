@@ -58,6 +58,7 @@ class MazeCar(PaiaGame):
     def reset(self):
         self.frame_count = 0
         self.set_game_mode()
+        self.game_mode.sound_controller.play_music()
 
     def isRunning(self):
         return self.game_mode.isRunning()
