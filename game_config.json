@@ -1,6 +1,6 @@
 {
   "game_name": "maze_car",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "url": "https://github.com/yen900611/RacingCar",
   "game_params": [
     {
@@ -60,7 +60,7 @@
         3,
         5
       ],
-      "help": "set the number of senser .",
+      "help": "set the number of sensor.",
       "default": 5
     },
     {
