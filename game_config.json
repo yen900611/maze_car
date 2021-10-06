@@ -1,6 +1,6 @@
 {
   "game_name": "maze_car",
-  "version": "3.0.6",
+  "version": "3.0.8",
   "url": "https://github.com/yen900611/RacingCar",
   "game_params": [
     {
@@ -18,15 +18,15 @@
       "type": "str",
       "choices": [
         {
-          "verbose": "MAZE",
+          "verbose": "經典迷宮",
           "value": "MAZE"
         },
         {
-          "verbose": "MOVE_MAZE",
+          "verbose": "移動迷宮",
           "value": "MOVE_MAZE"
         },
         {
-          "verbose": "PRACTICE",
+          "verbose": "小試身手",
           "value": "PRACTICE"
         }
       ],
