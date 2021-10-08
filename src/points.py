@@ -31,11 +31,10 @@ class End_point(Point):
     def detect_cars_collision(self):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
         for hit in hits:
-            if hit.status:
+            if hit.is_running:
                 hit.end_frame = self.game.frame
                 hit.is_completed = True
-                if hit not in self.game.eliminated_user:
-                    self.game.eliminated_user.append(hit)
+                self.game.eliminated_user.append(hit) #TODO #外部注入
                 self.game.state = GameResultState.FINISH
                 hit.is_running = False
                 hit.status = GameStatus.GAME_PASS
