@@ -13,7 +13,7 @@
       "GAME_STATUS": [
         ["GAME_ALIVE", "alive", "存活"],
         ["GAME_PASS", "pass", "通關"],
-        ["GAME OVER", "over", "已結束"]
+        ["GAME_OVER", "over", "已結束"]
     ],
     "SCENE_INFO": [
         ["scene_info['frame']", "# frame", "# 幀數"],

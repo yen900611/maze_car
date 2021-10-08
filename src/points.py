@@ -34,7 +34,8 @@ class End_point(Point):
             if hit.status:
                 hit.end_frame = self.game.frame
                 hit.is_completed = True
-                self.game.eliminated_user.append(hit)
+                if hit not in self.game.eliminated_user:
+                    self.game.eliminated_user.append(hit)
                 self.game.state = GameResultState.FINISH
                 hit.is_running = False
                 hit.status = GameStatus.GAME_PASS
