@@ -209,7 +209,9 @@ class MazeCar(PaiaGame):
             for user in ranking:
                 same_rank = {"player": str(user.car_no + 1) + "P",
                              "rank": self.game_mode.ranked_user.index(ranking) + 1,
-                             "frame_used": user.end_frame}
+                             "frame_used": user.end_frame,
+                             "check_points":user.check_point
+                             }
                 rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],

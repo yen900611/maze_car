@@ -17,8 +17,8 @@ class MLPlay:
         self.l_sensor_value = scene_info["L_sensor"]
         self.f_sensor_value = scene_info["F_sensor"]
         if self.f_sensor_value >15:
-            self.control_list[0]["left_PWM"] = 50
-            self.control_list[0]["right_PWM"] = 50
+            self.control_list[0]["left_PWM"] = 100
+            self.control_list[0]["right_PWM"] = 100
         else:
             self.control_list[0]["left_PWM"] = 0
             self.control_list[0]["right_PWM"] = 0
