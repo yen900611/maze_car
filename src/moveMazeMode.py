@@ -150,16 +150,12 @@ class MoveMazeMode(GameMode):
             self.worlds.append(world)
 
     def _is_game_end(self):
-        """
-            遊戲結束條件
-            1. 全部玩家抵達終點
-            2. 時間結束
-        """
-        if self.frame > FPS * self.game_end_time:
+        if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
+                    self.user_check_points.append(car.check_point)
                     car.is_running = False
                     car.status = "GAME_OVER"
             self.is_end = True
@@ -167,15 +163,8 @@ class MoveMazeMode(GameMode):
             self._print_result()
             self.status = "END"
 
-        elif len(self.cars) == len(self.eliminated_user):
-            self.is_end = True
-            self.ranked_user = self.rank()
-            self._print_result()
-            self.status = "END"
-
-
-def draw_grid(self):
-    for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
-        pygame.draw.line(self.screen, GREY, (x, TILE_LEFTTOP[1]), (x, TILE_HEIGHT + TILE_LEFTTOP[1]))
-    for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1], TILESIZE):
-        pygame.draw.line(self.screen, GREY, (TILE_LEFTTOP[0], y), (TILE_WIDTH + TILE_LEFTTOP[0], y))
+    def draw_grid(self):
+        for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
+            pygame.draw.line(self.screen, GREY, (x, TILE_LEFTTOP[1]), (x, TILE_HEIGHT + TILE_LEFTTOP[1]))
+        for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1], TILESIZE):
+            pygame.draw.line(self.screen, GREY, (TILE_LEFTTOP[0], y), (TILE_WIDTH + TILE_LEFTTOP[0], y))
