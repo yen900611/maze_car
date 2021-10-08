@@ -10,7 +10,7 @@ from .car import Car
 from .gameMode import GameMode
 from .env import *
 import pygame
-# from .maze_wall import Wall
+from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
 
 class MoveMazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
@@ -40,7 +40,7 @@ class MoveMazeMode(GameMode):
 
         self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
         pygame.font.init()
-        self.status = "GAME_PASS"
+        self.state = GameResultState.FAIL
         self.is_end = False
         self.sensor_num = sensor
         self.x = 0
@@ -141,9 +141,14 @@ class MoveMazeMode(GameMode):
             self.running = False
 
     def load_data(self):
-        game_folder = path.dirname(__file__)
         map_folder = path.join(path.dirname(__file__), "map")
-        self.map = Map(path.join(map_folder, self.map_file))
+        try:
+            self.map = Map(path.join(map_folder, self.map_file))
+        except Exception:
+            print(f"File '{self.map_file}' is not found.We will load first map for you.")
+            self.map_file = "move_map_1.json"
+            self.map = Map(path.join(map_folder, self.map_file))
+
         # print(self.map.data)
 
     def _init_world(self, user_no: int):
