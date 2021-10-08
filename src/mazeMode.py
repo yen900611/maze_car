@@ -1,14 +1,15 @@
-import time
 import Box2D
-from .sound_controller import SoundController
-from .points import End_point, Check_point, Outside_point
-from .maze_wall import Wall
-from .tilemap import Map, Camera
-from .car import Car
-from .gameMode import GameMode
-from .env import *
 import pygame
-from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
+
+from mlgame.gamedev.game_interface import GameResultState
+from .car import Car
+from .env import *
+from .gameMode import GameMode
+from .maze_wall import Wall
+from .points import End_point, Check_point, Outside_point
+from .sound_controller import SoundController
+from .tilemap import Map
+
 
 class MazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
@@ -16,14 +17,14 @@ class MazeMode(GameMode):
         '''load map data'''
         self.user_num = user_num
         self.maze_id = maze_no - 1
-        self.map_file = "normal_map_"+ str(maze_no) + ".json"
+        self.map_file = "normal_map_" + str(maze_no) + ".json"
         self.load_data()
 
         '''group of sprites'''
         self.worlds = []
         self.cars = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        self.all_points = pygame.sprite.Group() # Group inclouding end point, check points,etc.
+        self.all_points = pygame.sprite.Group()  # Group inclouding end point, check points,etc.
 
         '''data set'''
         self.wall_info = []
@@ -77,7 +78,7 @@ class MazeMode(GameMode):
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-        self.pygame_point = [0,0]
+        self.pygame_point = [0, 0]
         # self.limit_pygame_screen()
 
     def update_sprite(self, command):
@@ -116,12 +117,12 @@ class MazeMode(GameMode):
 
         if self.pygame_point[1] > 0:
             self.pygame_point[1] = 0
-        elif self.pygame_point[1] < TILE_HEIGHT/PPM-self.map.tileHeight:
-            self.pygame_point[1] = TILE_HEIGHT/PPM-self.map.tileHeight
+        elif self.pygame_point[1] < TILE_HEIGHT / PPM - self.map.tileHeight:
+            self.pygame_point[1] = TILE_HEIGHT / PPM - self.map.tileHeight
         else:
             pass
-        if self.pygame_point[0] >self.map.tileWidth-TILE_WIDTH/PPM:
-            self.pygame_point[0] = self.map.tileWidth-TILE_WIDTH/PPM
+        if self.pygame_point[0] > self.map.tileWidth - TILE_WIDTH / PPM:
+            self.pygame_point[0] = self.map.tileWidth - TILE_WIDTH / PPM
         elif self.pygame_point[0] < 0:
             self.pygame_point[0] = 0
         else:
@@ -142,13 +143,24 @@ class MazeMode(GameMode):
             self.worlds.append(world)
 
     def _is_game_end(self):
-        if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
+        """
+            遊戲結束條件
+            1. 全部玩家抵達終點
+            2. 時間結束
+        """
+        if self.frame > FPS * self.game_end_time:
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
                     car.is_running = False
                     car.status = "GAME_OVER"
+            self.is_end = True
+            self.ranked_user = self.rank()
+            self._print_result()
+            self.status = "END"
+
+        elif len(self.cars) == len(self.eliminated_user):
             self.is_end = True
             self.ranked_user = self.rank()
             self._print_result()

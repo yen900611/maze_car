@@ -1,16 +1,10 @@
-import math
-import time
-import Box2D
-
-from .sound_controller import SoundController
-from .tilemap import Map
-from .points import *
-from .maze_wall import *
 from .car import Car
 from .gameMode import GameMode
-from .env import *
-import pygame
-from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
+from .maze_wall import *
+from .points import *
+from .sound_controller import SoundController
+from .tilemap import Map
+
 
 class MoveMazeMode(GameMode):
     def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
@@ -18,7 +12,7 @@ class MoveMazeMode(GameMode):
         '''load map data'''
         self.user_num = user_num
         self.maze_id = maze_no - 1
-        self.map_file = "move_map_"+ str(maze_no) + ".json"
+        self.map_file = "move_map_" + str(maze_no) + ".json"
         self.load_data()
 
         '''group of sprites'''
@@ -26,7 +20,7 @@ class MoveMazeMode(GameMode):
         self.cars = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.wall_for_update = pygame.sprite.Group()
-        self.all_points = pygame.sprite.Group() # Group inclouding end point, check points,etc.
+        self.all_points = pygame.sprite.Group()  # Group inclouding end point, check points,etc.
 
         '''data set'''
 
@@ -107,7 +101,7 @@ class MoveMazeMode(GameMode):
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         # self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
         #                      self.car.body.position[1] + HEIGHT / 2 / PPM]
-        self.pygame_point = [0,0]
+        self.pygame_point = [0, 0]
 
     def update_sprite(self, command):
         '''update the model of game,call this fuction per frame'''
@@ -129,7 +123,6 @@ class MoveMazeMode(GameMode):
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
             self.car_info.append(car.get_info())
             car.detect_distance(self.frame, self.wall_info)
-
 
         for point in self.all_points:
             point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
@@ -157,12 +150,16 @@ class MoveMazeMode(GameMode):
             self.worlds.append(world)
 
     def _is_game_end(self):
-        if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
+        """
+            遊戲結束條件
+            1. 全部玩家抵達終點
+            2. 時間結束
+        """
+        if self.frame > FPS * self.game_end_time:
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
                     self.eliminated_user.append(car)
-                    self.user_check_points.append(car.check_point)
                     car.is_running = False
                     car.status = "GAME_OVER"
             self.is_end = True
@@ -170,8 +167,15 @@ class MoveMazeMode(GameMode):
             self._print_result()
             self.status = "END"
 
-    def draw_grid(self):
-        for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
-            pygame.draw.line(self.screen, GREY, (x, TILE_LEFTTOP[1]), (x, TILE_HEIGHT + TILE_LEFTTOP[1]))
-        for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1], TILESIZE):
-            pygame.draw.line(self.screen, GREY, (TILE_LEFTTOP[0], y), (TILE_WIDTH + TILE_LEFTTOP[0], y))
+        elif len(self.cars) == len(self.eliminated_user):
+            self.is_end = True
+            self.ranked_user = self.rank()
+            self._print_result()
+            self.status = "END"
+
+
+def draw_grid(self):
+    for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
+        pygame.draw.line(self.screen, GREY, (x, TILE_LEFTTOP[1]), (x, TILE_HEIGHT + TILE_LEFTTOP[1]))
+    for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1], TILESIZE):
+        pygame.draw.line(self.screen, GREY, (TILE_LEFTTOP[0], y), (TILE_WIDTH + TILE_LEFTTOP[0], y))
