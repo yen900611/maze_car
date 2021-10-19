@@ -17,6 +17,9 @@ class MazeCar(PaiaGame):
         super().__init__()
         self.game_type = game_type
         self.user_num = user_num
+        self.is_single = False
+        if self.user_num == 1:
+            self.is_single = True
         self.maze_id = map - 1
         self.game_end_time = time / FPS
         self.sensor_num = sensor
@@ -110,9 +113,11 @@ class MazeCar(PaiaGame):
             "toggle": [],
             "foreground": [],
             "user_info": [],
-            "game_sys_info": {"view_center_coordinate": [250 - self.game_mode.car_info[0]["center"][0],
-                                                         240 - self.game_mode.car_info[0]["center"][1]]}
+            "game_sys_info": {}
         }
+        if self.is_single:
+            game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.game_mode.car_info[0]["center"][0],
+                                                                         240 - self.game_mode.car_info[0]["center"][1]]}
         for p in self.game_mode.all_points:
             game_progress["object_list"].append(p.get_progress_data())
 
@@ -210,7 +215,7 @@ class MazeCar(PaiaGame):
                 same_rank = {"player": str(user.car_no + 1) + "P",
                              "rank": self.game_mode.ranked_user.index(ranking) + 1,
                              "frame_used": user.end_frame,
-                             "check_points":user.check_point
+                             "check_points": user.check_point
                              }
                 rank.append(same_rank)
 
@@ -283,4 +288,5 @@ class MazeCar(PaiaGame):
         :return: center of pygame rect
         '''
         return (
-        (coordinate[0] - self.game_mode.pygame_point[0]) * PPM, (self.game_mode.pygame_point[1] - coordinate[1]) * PPM)
+            (coordinate[0] - self.game_mode.pygame_point[0]) * PPM,
+            (self.game_mode.pygame_point[1] - coordinate[1]) * PPM)
