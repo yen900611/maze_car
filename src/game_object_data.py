@@ -1,6 +1,7 @@
 import random
 from .env import *
 
+
 class Scene():
     def __init__(self, width: int, height: int, color: str = "#000000"):
         """
@@ -14,13 +15,14 @@ class Scene():
         self.height = height
         self.color = color
 
+
 def get_progress_data(game_mode):
     game_progress = {
-        "background":[],
-        "object_list":[],
-        "toggle":[],
-        "foreground":[],
-        "user_info":[],
+        "background": [],
+        "object_list": [],
+        "toggle": [],
+        "foreground": [],
+        "user_info": [],
         "game_sys_info": {}
     }
 
@@ -39,8 +41,6 @@ def get_progress_data(game_mode):
     # except Exception:
     #     pass
 
-
-
     # game_progress["background"].append(get_rect_object("rect", (0, 0), TILE_LEFTTOP[0], HEIGHT, "#000000"))
     # game_progress["background"].append(get_rect_object("rect", (0, 0), WIDTH, TILE_LEFTTOP[1], "#000000"))
     # game_progress["background"].append(get_rect_object("rect", (TILE_LEFTTOP[0] + TILE_WIDTH, 0),
@@ -50,33 +50,57 @@ def get_progress_data(game_mode):
     # game_progress["background"].append(get_image_object("info", (507, 20), 306, 480))
 
     for car in game_mode.car_info:
-        if car["id"] %2 == 0:
+        if car["id"] % 2 == 0:
             x = 600
         else:
             x = 730
 
         if car["status"]:
-            game_progress["background"].append(get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
-                                  178 + 20 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["background"].append(get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
-                                  178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
-            game_progress["background"].append(get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
-                                  178 + 60 + 94 * (car["id"] // 2)), "15px Arial"))
+            game_progress["background"].append(
+                get_dummy_text("L:" + str(car["l_sensor_value"]["distance"]) + "cm", "#FFFF00", (x,
+                                                                                                 178 + 20 + 94 * (car[
+                                                                                                                      "id"] // 2)),
+                               "15px Arial"))
+            game_progress["background"].append(
+                get_dummy_text("F:" + str(car["f_sensor_value"]["distance"]) + "cm", "#FF0000", (x,
+                                                                                                 178 + 40 + 94 * (car[
+                                                                                                                      "id"] // 2)),
+                               "15px Arial"))
+            game_progress["background"].append(
+                get_dummy_text("R:" + str(car["r_sensor_value"]["distance"]) + "cm", "#21A1F1", (x,
+                                                                                                 178 + 60 + 94 * (car[
+                                                                                                                      "id"] // 2)),
+                               "15px Arial"))
             game_progress["object_list"].append(get_line_object("l_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["l_sensor_value"]["coordinate"]), "#FFFF00",5))
+                                                                trnsfer_box2d_to_pygame(game_mode,
+                                                                                        car["l_sensor_value"][
+                                                                                            "coordinate"]), "#FFFF00",
+                                                                5))
 
             game_progress["object_list"].append(get_line_object("l_top_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["l_t_sensor_value"]["coordinate"]), "#FFFF00",5))
+                                                                trnsfer_box2d_to_pygame(game_mode,
+                                                                                        car["l_t_sensor_value"][
+                                                                                            "coordinate"]), "#FFFF00",
+                                                                5))
 
             game_progress["object_list"].append(get_line_object("r_top_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["r_t_sensor_value"]["coordinate"]), "#21A1F1",5))
+                                                                trnsfer_box2d_to_pygame(game_mode,
+                                                                                        car["r_t_sensor_value"][
+                                                                                            "coordinate"]), "#21A1F1",
+                                                                5))
             game_progress["object_list"].append(get_line_object("r_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["r_sensor_value"]["coordinate"]), "#21A1F1",5))
+                                                                trnsfer_box2d_to_pygame(game_mode,
+                                                                                        car["r_sensor_value"][
+                                                                                            "coordinate"]), "#21A1F1",
+                                                                5))
             game_progress["object_list"].append(get_line_object("f_sensor", car["center"],
-                                                                     trnsfer_box2d_to_pygame(game_mode, car["f_sensor_value"]["coordinate"]), "#FF0000",5))
+                                                                trnsfer_box2d_to_pygame(game_mode,
+                                                                                        car["f_sensor_value"][
+                                                                                            "coordinate"]), "#FF0000",
+                                                                5))
         else:
             game_progress["background"].append(get_dummy_text(str(car["end_frame"]) + "frame", "#FFFFFF",
-                                  (x, 178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
+                                                              (x, 178 + 40 + 94 * (car["id"] // 2)), "15px Arial"))
     # try:
     #     for car in game_mode.car_info:
     #         game_progress["object_list"].append(
@@ -86,16 +110,17 @@ def get_progress_data(game_mode):
     #     pass
     for user in game_mode.car_info:
         game_progress["user_info"].append({
-            "player":str(user["id"]+1)+"P",
-            "F_sensor":user["f_sensor_value"]["distance"],
-            "R_sensor":user["r_sensor_value"]["distance"],
-            "L_sensor":user["l_sensor_value"]["distance"],
-            "R_PWM":user["R_PWM"],
-            "L_PWM":user["L_PWM"],
+            "player": str(user["id"] + 1) + "P",
+            "F_sensor": user["f_sensor_value"]["distance"],
+            "R_sensor": user["r_sensor_value"]["distance"],
+            "L_sensor": user["l_sensor_value"]["distance"],
+            "R_PWM": user["R_PWM"],
+            "L_PWM": user["L_PWM"],
         })
 
     game_progress["game_sys_info"]["frame"] = game_mode.frame
     return game_progress
+
 
 def get_scene_init_sample_data() -> dict:
     """
@@ -160,7 +185,8 @@ def get_scene_init_sample_data() -> dict:
             # "audios": {}
             }
 
-def get_image_object(image_id, coordinate, width, height, angle = 0):
+
+def get_image_object(image_id, coordinate, width, height, angle=0):
     """
     這是一個用來繪製圖片的資料格式，
     "type"表示不同的類型
@@ -177,7 +203,8 @@ def get_image_object(image_id, coordinate, width, height, angle = 0):
             "image_id": image_id,
             "angle": int(angle)}
 
-def get_rect_object(name, coordinate, width, height, color, angle = 0):
+
+def get_rect_object(name, coordinate, width, height, color, angle=0):
     """
     這是一個用來繪製矩形的資料格式，
     "type"表示不同的類型
@@ -198,7 +225,8 @@ def get_rect_object(name, coordinate, width, height, color, angle = 0):
             "color": color
             }
 
-def get_line_object(name, dot1, dot2, color, width = 2):
+
+def get_line_object(name, dot1, dot2, color, width=2):
     """
     這是一個用來繪製矩形的資料格式，
     "type"表示不同的類型
@@ -219,6 +247,7 @@ def get_line_object(name, dot1, dot2, color, width = 2):
             "color": color
             }
 
+
 def get_polygon_object(name, points, color):
     """
     這是一個用來繪製多邊形的資料格式，
@@ -227,12 +256,13 @@ def get_polygon_object(name, points, color):
     """
     vertices = []
     for p in points:
-        vertices.append({"x":p[0], "y":p[1]})
+        vertices.append({"x": p[0], "y": p[1]})
     return {"type": "polygon",
             "name": name,
             "color": color,
             "points": vertices
             }
+
 
 def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
     return {
@@ -243,6 +273,7 @@ def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
         "y": coordinate[1],
         "font-style": font_style
     }
+
 
 def get_dummy_progress_data():
     pass
@@ -282,11 +313,13 @@ def get_dummy_result_data():
 
     }
 
+
 def gen_points(point_num: int = 4) -> list:
     result = []
     for i in range(point_num):
         result.append({"x": random.randint(0, 100), "y": random.randint(0, 100)})
     return result
+
 
 def gen_rects(rect_num: int = 1) -> list:
     result = []
@@ -294,9 +327,10 @@ def gen_rects(rect_num: int = 1) -> list:
         result.append(gen_points(4))
     return result
 
+
 def trnsfer_box2d_to_pygame(game, coordinate):
-        '''
-        :param coordinate: vertice of body of box2d object
-        :return: center of pygame rect
-        '''
-        return ((coordinate[0] - game.pygame_point[0]) * PPM, (game.pygame_point[1] - coordinate[1]) * PPM)
+    '''
+    :param coordinate: vertice of body of box2d object
+    :return: center of pygame rect
+    '''
+    return ((coordinate[0] - game.pygame_point[0]) * PPM, (game.pygame_point[1] - coordinate[1]) * PPM)

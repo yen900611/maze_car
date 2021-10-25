@@ -5,16 +5,16 @@ TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 
 '''width and height'''
-WIDTH =820
+WIDTH = 820
 HEIGHT = 520
-TILE_WIDTH = 480 #大小
+TILE_WIDTH = 480  # 大小
 TILE_HEIGHT = 480
 
 '''tile-base'''
 TILESIZE = 20
-TILE_LEFTTOP = 20, 20 #pixel
-GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0])/TILESIZE
-GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1])/TILESIZE
+TILE_LEFTTOP = 20, 20  # pixel
+GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0]) / TILESIZE
+GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1]) / TILESIZE
 
 '''environment data'''
 FPS = 30
@@ -58,7 +58,7 @@ CARS_URL = ['https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/i
 
 '''map_file'''
 PRACTICE_MAPS = ["level_1.json", "level_2.json", "level_3.json", "level_4.json", "level_5.json", "level_6.json"]
-NORMAL_MAZE_MAPS = ["normal_map_1.json", "normal_map_2.json", "normal_map_3.json", "normal_map_3.json", "normal_map_3.json", "normal_map_3.json"]
-MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move_map_4.json", "move_map_4.json", "move_map_4.json"]
-
-
+NORMAL_MAZE_MAPS = ["normal_map_1.json", "normal_map_2.json", "normal_map_3.json", "normal_map_3.json",
+                    "normal_map_3.json", "normal_map_3.json"]
+MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move_map_4.json", "move_map_4.json",
+                  "move_map_4.json"]
