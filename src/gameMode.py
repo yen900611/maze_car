@@ -9,8 +9,7 @@ import pygame
 from .env import *
 
 class GameMode(object):
-    def __init__(self, pygame_screen=pygame.display.set_mode((WIDTH, HEIGHT)), bg_img=pygame.Surface((WIDTH, HEIGHT))):
-        self.screen = pygame_screen
+    def __init__(self, bg_img=pygame.Surface((WIDTH, HEIGHT))):
         self.bg_img = bg_img
         self.clock = pygame.time.Clock()
         self.running = True
