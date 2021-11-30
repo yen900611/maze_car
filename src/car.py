@@ -54,7 +54,6 @@ class Car(pygame.sprite.Sprite):
         else:
             self.body.linearVelocity = (0, 0)
 
-
     def detect_distance(self, frame, walls):
         sensor_value = self.sensor.update(frame, walls)
         self.sensor_R = sensor_value["right_value"]

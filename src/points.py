@@ -9,7 +9,8 @@ class Point(pygame.sprite.Sprite):
         self.group = game.all_points
         pygame.sprite.Sprite.__init__(self, self.group)
         self.game = game
-        self.x, self.y = (coordinate[0] + TILESIZE / (2 * PPM), -coordinate[1] - TILESIZE / (2 * PPM))
+        self.x, self.y = (coordinate[0] - TILESIZE/PPM, -coordinate[1] + TILESIZE / PPM)
+        # self.x, self.y = (coordinate[0] + TILESIZE / (2 * PPM), -coordinate[1] - TILESIZE / (2 * PPM))
 
     def get_info(self):
         return {
@@ -53,7 +54,7 @@ class End_point(Point):
 class Check_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 2, TILESIZE * 2)
+        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
         self.car_has_hit = []
 
     def update(self, *args, **kwargs) -> None:
@@ -70,8 +71,8 @@ class Check_point(Point):
         asset_data = {"type": "rect",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 40,
-                      "height": 40,
+                      "width": 60,
+                      "height": 60,
                       "color": RED,
                       "angle": 0}
         return asset_data
@@ -83,9 +84,10 @@ class Outside_point(Point):
 
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BLUE)
-        self.rect = self.image.get_rect()
+        # self.image = pygame.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(BLUE)
+        # self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
