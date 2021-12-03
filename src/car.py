@@ -81,7 +81,7 @@ class Car(pygame.sprite.Sprite):
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
-                         "coordinate":(round(self.body.position[0], 3), round(self.body.position[1], 3)),
+                         "coordinate":(round(self.body.position[0]*5, 3), round(self.body.position[1]*5, 3)),
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
