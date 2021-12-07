@@ -1,67 +1,229 @@
-# Maze Car
-
-## 遊戲簡介
-想要訓練屬於自己的迷宮自走車嗎？
-
-想要跟朋友來場刺激的競賽嗎？
-
-帶上你的自走車往終點衝刺吧！
-![](https://i.imgur.com/ymZZMyO.png)
+# **Maze Car**
 
 
-## 遊戲版本：
-`3.1.5`
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![MLGame](https://img.shields.io/badge/MLGame-9.1.5--beta-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
-## 更新：
-修正感測器變化量與座標變化量不符之問題。
+此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮
 
-
-## 遊戲玩法
-
-此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮。
-
-## 遊戲規則
-
-遊戲最多可以六個人同時進行，目前共有三種遊戲模式。
-
-✔小試身手模式：官方提供10個不同難度的基礎關卡，玩家可以透過關卡的遞進逐漸學習如何控制自走車通過不同的地形。
-
-🚗經典迷宮模式：玩家可以選擇不同的地圖，目標為抵達迷宮終點，遊戲將記錄不同玩家完成迷宮所花費的時間，並根據速度快慢給出排名與積分。
-
-🚧移動迷宮模式：相較於單純的迷宮，此模式中的地圖配有動態的牆壁，提高迷宮難度。與迷宮模式相同，將根據不同玩家的速度提供排名。
-
-## 遊戲物件
+![](https://i.imgur.com/uDn6Foi.gif)
 
 
-### 座標系統
-使用Box2D的座標系統，單位為cm，每公分換算為4像素，原點在迷宮區域的左上角，x 正方向為向右，y 正方向為向上。
+---
+# 基礎介紹
 
-### 遊戲區域
+## 啟動方式
 
-1000 \* 700 像素。
+- 直接啟動 [main.py](https://github.com/yen900611/Maze_Car/blob/master/main.py) 即可執行
 
-### 遊戲物件
-- 自走車
-    ![](https://i.imgur.com/srSifjm.png)
+### 遊戲參數設定
 
-    50 \* 50 px大小的矩形
+```python
+# main.py
 
-    遊戲開始時，所有玩家初始位置皆相同。
+game = MazeCar.MazeCar(user_num=1, game_type="MAZE", map=4, time=200, sensor=3, sound=SOUND_OFF)`
+```
 
-    遊戲過程中玩家可以收到自走車的中心點座標，作為位置的判斷。
+- `user_num`：玩家數量，最多可以6個玩家同時進行同一場遊戲。
+- `game_type`：自走車目前有三種遊戲模式：經典迷宮(`MAZE`)、移動迷宮(`MOVE_MAZE`)與小試身手(`PRACTICE`)。
+- `map`：選擇要執行的地圖編號，不同的模式中，地圖不會共用編號。
 
-    玩家透過控制雙輪的馬達轉速決定車子的行為，馬達轉速介於-225~255。若回傳值超過馬力範圍則視為已255的馬力正轉或逆轉，例如：回傳左輪馬力300、右輪馬力-400，則實際轉速等同於左輪255、右輪-255。
+- `time`：遊戲結束時間，單位為FPS，時間到會強制結束遊戲。
+- `sensor`：感測器的數量，可以選擇3或5個。區別在於是否有右前方/左前方的感測器。
 
-    車子顏色：1P:紅色; 2P:綠色; 3P:藍色; 4P:黃色; 5P:棕色; 6P:粉紅色。
+- `sound`：可輸入"on"或是"off"，控制是否播放遊戲音效。
 
-- 終點
+## 玩法
 
-    50 \* 50 px大小的矩形
+- 使用鍵盤 上、下、左、右 (1P)與 Ｗ、Ａ、Ｓ、Ｄ (2P)控制自走車
 
-    每個關卡設置1個終點作為過關目標。
+## 目標
 
-    遊戲過程中玩家可以收到終點的左上角座標，並且不會移動(數值不變)，作為位置的判斷。
+1. 在遊戲時間截止前到達迷宮的終點。
 
-- 檢查點
+### 通關條件
 
-    40 \*40 px大小的矩形
+1. 時間結束前，自走車碰到終點，即可過關。
+
+### 失敗條件
+
+1. 時間結束前，自走車尚未走到終點，即算失敗。
+
+## 遊戲系統
+
+1. 行動機制
+
+    控制左右輪轉速，達到前進、後退、轉彎的目的。
+
+    上鍵(W同)：左右輪固定輸出100
+
+    下鍵(S同)：左右輪固定輸出-100
+
+    左鍵(A同)：右輪輸出增加100
+
+    右鍵(D同)：左輪輸出增加100
+
+2. 感測器
+    實際距離如圖所示
+    ![](https://i.imgur.com/QUmpOmz.png)
+
+
+4. 物件大小
+    使用Box2D的座標系統，單位為cm，每公分換算為4像素，
+    ![](https://i.imgur.com/ghBEVyZ.png)
+
+
+    - 自走車 12.5 x 10cm
+    - 檢查點 15 x 15cm
+    - 終點 15 x 15cm
+4. 座標系統
+    
+    原點在迷宮區域的左上角，Ｘ軸向右為正，Y軸向上為正。
+    ![](https://i.imgur.com/4dcUjgr.png)
+
+---
+
+# 進階說明
+
+## 使用ＡＩ玩遊戲
+
+```bash
+# python MLGame.py [options] maze_car [user_num] [game_type] [map] [time] [sensor][sound]
+# 遊戲指令
+python MLGame.py -i ml_play_template.py maze_car 1 MAZE 3 1200 3 off
+```
+
+遊戲參數依序是[user_num] [game_type] [map] [time] [sensor][sound]
+
+ 
+## ＡＩ範例
+
+```python
+
+class MLPlay:
+    def __init__(self, player):
+        self.r_sensor_value = 0
+        self.l_sensor_value = 0
+        self.f_sensor_value = 0
+        self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
+
+    def update(self, scene_info: dict):
+        """
+        Generate the command according to the received scene information
+        """
+        if scene_info["status"] != "GAME_ALIVE":
+            return "RESET"
+        self.r_sensor_value = scene_info["R_sensor"]
+        self.l_sensor_value = scene_info["L_sensor"]
+        self.f_sensor_value = scene_info["F_sensor"]
+        
+        self.control_list[0]["left_PWM"] = 100
+        self.control_list[0]["right_PWM"] = 100
+        return self.control_list
+
+    def reset(self):
+        """
+        Reset the status
+        """
+        pass
+
+```
+
+## 遊戲資訊
+
+- `scene_info` 的資料格式如下
+
+```json
+{
+    "frame": 16,
+    "status": "GAME_ALIVE", 
+    "x": 107.506, 
+    "y": -112.5, 
+    "angle": 0.0, 
+    "R_sensor": 5.6, 
+    "L_sensor": 4.7, 
+    "F_sensor": 87.6, 
+    "L_T_sensor": -1, 
+    "R_T_sensor": -1, 
+    "end": [
+        7.0,
+        -2.0
+    ]
+}
+
+```
+
+* `frame`：遊戲畫面更新的編號
+* `L_T_sensor`：玩家自己車子左前超聲波感測器的值，資料型態為數值，單位是公分。
+* `R_T_sensor`：玩家自己車子右前超聲波感測器的值，資料型態為數值
+* `L_sensor`：玩家自己車子左邊超聲波感測器的值，資料型態為數值
+* `F_sensor`：玩家自己車子前面超聲波感測器的值，資料型態為數值
+* `R_sensor`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
+* `x`：玩家自己車子的x座標，該座標系統原點位於迷宮左上角，x軸向右為正。
+* `y`：玩家自己車子的y座標，該座標系統原點位於迷宮左上角，y軸向上為正。
+* `end`：終點座標。
+* `angle`：玩家自己車子的朝向，車子向上為0度，數值逆時鐘遞增至360
+* `status`： 目前遊戲的狀態
+    - `GAME_ALIVE`：遊戲進行中
+    - `GAME_PASS`：遊戲通關
+    - `GAME_OVER`：遊戲結束
+
+座標資訊請參考 `座標系統` 章節
+
+## 動作指令
+
+- 在 update() 最後要回傳一個列表，列表內包含一個字典，資料型態如下。
+    ```python
+    [{
+            'left_PWM': 0,
+            'right_PWM': 0
+    }]
+    ```
+    其中`left_PWM`與`right_PWM`分別代表左輪與右輪的馬力，接受範圍為-255~255。
+
+
+## 遊戲結果
+
+- 最後結果會顯示在console介面中，若是PAIA伺服器上執行，會回傳下列資訊到平台上。
+
+```json
+{
+    "frame_used": 121, 
+    "state": "FINISH", 
+    "attachment": [
+        {
+        "player": "2P", 
+        "rank": 1, 
+        "frame_used": 107, 
+        "check_points": 0
+        }, 
+        {
+        "player": "1P", 
+        "rank": 2, 
+        "frame_used": 121, 
+        "check_points": 0
+        }
+    ]
+}
+
+```
+
+- `frame_used`：表示使用了多少個frame
+- `state`：表示遊戲結束的狀態
+    - `FAIL`：遊戲失敗
+    - `FINISH`：遊戲完成
+- `attachment`：紀錄遊戲各個玩家的結果與分數等資訊
+    - `player`：玩家編號
+    - `rank`：排名
+    - `frame_used`：個別玩家到達終點使用的frame數量
+    - `check_points`：玩家通過的檢查點數量
+---
+# 地圖製作說明
+[地圖製作教學](map_editor.md)
+
+
+![](https://i.imgur.com/ubPC8Fp.jpg)
+---
+
+
