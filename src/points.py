@@ -24,7 +24,7 @@ class Point(pygame.sprite.Sprite):
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 2, TILESIZE * 2)
+        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
@@ -44,8 +44,8 @@ class End_point(Point):
         asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 50,
-                      "height": 50,
+                      "width": 60,
+                      "height": 60,
                       "image_id": "logo",
                       "angle": 0}
         return asset_data
