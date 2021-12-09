@@ -44,7 +44,7 @@ SOUND_DIR = path.join(path.dirname(__file__), '../asset/sound')
 INFO_NAME = "info.png"
 INFO_URL = 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/image/info.png'
 
-LOGO = "logo.png"
+LOGO = "paia_logo_15.png"
 LOGO_URL = 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/image/logo.png'
 
 CARS_NAME = ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]

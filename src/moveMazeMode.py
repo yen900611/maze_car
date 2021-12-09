@@ -32,7 +32,7 @@ class MoveMazeMode(GameMode):
         self.eliminated_user = []
         self.user_check_points = []
 
-        self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
+        self.game_end_time = time  # int, decide how many frames the game will end even some users don't finish game
         pygame.font.init()
         self.state = GameResultState.FAIL
         self.is_end = False
@@ -96,6 +96,7 @@ class MoveMazeMode(GameMode):
                                                (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == 8:
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    self.check_point_num += 1
 
                 elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
@@ -150,7 +151,7 @@ class MoveMazeMode(GameMode):
             self.worlds.append(world)
 
     def _is_game_end(self):
-        if self.frame > FPS * self.game_end_time or len(self.eliminated_user) == len(self.cars):
+        if self.frame >= self.game_end_time or len(self.eliminated_user) == len(self.cars):
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame

@@ -34,7 +34,7 @@ class MazeMode(GameMode):
         self.result = []
         self.eliminated_user = []
 
-        self.game_end_time = time  # int, decide how many second the game will end even some users don't finish game
+        self.game_end_time = time  # int, decide how many frames the game will end even some users don't finish game
         pygame.font.init()
         self.state = GameResultState.FAIL
         self.is_end = False
@@ -76,6 +76,7 @@ class MazeMode(GameMode):
                                                (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                 elif tile == 8:
                     Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    self.check_point_num+=1
                 elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
         self.pygame_point = [0, 0]
@@ -148,7 +149,7 @@ class MazeMode(GameMode):
             1. 全部玩家抵達終點
             2. 時間結束
         """
-        if self.frame > FPS * self.game_end_time:
+        if self.frame >= self.game_end_time:
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
                     car.end_frame = self.frame
