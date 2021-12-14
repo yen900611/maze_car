@@ -218,12 +218,16 @@ class MLPlay:
     - `rank`：排名
     - `used_frame`：個別玩家到達終點使用的frame數
     - `frame_limit`：該局遊戲所設定的時間上限
-    - `frame_ratio`：$${玩家使用的frame數 \over 遊戲設定的時間上限} \times 100 $$
+    - `frame_percent`：
+        ![](https://i.imgur.com/QuI8HmM.png)
     - `total_checkpoints`：該地圖的總檢查點數量
     - `check_points`：玩家通過的檢查點數量
     - `remain_points`：玩家未通過的檢查點數量
-    - `pass_percent`：$${玩家通過的檢查點數 \over 地圖的總檢查點數} \times 100 $$
-    - `remain_percent`：$${玩家未通過的檢查點數 \over 地圖的總檢查點數} \times 100 $$
+    - `pass_percent`：
+        ![](https://i.imgur.com/QuMt5Lu.png)
+
+    - `remain_percent`：
+        ![](https://i.imgur.com/mym3FVm.png)
 ---
 # 地圖製作說明
 [地圖製作教學](map_editor.md)
