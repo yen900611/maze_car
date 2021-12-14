@@ -211,34 +211,29 @@ class MazeCar(PaiaGame):
         result = self.game_mode.result
         rank = []
         #TODO refactor
-        if self.game_mode.check_point_num:
-            for ranking in self.game_mode.ranked_user:
-                for user in ranking:
-                    same_rank = {"player": str(user.car_no + 1) + "P",
-                                 "rank": self.game_mode.ranked_user.index(ranking) + 1,
-                                 "used_frame": user.end_frame,
-                                 "frame_limit":self.game_end_time * FPS,
-                                 "frame_percent":round(user.end_frame/self.game_end_time,5),
-                                 "total_checkpoints":self.game_mode.check_point_num,
-                                 "check_points": user.check_point,
-                                 "pass_percent": round(user.check_point/self.game_mode.check_point_num, 5)
-                    }
-                    rank.append(same_rank)
+        for ranking in self.game_mode.ranked_user:
+            for user in ranking:
+                if self.game_mode.check_point_num:
 
-        else:
-            for ranking in self.game_mode.ranked_user:
-                for user in ranking:
-                    same_rank = {"player": str(user.car_no + 1) + "P",
-                                 "rank": self.game_mode.ranked_user.index(ranking) + 1,
-                                 "used_frame": user.end_frame,
-                                 "frame_limit": self.game_end_time * FPS,
-                                 "frame_ratio": round(user.end_frame / self.game_end_time, 5),
-                                 "total_checkpoints": self.game_mode.check_point_num,
-                                 "check_points": user.check_point,
-                                 "pass_ratio": 0
-                                 }
-                    rank.append(same_rank)
-
+                    pass_percent = round(user.check_point/self.game_mode.check_point_num, 5)*100
+                    remain_point = self.game_mode.check_point_num - user.check_point
+                    remain_percent = 100 - pass_percent
+                else:
+                    pass_percent = 0
+                    remain_point = 0
+                    remain_percent = 0
+                same_rank = {"player": str(user.car_no + 1) + "P",
+                             "rank": self.game_mode.ranked_user.index(ranking) + 1,
+                             "used_frame": user.end_frame,
+                             "frame_limit":self.game_end_time,
+                             "frame_percent":round(user.end_frame/self.game_end_time,5)*100,
+                             "total_checkpoints":self.game_mode.check_point_num,
+                             "check_points": user.check_point,
+                             "remain_points": remain_point,
+                             "pass_percent": pass_percent,
+                             "remain_percent": remain_percent,
+                }
+                rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],
                 "state": self.game_mode.state,

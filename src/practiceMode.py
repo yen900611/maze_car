@@ -61,25 +61,7 @@ class PracticeMode(GameMode):
             self.wall_info.append([vertices[2], vertices[1]])
             self.wall_info.append([vertices[3], vertices[0]])
             self.wall_info.append([vertices[2], vertices[3]])
-        for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == 6:
-                    for world in self.worlds:
-                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                        # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
-                elif tile == 7:
-                    self.end_point = End_point(self,
-                                               (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == 8:
-                    Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                    self.check_point_num += 1
-
-                elif tile == 9:
-                    Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+        self.load_map_object()
         self.pygame_point = [0, 0]
 
     def update_sprite(self, command):

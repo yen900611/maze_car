@@ -1,8 +1,8 @@
 """
 This is a base class for different mode in game.
 """
-import math
-import time
+from .car import Car
+from .points import *
 
 import pygame
 
@@ -255,3 +255,45 @@ class GameMode(object):
                     self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
             self.x += 1
             print(self.result)
+
+    def load_map_object(self):
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == 6 or tile == 19:
+                    for world in self.worlds:
+                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                       self.worlds.index(world), self.sensor_num, 2)
+                        self.cars.add(self.car)
+                        self.car_info.append(self.car.get_info())
+                        # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
+                elif tile == 7:
+                    self.end_point = End_point(self,
+                                               (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                elif tile == 8:
+                    Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    self.check_point_num+=1
+                elif tile == 9:
+                    Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                elif tile == 22:
+                    for world in self.worlds:
+                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                       self.worlds.index(world), self.sensor_num, 0.5)
+                        self.cars.add(self.car)
+                        self.car_info.append(self.car.get_info())
+                elif tile == 21:
+                    for world in self.worlds:
+                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                       self.worlds.index(world), self.sensor_num, 1)
+                        self.cars.add(self.car)
+                        self.car_info.append(self.car.get_info())
+                elif tile == 20:
+                    for world in self.worlds:
+                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                       self.worlds.index(world), self.sensor_num, 1.5)
+                        self.cars.add(self.car)
+                        self.car_info.append(self.car.get_info())
+

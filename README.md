@@ -195,13 +195,13 @@ class MLPlay:
         {
         "player": "2P", 
         "rank": 1, 
-        "frame_used": 107, 
+        "used_frame": 107, 
         "check_points": 0
         }, 
         {
         "player": "1P", 
         "rank": 2, 
-        "frame_used": 121, 
+        "used_frame": 121, 
         "check_points": 0
         }
     ]
@@ -209,15 +209,21 @@ class MLPlay:
 
 ```
 
-- `frame_used`：表示使用了多少個frame
+- `frame_used`：表示遊戲使用了多少個frame
 - `state`：表示遊戲結束的狀態
     - `FAIL`：遊戲失敗
     - `FINISH`：遊戲完成
 - `attachment`：紀錄遊戲各個玩家的結果與分數等資訊
     - `player`：玩家編號
     - `rank`：排名
-    - `frame_used`：個別玩家到達終點使用的frame數量
+    - `used_frame`：個別玩家到達終點使用的frame數
+    - `frame_limit`：該局遊戲所設定的時間上限
+    - `frame_ratio`：$${玩家使用的frame數 \over 遊戲設定的時間上限} \times 100 $$
+    - `total_checkpoints`：該地圖的總檢查點數量
     - `check_points`：玩家通過的檢查點數量
+    - `remain_points`：玩家未通過的檢查點數量
+    - `pass_percent`：$${玩家通過的檢查點數 \over 地圖的總檢查點數} \times 100 $$
+    - `remain_percent`：$${玩家未通過的檢查點數 \over 地圖的總檢查點數} \times 100 $$
 ---
 # 地圖製作說明
 [地圖製作教學](map_editor.md)

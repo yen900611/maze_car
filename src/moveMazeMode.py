@@ -1,8 +1,8 @@
-from .car import Car
+
 from .gameMode import GameMode
 from .maze_wall import *
-from .points import *
 from .sound_controller import SoundController
+from mlgame.gamedev.game_interface import GameResultState
 from .tilemap import Map
 
 
@@ -82,26 +82,7 @@ class MoveMazeMode(GameMode):
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
 
-        for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == 6:
-                    for world in self.worlds:
-                        x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                elif tile == 7:
-                    self.end_point = End_point(self,
-                                               (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == 8:
-                    Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                    self.check_point_num += 1
-
-                elif tile == 9:
-                    Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-        # self.pygame_point = [self.car.body.position[0] - (TILE_LEFTTOP[0] + TILE_WIDTH) / 2 / PPM,
-        #                      self.car.body.position[1] + HEIGHT / 2 / PPM]
+        self.load_map_object()
         self.pygame_point = [0, 0]
 
     def update_sprite(self, command):
