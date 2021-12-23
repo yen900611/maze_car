@@ -3,6 +3,7 @@ This is a base class for different mode in game.
 """
 from .car import Car
 from .points import *
+from .maze_wall import SlantWall
 
 import pygame
 
@@ -297,4 +298,41 @@ class GameMode(object):
                                        self.worlds.index(world), self.sensor_num, 1.5)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
+                elif tile == 14:
+                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                    wall_vertices = [(x, -y),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                    for world in self.worlds:
+                        wall = SlantWall(self, wall_vertices, world)
+                        if self.worlds.index(world) == 0:
+                            self.slant_walls.add(wall)
+                elif tile == 15:
+                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                    for world in self.worlds:
+                        wall = SlantWall(self, wall_vertices, world)
+                        if self.worlds.index(world) == 0:
+                            self.slant_walls.add(wall)
+                elif tile == 16:
+                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                     (x, -y),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                    for world in self.worlds:
+                        wall = SlantWall(self, wall_vertices, world)
+                        if self.worlds.index(world) == 0:
+                            self.slant_walls.add(wall)
+                elif tile == 17:
+                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                     (x, -y),
+                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y)]
+                    for world in self.worlds:
+                        wall = SlantWall(self, wall_vertices, world)
+                        if self.worlds.index(world) == 0:
+                            self.slant_walls.add(wall)
+
 

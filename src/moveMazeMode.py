@@ -19,6 +19,7 @@ class MoveMazeMode(GameMode):
         self.worlds = []
         self.cars = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.slant_walls = pygame.sprite.Group()
         self.wall_for_update = pygame.sprite.Group()
         self.all_points = pygame.sprite.Group()  # Group inclouding end point, check points,etc.
 
@@ -51,6 +52,7 @@ class MoveMazeMode(GameMode):
         self.get_wall_info_v(1)
         self.get_wall_info_v(4)
         self.get_wall_info_h(5)
+        self.load_map_object()
         for wall_vertices in self.wall_vertices_for_Box2D:
             if wall_vertices["type"] == 1:
                 for world in self.worlds:
@@ -82,7 +84,6 @@ class MoveMazeMode(GameMode):
                     if self.worlds.index(world) == 0:
                         self.walls.add(wall)
 
-        self.load_map_object()
         self.pygame_point = [0, 0]
 
     def update_sprite(self, command):
@@ -100,6 +101,11 @@ class MoveMazeMode(GameMode):
             self.wall_info.append([vertices[2], vertices[1]])
             self.wall_info.append([vertices[3], vertices[0]])
             self.wall_info.append([vertices[2], vertices[3]])
+        for wall in self.slant_walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            self.wall_info.append([vertices[0], vertices[1]])
+            self.wall_info.append([vertices[1], vertices[2]])
+            self.wall_info.append([vertices[2], vertices[0]])
         for car in self.cars:
             car.update(command["ml_" + str(car.car_no + 1) + "P"])
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)

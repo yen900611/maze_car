@@ -126,6 +126,10 @@ class MazeCar(PaiaGame):
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
             game_progress["object_list"].append(create_polygon_view_data("wall", vertices, "#ffffff"))
+        for wall in self.game_mode.slant_walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            game_progress["object_list"].append(create_polygon_view_data("wall", vertices, "#ffffff"))
 
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
