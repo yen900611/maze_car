@@ -17,8 +17,6 @@ class Wall(pygame.sprite.Sprite):
         self.world = world
         self.x, self.y = (0, 0)
         self.body = world.CreateKinematicBody(position = (0, 0))
-        # self.body = world.CreateKinematicBody(position=(self.x + TILESIZE/ (2*PPM), - self.y - TILESIZE/ (2*PPM)))
-        # self.body = world.CreateKinematicBody(position=(2,2))
         self.box = self.body.CreatePolygonFixture(box = ((TILESIZE/ (2*PPM), TILESIZE/ (2*PPM))), vertices = vertices)
 
 class VerticalMoveWall(Wall):
@@ -58,3 +56,12 @@ class HorizontalMoveWall(Wall):
         elif self.body.position[0] < self.start_coordinate[0]:
             self.body.linearVelocity = (self.velocity, 0)
 
+class SlantWall(Wall):
+    def __init__(self, game, vertices, world):
+        Wall.__init__(self, game, vertices, world)
+        self.game = game
+        self.world = world
+        self.x, self.y = (0, 0)
+        self.body = world.CreateKinematicBody(position = (0, 0))
+        self.box = self.body.CreatePolygonFixture(vertices = vertices)
+        pass

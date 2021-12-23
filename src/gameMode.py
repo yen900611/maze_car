@@ -133,7 +133,7 @@ class GameMode(object):
             while row < len(self.map.data):
                 tiles = self.map.data[row]
 
-                if tiles[col] == wall_tile:
+                if (tiles[col]%18) == wall_tile:
                     if first_tile == -1:
                         first_tile = row
                         if row == len(self.map.data) - 1:
@@ -174,7 +174,7 @@ class GameMode(object):
             first_tile = -1
             last_tile = -1
             while col < (len(tiles)):
-                if tiles[col] == wall_tile:
+                if (tiles[col]%18) == wall_tile:
                     if first_tile == -1:
                         first_tile = col
                         if col == len(tiles) - 1:
@@ -188,7 +188,7 @@ class GameMode(object):
                             {"type": wall_tile, "vertices": self.wall_vertices_h((first_tile, row), (last_tile, row))})
                         # self.wall_vertices_for_Box2D.append(self.wall_vertices_h((first_tile, row), (last_tile, row)))
                         for i in range(first_tile, last_tile + 1):
-                            tiles[i] = "0"
+                            tiles[i] = 0
                         first_tile = -1
                         col += 1
                     else:
@@ -204,7 +204,7 @@ class GameMode(object):
                                 {"type": wall_tile,
                                  "vertices": self.wall_vertices_h((first_tile, row), (last_tile, row))})
                             for i in range(first_tile, last_tile + 1):
-                                tiles[i] = "0"
+                                tiles[i] = 0
                             first_tile = -1
                             col += 1
                     else:
@@ -259,7 +259,8 @@ class GameMode(object):
     def load_map_object(self):
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                if tile == 6 or tile == 19:
+                tile = tile%18
+                if tile == 6 or tile == 10:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
@@ -275,21 +276,21 @@ class GameMode(object):
                     self.check_point_num+=1
                 elif tile == 9:
                     Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == 22:
+                elif tile == 13:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
                                        self.worlds.index(world), self.sensor_num, 0.5)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
-                elif tile == 21:
+                elif tile == 12:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
                                        self.worlds.index(world), self.sensor_num, 1)
                         self.cars.add(self.car)
                         self.car_info.append(self.car.get_info())
-                elif tile == 20:
+                elif tile == 11:
                     for world in self.worlds:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
                         self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
