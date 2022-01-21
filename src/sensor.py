@@ -5,7 +5,7 @@ import Box2D
 from .env import *
 
 class Sensor():
-    def __init__(self, world, body, sensor_num):
+    def __init__(self, world, body, sensor_num, angle):
         self.car = body
         self.right_value = {}
         self.right_top_value = {}
@@ -13,9 +13,10 @@ class Sensor():
         self.left__top_value = {}
         self.front_value = {}
         self.sensor_num = sensor_num
-        self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + 1, body.position[1]))
+        angle_t = int(angle/0.5)%4
+        self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + sensor_trans[angle_t][0], body.position[1]+ sensor_trans[angle_t][1]))
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
-        self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - 1, body.position[1]))
+        self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - sensor_trans[angle_t][0], body.position[1] - sensor_trans[angle_t][1]))
         ball = self.sensor_left.CreateCircleFixture(radius=0.1)
 
         world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, anchorA=self.sensor_left.position,

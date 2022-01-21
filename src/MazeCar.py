@@ -226,16 +226,16 @@ class MazeCar(PaiaGame):
                     pass_percent = 0
                     remain_point = 0
                     remain_percent = 0
-                same_rank = {"player": str(user.car_no + 1) + "P",
-                             "rank": self.game_mode.ranked_user.index(ranking) + 1,
-                             "used_frame": user.end_frame,
-                             "frame_limit":self.game_end_time,
-                             "frame_percent":round(user.end_frame/self.game_end_time,5)*100,
-                             "total_checkpoints":self.game_mode.check_point_num,
-                             "check_points": user.check_point,
-                             "remain_points": remain_point,
-                             "pass_percent": pass_percent,
-                             "remain_percent": remain_percent,
+                same_rank = {"玩家編號": str(user.car_no + 1) + "P",
+                             "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
+                             "使用總幀數": user.end_frame,
+                             "遊戲總幀數限制":self.game_end_time,
+                             "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
+                             "檢查點總數量":self.game_mode.check_point_num,
+                             "玩家通過檢查點數量": user.check_point,
+                             "玩家未通過檢查點數量": remain_point,
+                             "檢查點通過率": pass_percent,
+                             "檢查點未通過率": remain_percent,
                 }
                 rank.append(same_rank)
 

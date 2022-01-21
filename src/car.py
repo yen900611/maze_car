@@ -29,9 +29,9 @@ class Car(pygame.sprite.Sprite):
         self.rect.center = (0, 0)  # pygame
         self.x, self.y = coordinate
         self.body = world.CreateDynamicBody(position=coordinate)
-        self.body.angle = math.pi * angle
         self.box = self.body.CreatePolygonFixture(box=(1.13, 1.13), density=1, friction=0.1, restitution=0.3)
-        self.sensor = Sensor(world, self.body, sensor_num)
+        self.sensor = Sensor(world, self.body, sensor_num, angle)
+        self.body.angle = math.pi * angle
         self.check_point = 0
 
     def update(self, commands):

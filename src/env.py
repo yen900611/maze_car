@@ -16,6 +16,12 @@ TILE_LEFTTOP = 20, 20  # pixel
 GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0]) / TILESIZE
 GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1]) / TILESIZE
 
+'''sensor set trans'''
+sensor_trans = ((1, 0),
+                (0, 1),
+                (-1, 0),
+                (0, -1))
+
 '''environment data'''
 FPS = 30
 
