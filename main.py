@@ -1,7 +1,7 @@
 import pygame
 from src import MazeCar
 
-from games.maze_car.src.env import FPS
+from src.env import FPS
 from mlgame.view.view import PygameView
 from mlgame.gamedev.generic import quit_or_esc
 
