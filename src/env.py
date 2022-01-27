@@ -5,10 +5,10 @@ TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 
 '''width and height'''
-WIDTH = 820
-HEIGHT = 520
-TILE_WIDTH = 480  # 大小
-TILE_HEIGHT = 480
+WIDTH = 860
+HEIGHT = 560
+TILE_WIDTH = 540  # 大小
+TILE_HEIGHT = 540
 
 '''tile-base'''
 TILESIZE = 20
@@ -47,14 +47,17 @@ IMAGE_DIR = path.join(path.dirname(__file__), 'image')
 SOUND_DIR = path.join(path.dirname(__file__), '../asset/sound')
 
 '''image'''
+BG_IMG = "ground.png"
+BG_URL = 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/image/ground.png'
+
 INFO_NAME = "info.png"
 INFO_URL = 'https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/image/info.png'
 
 LOGO = "logo.png"
 LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/logo.png'
 
-TWM_LOGO = "TWM_logo.png"
-TWM_LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/TWM_logo.png'
+TMF_LOGO = "TMFlogo.png"
+TMF_LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/TMFlogo.png'
 
 CARS_NAME = ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]
 CARS_URL = ['https://raw.githubusercontent.com/yen900611/Maze_Car/master/asset/image/car_01.png',

@@ -335,7 +335,7 @@ class GameMode(object):
                             if self.worlds.index(world) == 0:
                                 self.slant_walls.add(wall)
                 except Exception:
-                    print("Tiled Error")
+                    print("Map Error")
         try:
             if self.end_point and len(self.cars):
                 pass

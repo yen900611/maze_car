@@ -101,9 +101,13 @@ class MazeCar(PaiaGame):
         logo_path = path.join(ASSET_IMAGE_DIR, LOGO)
         logo_url = LOGO_URL
         game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
-        twm_logo_path = path.join(ASSET_IMAGE_DIR, TWM_LOGO)
-        twm_logo_url = TWM_LOGO_URL
-        game_info["assets"].append(create_asset_init_data("twm_logo", 20, 20, twm_logo_path, twm_logo_url))
+        tmf_logo_path = path.join(ASSET_IMAGE_DIR, TMF_LOGO)
+        tmf_logo_url = TMF_LOGO_URL
+        game_info["assets"].append(create_asset_init_data("tmf_logo", 100, 40, tmf_logo_path, tmf_logo_url))
+        bg_path = path.join(ASSET_IMAGE_DIR, BG_IMG)
+        bg_url = BG_URL
+        game_info["assets"].append(create_asset_init_data("bg_img", 860, 560, bg_path, bg_url))
+
 
         for car in self.game_mode.car_info:
             file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
@@ -149,17 +153,18 @@ class MazeCar(PaiaGame):
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
         # rect
-        game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
-        game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
-        game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
-                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#6f0000"))
-        game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
-                                                             WIDTH, HEIGHT, "#6f0000"))
-        game_progress["toggle"].append(create_image_view_data("twm_logo", 2, 500, 20, 20))
+        game_progress["toggle"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
+        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
+        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
+        # game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
+        #                                                      WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#6f0000"))
+        # game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
+        #                                                      WIDTH, HEIGHT, "#6f0000"))
+        game_progress["toggle"].append(create_image_view_data("tmf_logo", 590, 510, 200, 50))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
         game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
-        game_progress["toggle"].append(create_image_view_data("info", 507, 20, 306, 480))
+        game_progress["toggle"].append(create_image_view_data("info", 535, 40, 306, 480))
         # car
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
@@ -168,12 +173,12 @@ class MazeCar(PaiaGame):
             )
 
         # text
-        game_progress["toggle"].append(create_text_view_data(f"{self.frame_count} frames", 618, 80, WHITE))
+        game_progress["toggle"].append(create_text_view_data(f"{self.frame_count} frames", 645, 100, WHITE))
         for car in self.game_mode.car_info:
             if car["id"] % 2 == 0:
-                x = 600
+                x = 630
             else:
-                x = 730
+                x = 760
 
             if car["status"]:
                 game_progress["toggle"].append(
@@ -288,6 +293,10 @@ class MazeCar(PaiaGame):
         key_pressed_list = pygame.key.get_pressed()
         cmd_1P = [{"left_PWM": 0, "right_PWM": 0}]
         cmd_2P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_3P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_4P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_5P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_6P = [{"left_PWM": 0, "right_PWM": 0}]
 
         if key_pressed_list[pygame.K_UP]:
             cmd_1P[0]["left_PWM"] = 100
@@ -312,7 +321,11 @@ class MazeCar(PaiaGame):
             cmd_2P[0]["left_PWM"] += 100
 
         return {"ml_1P": cmd_1P,
-                "ml_2P": cmd_2P}
+                "ml_2P": cmd_2P,
+                "ml_3P": cmd_3P,
+                "ml_4P": cmd_4P,
+                "ml_5P": cmd_5P,
+                "ml_6P": cmd_6P}
 
     def set_game_mode(self):
         if self.game_type == "MAZE":
