@@ -48,7 +48,6 @@ class MazeMode(GameMode):
 
     def new(self):
         # initialize all variables and do all setup for a new game
-
         self.get_wall_info_h(1)
         self.get_wall_info_v(1)
         for wall_vertices in self.wall_vertices_for_Box2D:

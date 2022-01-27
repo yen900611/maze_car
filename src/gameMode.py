@@ -260,79 +260,89 @@ class GameMode(object):
     def load_map_object(self):
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
-                tile = tile%18
-                if tile == 6 or tile == 10:
-                    for world in self.worlds:
+                try:
+                    if tile == 6 or tile == 10:
+                        for world in self.worlds:
+                            x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                            self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                           self.worlds.index(world), self.sensor_num, 2)
+                            self.cars.add(self.car)
+                            self.car_info.append(self.car.get_info())
+                            # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
+                    elif tile == 7:
+                        self.end_point = End_point(self,
+                                                   (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    elif tile == 8:
+                        Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                        self.check_point_num+=1
+                    elif tile == 9:
+                        Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                    elif tile == 13:
+                        for world in self.worlds:
+                            x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                            self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                           self.worlds.index(world), self.sensor_num, 0.5)
+                            self.cars.add(self.car)
+                            self.car_info.append(self.car.get_info())
+                    elif tile == 12:
+                        for world in self.worlds:
+                            x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                            self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                           self.worlds.index(world), self.sensor_num, 1)
+                            self.cars.add(self.car)
+                            self.car_info.append(self.car.get_info())
+                    elif tile == 11:
+                        for world in self.worlds:
+                            x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
+                            self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
+                                           self.worlds.index(world), self.sensor_num, 1.5)
+                            self.cars.add(self.car)
+                            self.car_info.append(self.car.get_info())
+                    elif tile == 14:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num, 2)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                        # Car(self, world, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)), i, 1)
-                elif tile == 7:
-                    self.end_point = End_point(self,
-                                               (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == 8:
-                    Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                    self.check_point_num+=1
-                elif tile == 9:
-                    Outside_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
-                elif tile == 13:
-                    for world in self.worlds:
+                        wall_vertices = [(x, -y),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                        for world in self.worlds:
+                            wall = SlantWall(self, wall_vertices, world)
+                            if self.worlds.index(world) == 0:
+                                self.slant_walls.add(wall)
+                    elif tile == 15:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num, 0.5)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                elif tile == 12:
-                    for world in self.worlds:
+                        wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                        for world in self.worlds:
+                            wall = SlantWall(self, wall_vertices, world)
+                            if self.worlds.index(world) == 0:
+                                self.slant_walls.add(wall)
+                    elif tile == 16:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num, 1)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                elif tile == 11:
-                    for world in self.worlds:
+                        wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                         (x, -y),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
+                        for world in self.worlds:
+                            wall = SlantWall(self, wall_vertices, world)
+                            if self.worlds.index(world) == 0:
+                                self.slant_walls.add(wall)
+                    elif tile == 17:
                         x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                        self.car = Car(world, (x + TILESIZE / (2 * PPM), - y - TILESIZE / (2 * PPM)),
-                                       self.worlds.index(world), self.sensor_num, 1.5)
-                        self.cars.add(self.car)
-                        self.car_info.append(self.car.get_info())
-                elif tile == 14:
-                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                    wall_vertices = [(x, -y),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
-                    for world in self.worlds:
-                        wall = SlantWall(self, wall_vertices, world)
-                        if self.worlds.index(world) == 0:
-                            self.slant_walls.add(wall)
-                elif tile == 15:
-                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
-                    for world in self.worlds:
-                        wall = SlantWall(self, wall_vertices, world)
-                        if self.worlds.index(world) == 0:
-                            self.slant_walls.add(wall)
-                elif tile == 16:
-                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
-                                     (x, -y),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y - (TILE_LEFTTOP[0] / TILESIZE))]
-                    for world in self.worlds:
-                        wall = SlantWall(self, wall_vertices, world)
-                        if self.worlds.index(world) == 0:
-                            self.slant_walls.add(wall)
-                elif tile == 17:
-                    x, y = (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE))
-                    wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
-                                     (x, -y),
-                                     (x + (TILE_LEFTTOP[0] / TILESIZE), -y)]
-                    for world in self.worlds:
-                        wall = SlantWall(self, wall_vertices, world)
-                        if self.worlds.index(world) == 0:
-                            self.slant_walls.add(wall)
-
+                        wall_vertices = [(x, -y - (TILE_LEFTTOP[0] / TILESIZE)),
+                                         (x, -y),
+                                         (x + (TILE_LEFTTOP[0] / TILESIZE), -y)]
+                        for world in self.worlds:
+                            wall = SlantWall(self, wall_vertices, world)
+                            if self.worlds.index(world) == 0:
+                                self.slant_walls.add(wall)
+                except Exception:
+                    print("Tiled Error")
+        try:
+            if self.end_point and len(self.cars):
+                pass
+            else:
+                print("Map without car")
+                self.running = False
+        except:
+            print("Map without end point")
+            self.running = False
 
