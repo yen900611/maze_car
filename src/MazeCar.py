@@ -101,6 +101,9 @@ class MazeCar(PaiaGame):
         logo_path = path.join(ASSET_IMAGE_DIR, LOGO)
         logo_url = LOGO_URL
         game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
+        twm_logo_path = path.join(ASSET_IMAGE_DIR, TWM_LOGO)
+        twm_logo_url = TWM_LOGO_URL
+        game_info["assets"].append(create_asset_init_data("twm_logo", 20, 20, twm_logo_path, twm_logo_url))
 
         for car in self.game_mode.car_info:
             file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
@@ -149,9 +152,10 @@ class MazeCar(PaiaGame):
         game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
         game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
-                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
+                                                             WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#6f0000"))
         game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
-                                                             WIDTH, HEIGHT, "#000000"))
+                                                             WIDTH, HEIGHT, "#6f0000"))
+        game_progress["toggle"].append(create_image_view_data("twm_logo", 2, 500, 20, 20))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
         game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info

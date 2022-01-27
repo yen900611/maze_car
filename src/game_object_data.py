@@ -185,7 +185,6 @@ def get_scene_init_sample_data() -> dict:
             # "audios": {}
             }
 
-
 def get_image_object(image_id, coordinate, width, height, angle=0):
     """
     這是一個用來繪製圖片的資料格式，
@@ -202,7 +201,6 @@ def get_image_object(image_id, coordinate, width, height, angle=0):
             "height": height,
             "image_id": image_id,
             "angle": int(angle)}
-
 
 def get_rect_object(name, coordinate, width, height, color, angle=0):
     """
@@ -225,7 +223,6 @@ def get_rect_object(name, coordinate, width, height, color, angle=0):
             "color": color
             }
 
-
 def get_line_object(name, dot1, dot2, color, width=2):
     """
     這是一個用來繪製矩形的資料格式，
@@ -247,7 +244,6 @@ def get_line_object(name, dot1, dot2, color, width=2):
             "color": color
             }
 
-
 def get_polygon_object(name, points, color):
     """
     這是一個用來繪製多邊形的資料格式，
@@ -262,7 +258,6 @@ def get_polygon_object(name, points, color):
             "color": color,
             "points": vertices
             }
-
 
 def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
     return {
@@ -286,7 +281,6 @@ def get_dummy_progress_data():
     #               }, {}, {}],
     #         "game_sys_info": {}
     #         }
-
 
 def get_dummy_result_data():
     return {
