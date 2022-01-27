@@ -67,13 +67,13 @@ class Car(pygame.sprite.Sprite):
         if pwm <0:
             self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            self.sensor.sensor_left.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
+            self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def right_move(self, pwm: int):
         if pwm <0:
             self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            self.sensor.sensor_right.linearVelocity =self.body.GetWorldVector(localVector = (0,pwm**0.5))
+            self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
