@@ -68,7 +68,7 @@ game = MazeCar.MazeCar(user_num=1, game_type="MAZE", map=4, time=200, sensor=3, 
     右鍵(D同)：左輪輸出增加100
 
 2. 感測器
-    實際距離如圖所示
+    感測器測量的起點為自走車車身外圍，終點為直線距離上最靠的牆壁，實際距離如圖所示
     ![](https://i.imgur.com/QUmpOmz.png)
 
 
