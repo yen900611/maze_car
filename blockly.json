@@ -35,7 +35,7 @@
         [520, "bottom boundary", "下邊界"]
     ],
     "ACTION": [
-        ["'RESET'", "RESET", "重製遊戲"]
+        ["RESET", "RESET", "重製"]
     ]
 
 }
