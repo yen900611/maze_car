@@ -35,7 +35,7 @@
         [520, "bottom boundary", "下邊界"]
     ],
     "ACTION": [
-        ["RESET", "RESET", "重製"]
+        ["RESET", "RESET", "重置"]
     ]
 
 }
