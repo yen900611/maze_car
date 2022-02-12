@@ -78,6 +78,7 @@ class Car(pygame.sprite.Sprite):
     def get_info(self):
         self.car_info = {"id": self.car_no,
                          "status":self.status,
+                         "is_running":self.is_running,
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
