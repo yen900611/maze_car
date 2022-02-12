@@ -26,29 +26,6 @@ def get_progress_data(game_mode):
         "game_sys_info": {}
     }
 
-    # try:
-    #     wall_vertices = []
-    #     for wall in game_mode.walls:
-    #         vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-    #         vertices = [game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-    #         game_progress["game_object_list"].append(get_polygon_object("wall", vertices, "#ffffff"))
-    # except Exception:
-    #     pass
-    #
-    # try:
-    #     game_progress["game_object_list"].append(get_image_object("logo", (game_mode.end_point.rect.x, game_mode.end_point.rect.y),
-    #                                                               50, 50))
-    # except Exception:
-    #     pass
-
-    # game_progress["background"].append(get_rect_object("rect", (0, 0), TILE_LEFTTOP[0], HEIGHT, "#000000"))
-    # game_progress["background"].append(get_rect_object("rect", (0, 0), WIDTH, TILE_LEFTTOP[1], "#000000"))
-    # game_progress["background"].append(get_rect_object("rect", (TILE_LEFTTOP[0] + TILE_WIDTH, 0),
-    #                                                          WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#000000"))
-    # game_progress["background"].append(get_rect_object("rect", (0, TILE_LEFTTOP[1] + TILE_HEIGHT),
-    #                                                          WIDTH, HEIGHT, "#000000"))
-    # game_progress["background"].append(get_image_object("info", (507, 20), 306, 480))
-
     for car in game_mode.car_info:
         if car["id"] % 2 == 0:
             x = 600
@@ -185,6 +162,7 @@ def get_scene_init_sample_data() -> dict:
             # "audios": {}
             }
 
+
 def get_image_object(image_id, coordinate, width, height, angle=0):
     """
     這是一個用來繪製圖片的資料格式，
@@ -201,6 +179,7 @@ def get_image_object(image_id, coordinate, width, height, angle=0):
             "height": height,
             "image_id": image_id,
             "angle": int(angle)}
+
 
 def get_rect_object(name, coordinate, width, height, color, angle=0):
     """
@@ -223,6 +202,7 @@ def get_rect_object(name, coordinate, width, height, color, angle=0):
             "color": color
             }
 
+
 def get_line_object(name, dot1, dot2, color, width=2):
     """
     這是一個用來繪製矩形的資料格式，
@@ -244,6 +224,7 @@ def get_line_object(name, dot1, dot2, color, width=2):
             "color": color
             }
 
+
 def get_polygon_object(name, points, color):
     """
     這是一個用來繪製多邊形的資料格式，
@@ -258,6 +239,7 @@ def get_polygon_object(name, points, color):
             "color": color,
             "points": vertices
             }
+
 
 def get_dummy_text(content, color, coordinate, font_style="24px Arial"):
     return {
@@ -281,6 +263,7 @@ def get_dummy_progress_data():
     #               }, {}, {}],
     #         "game_sys_info": {}
     #         }
+
 
 def get_dummy_result_data():
     return {
