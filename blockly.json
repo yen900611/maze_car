@@ -8,7 +8,7 @@
         ["player3", "3P", "3P"],
         ["player4", "4P", "4P"],
         ["player5", "5P", "5P"],
-        ["player6", "6P", "6P"],
+        ["player6", "6P", "6P"]
     ],
       "GAME_STATUS": [
         ["GAME_ALIVE", "alive", "存活"],
@@ -35,7 +35,7 @@
         [520, "bottom boundary", "下邊界"]
     ],
     "ACTION": [
-        ["RESET", "RESET", "重製"]
+        ["RESET", "RESET", "重置"]
     ]
 
 }
