@@ -85,7 +85,7 @@ def __init__(self, player):
 
 自走車可以多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
 * For example
-`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car 2 MAZE 1 off`
+`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car --user_num 2 --game_type MAZE --time_to_play 1 --sensor_num 3 --sound off`
 
 
 ![](https://i.imgur.com/ubPC8Fp.jpg)
