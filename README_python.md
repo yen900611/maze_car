@@ -11,9 +11,15 @@
 * 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
     * 手動模式：
 `python MLGame.py -m maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
-    * 機器學習模式：
+    * 機器學習模式 MLGame 9.1.* 以前：
 `python MLGame.py -i ml_play_template.py maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
 
+    * 機器學習模式 MLGame 9.2.* 以後：
+`python MLGame.py \
+-i ml_play_template.py -i ml_play_template.py -i ml_play_template.py \
+-i ml_play_template.py -i ml_play_template.py -i ml_play_template.py -f 120 \
+Maze_Car --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
+`
 ### 遊戲參數
 
 * `the number of user`：指定遊戲玩家人數，最少需一名玩家。單機手動模式最多兩名(鍵盤位置不足)，機器學習模式至多六名。
@@ -85,7 +91,7 @@ def __init__(self, player):
 
 自走車可以多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
 * For example
-`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car 2 MAZE 1 off`
+`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car --user_num 2 --game_type MAZE --time_to_play 1 --sensor_num 3 --sound off`
 
 
 ![](https://i.imgur.com/ubPC8Fp.jpg)

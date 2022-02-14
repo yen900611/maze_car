@@ -2,7 +2,7 @@
 
 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.1.5--beta-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame-9.2.3-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
 此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮
@@ -93,9 +93,16 @@ game = MazeCar.MazeCar(user_num=1, game_type="MAZE", map=4, time=200, sensor=3, 
 
 ```bash
 # python MLGame.py [options] maze_car [user_num] [game_type] [map] [time] [sensor][sound]
-# 遊戲指令
+# 遊戲指令# before MLGame 9.1.*
 python MLGame.py -i ml_play_template.py maze_car 1 MAZE 3 1200 3 off
+
+# Begin from MLGame 9.2.*
+python MLGame.py \
+-i ml_play_template.py -i ml_play_template.py -i ml_play_template.py \
+-i ml_play_template.py -i ml_play_template.py -i ml_play_template.py -f 120 \
+Maze_Car --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
 ```
+
 
 遊戲參數依序是[user_num] [game_type] [map] [time] [sensor][sound]
 
