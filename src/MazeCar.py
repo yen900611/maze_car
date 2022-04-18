@@ -153,23 +153,17 @@ class MazeCar(PaiaGame):
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
         # rect
+        # game_progress["background"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
         game_progress["toggle"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
-        #                                                      WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#6f0000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
-        #                                                      WIDTH, HEIGHT, "#6f0000"))
-        # game_progress["toggle"].append(create_image_view_data("tmf_logo", 590, 510, 200, 50))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0]+1, TILESIZE):
             game_progress["object_list"].append(create_line_view_data("x", x, TILE_LEFTTOP[1], x, TILE_HEIGHT+TILE_LEFTTOP[1], "#8c8c8c"))
 
         for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1]+1, TILESIZE):
             game_progress["object_list"].append(create_line_view_data("y", TILE_LEFTTOP[0], y, TILE_WIDTH+TILE_LEFTTOP[0], y, "#8c8c8c"))
-        game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
+        # game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
-        game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
+        # game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
         # car
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
