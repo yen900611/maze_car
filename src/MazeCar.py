@@ -121,6 +121,7 @@ class MazeCar(PaiaGame):
         Get the position of game objects for drawing on the web
         """
         game_progress = {
+            "frame": self.frame_count,
             "background": [],
             "object_list": [],
             "toggle": [],
