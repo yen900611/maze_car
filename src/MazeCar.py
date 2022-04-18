@@ -115,7 +115,6 @@ class MazeCar(PaiaGame):
             car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 50, file_path, url)
             game_info["assets"].append(car_init_info)
         return game_info
-
     @check_game_progress
     def get_scene_progress_data(self) -> dict:
         """
