@@ -63,6 +63,7 @@ class MazeCar(PaiaGame):
                                                              "L_T_sensor": car["l_t_sensor_value"]["distance"],
                                                              "R_T_sensor": car["r_t_sensor_value"]["distance"],
                                                              "end": self.game_mode.end_point.get_info()["coordinate"]}
+        print(player_info)
         return player_info
 
     def reset(self):
@@ -162,6 +163,11 @@ class MazeCar(PaiaGame):
         #                                                      WIDTH, HEIGHT, "#6f0000"))
         # game_progress["toggle"].append(create_image_view_data("tmf_logo", 590, 510, 200, 50))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
+        # for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0], TILESIZE):
+        #     game_progress["toggle"].append(create_line_view_data("x", x, TILE_LEFTTOP[1], x, TILE_HEIGHT+TILE_LEFTTOP[1], "#8c8c8c"))
+
+        # for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1], TILESIZE):
+        #     game_progress["toggle"].append(create_line_view_data("y", TILE_LEFTTOP[0], y, TILE_WIDTH+TILE_LEFTTOP[0], y, "#8c8c8c"))
         game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
         game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
