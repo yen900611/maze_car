@@ -124,6 +124,7 @@ class MazeCar(PaiaGame):
             "frame": self.frame_count,
             "background": [],
             "object_list": [],
+            "toggle_with_bias":[],
             "toggle": [],
             "foreground": [],
             "user_info": [],
@@ -157,10 +158,10 @@ class MazeCar(PaiaGame):
         game_progress["toggle"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
         for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0]+1, TILESIZE):
-            game_progress["object_list"].append(create_line_view_data("x", x, TILE_LEFTTOP[1], x, TILE_HEIGHT+TILE_LEFTTOP[1], "#8c8c8c"))
+            game_progress["toggle_with_bias"].append(create_line_view_data("x", x, TILE_LEFTTOP[1], x, TILE_HEIGHT+TILE_LEFTTOP[1], "#8c8c8c"))
 
         for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1]+1, TILESIZE):
-            game_progress["object_list"].append(create_line_view_data("y", TILE_LEFTTOP[0], y, TILE_WIDTH+TILE_LEFTTOP[0], y, "#8c8c8c"))
+            game_progress["toggle_with_bias"].append(create_line_view_data("y", TILE_LEFTTOP[0], y, TILE_WIDTH+TILE_LEFTTOP[0], y, "#8c8c8c"))
         # game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
         # game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
