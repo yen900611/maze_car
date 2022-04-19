@@ -7,25 +7,25 @@ class MLPlay:
         self.r_sensor_value = 0
         self.l_sensor_value = 0
         self.f_sensor_value = 0
-        self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
+        self.control_list = [{"left_PWM": 0, "right_PWM": 0}]
         # print("Initial ml script")
 
-    def update(self, scene_info: dict,keyboard:list=[], *args, **kwargs):
+    def update(self, scene_info: dict, keyboard: list = [], *args, **kwargs):
         """
         Generate the command according to the received scene information
         """
         if scene_info["status"] != "GAME_ALIVE":
             return "RESET"
-        if pygame.K_w in keyboard:
+        if pygame.K_w in keyboard or pygame.K_UP in keyboard:
             self.control_list[0]["left_PWM"] = 200
             self.control_list[0]["right_PWM"] = 200
-        elif pygame.K_a in keyboard:
+        elif pygame.K_a in keyboard or pygame.K_LEFT in keyboard:
             self.control_list[0]["left_PWM"] = -150
             self.control_list[0]["right_PWM"] = 150
-        elif pygame.K_d in keyboard:
+        elif pygame.K_d in keyboard or pygame.K_RIGHT in keyboard:
             self.control_list[0]["left_PWM"] = 150
             self.control_list[0]["right_PWM"] = -150
-        elif pygame.K_s in keyboard:
+        elif pygame.K_s in keyboard or pygame.K_DOWN in keyboard:
             self.control_list[0]["left_PWM"] = -150
             self.control_list[0]["right_PWM"] = -150
         else:
