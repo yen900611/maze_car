@@ -51,7 +51,7 @@ def __init__(self, player):
 
 由遊戲端發送的字典物件，同時也是存到紀錄檔的物件。
 ```python=17
-   def update(self, scene_info: dict):
+   def update(self, scene_info: dict,update(self, scene_info: dict, *args, **kwargs)):
         """
         Generate the command according to the received scene information
         """
