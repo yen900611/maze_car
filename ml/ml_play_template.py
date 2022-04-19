@@ -7,7 +7,7 @@ class MLPlay:
         self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
         # print("Initial ml script")
 
-    def update(self, scene_info: dict):
+    def update(self, scene_info: dict, *args, **kwargs):
         """
         Generate the command according to the received scene information
         """

@@ -66,11 +66,11 @@ class Sensor():
             if dot:
                 if dot[0] - car_center[0] > 0 and vector[0] > 0:
                     results.append(math.sqrt(
-                        (dot[0] - car_center[0]) ** 2 + (dot[1] - car_center[1]) ** 2) - 1.5)
+                        (dot[0] - car_center[0]) ** 2 + (dot[1] - car_center[1]) ** 2) - 1)
                     dots.append(dot)
                 elif dot[0] - car_center[0] < 0 and vector[0] < 0:
                     results.append(math.sqrt(
-                        (dot[0] - car_center[0]) ** 2 + (dot[1] - car_center[1]) ** 2) - 1.5)
+                        (dot[0] - car_center[0]) ** 2 + (dot[1] - car_center[1]) ** 2) - 1)
                     dots.append(dot)
                 else:
                     pass

@@ -14,7 +14,7 @@ class Point(pygame.sprite.Sprite):
 
     def get_info(self):
         return {
-            "coordinate": (self.x, self.y)
+            "coordinate": ((self.x+0.5) * 5, (self.y-0.5) * 5)
         }
 
     def get_progress_data(self):

@@ -115,15 +115,16 @@ class MazeCar(PaiaGame):
             car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 50, file_path, url)
             game_info["assets"].append(car_init_info)
         return game_info
-
     @check_game_progress
     def get_scene_progress_data(self) -> dict:
         """
         Get the position of game objects for drawing on the web
         """
         game_progress = {
+            "frame": self.frame_count,
             "background": [],
             "object_list": [],
+            "toggle_with_bias":[],
             "toggle": [],
             "foreground": [],
             "user_info": [],
@@ -153,18 +154,17 @@ class MazeCar(PaiaGame):
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
         # rect
+        # game_progress["background"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
         game_progress["toggle"].append(create_image_view_data("bg_img", 0, 0, 860, 560))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, TILE_LEFTTOP[0], HEIGHT, "#000000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, 0, WIDTH, TILE_LEFTTOP[1], "#000000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", TILE_LEFTTOP[0] + TILE_WIDTH, 0,
-        #                                                      WIDTH - TILE_LEFTTOP[0] - TILE_WIDTH, HEIGHT, "#6f0000"))
-        # game_progress["toggle"].append(create_rect_view_data("rect", 0, TILE_LEFTTOP[1] + TILE_HEIGHT,
-        #                                                      WIDTH, HEIGHT, "#6f0000"))
-        # game_progress["toggle"].append(create_image_view_data("tmf_logo", 590, 510, 200, 50))
         p = self.game_mode.trnsfer_box2d_to_pygame((0, 0))
-        game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
+        for x in range(TILE_LEFTTOP[0], TILE_WIDTH + TILE_LEFTTOP[0]+1, TILESIZE):
+            game_progress["toggle_with_bias"].append(create_line_view_data("x", x, TILE_LEFTTOP[1], x, TILE_HEIGHT+TILE_LEFTTOP[1], "#8c8c8c"))
+
+        for y in range(TILE_LEFTTOP[1], TILE_HEIGHT + TILE_LEFTTOP[1]+1, TILESIZE):
+            game_progress["toggle_with_bias"].append(create_line_view_data("y", TILE_LEFTTOP[0], y, TILE_WIDTH+TILE_LEFTTOP[0], y, "#8c8c8c"))
+        # game_progress["object_list"].append(create_rect_view_data("rect", p[0], p[1], 10, 10, "#356425"))
         # info
-        game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
+        # game_progress["toggle"].append(create_image_view_data("info", 525, 40, 327, 480))
         # car
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(

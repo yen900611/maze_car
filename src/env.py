@@ -47,8 +47,8 @@ IMAGE_DIR = path.join(path.dirname(__file__), 'image')
 SOUND_DIR = path.join(path.dirname(__file__), '../asset/sound')
 
 '''image'''
-BG_IMG = "ground.png"
-BG_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/ground.png'
+BG_IMG = "bg_img.png"
+BG_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/bg_img.png'
 
 INFO_NAME = "info.png"
 INFO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/info.png'
