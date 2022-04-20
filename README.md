@@ -2,7 +2,7 @@
 
 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.2.3-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame-9.4.1-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
 此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮
@@ -156,10 +156,8 @@ class MLPlay:
     "F_sensor": 87.6, 
     "L_T_sensor": -1, 
     "R_T_sensor": -1, 
-    "end": [
-        12.5,
-        -12.5
-    ]
+    "end_x": 12.5,
+    "end_y": -12.5
 }
 
 ```
@@ -172,7 +170,8 @@ class MLPlay:
 * `R_sensor`：玩家自己車子右邊超聲波感測器的值，資料型態為數值
 * `x`：玩家自己車子的x座標，該座標系統原點位於迷宮左上角，x軸向右為正。
 * `y`：玩家自己車子的y座標，該座標系統原點位於迷宮左上角，y軸向上為正。
-* `end`：終點座標。
+* `end_x`：終點x座標，該座標系統原點位於迷宮左上角，x軸向右為正。
+* `end_y`：終點y座標，該座標系統原點位於迷宮左上角，y軸向上為正。
 * `angle`：玩家自己車子的朝向，車子向上為0度，數值逆時鐘遞增至360
 * `status`： 目前遊戲的狀態
     - `GAME_ALIVE`：遊戲進行中
