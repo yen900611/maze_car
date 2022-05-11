@@ -1,17 +1,18 @@
 # **Maze Car**
 
+<img src="./asset/logo.svg" alt="logo" width="100"/>
 
+![Maze_Car](https://img.shields.io/github/v/tag/yen900611/Maze_Car)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![MLGame](https://img.shields.io/badge/MLGame-9.4.1-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
-此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮
+在錯綜復雜的棋盤迷宮中，如何讓你的自走車突破重圍，走到出口，而不會迷失在其之中。本遊戲也提供多元的關卡，隨著遊戲難度提升，迷宮的牆壁可是會移動，考驗各位玩家如何再多變的環境下，依然能夠逃出迷宮。
 
 ![](https://i.imgur.com/uDn6Foi.gif)
 
 # 更新內容(3.2.9)
 + 新增座標格線，以利玩家判斷數值。
-
 
 ---
 # 基礎介紹
