@@ -1,6 +1,6 @@
 class MLPlay:
-    def __init__(self, player):
-        self.player_no = player[6]
+    def __init__(self, ai_name,*args,**kwargs):
+        self.player_no = ai_name
         self.r_sensor_value = 0
         self.l_sensor_value = 0
         self.f_sensor_value = 0

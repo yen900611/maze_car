@@ -1,9 +1,10 @@
 import math
 
-from mlgame.view.test_decorator import check_game_progress, check_game_result
+from mlgame.game.paia_game import PaiaGame
+from mlgame.utils.enum import get_ai_name
+from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
     create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data
-from mlgame.gamedev.game_interface import PaiaGame, GameResultState, GameStatus
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
@@ -13,16 +14,16 @@ from .sound_controller import *
 
 
 class MazeCar(PaiaGame):
-    def __init__(self, user_num, game_type, map, time, sensor, sound):
-        super().__init__()
+    def __init__(self, user_num, game_type, map, time_to_play, sensor_num, sound, *args, **kwargs):
+        super().__init__(user_num=user_num)
         self.game_type = game_type
         self.user_num = user_num
         self.is_single = False
         if self.user_num == 1:
             self.is_single = True
         self.maze_id = map - 1
-        self.game_end_time = time
-        self.sensor_num = sensor
+        self.game_end_time = time_to_play
+        self.sensor_num = sensor_num
         self.is_sound = sound
         self.set_game_mode()
         self.game_mode.sound_controller.play_music()
@@ -47,12 +48,12 @@ class MazeCar(PaiaGame):
                 break
             self.origin_car_pos = car.get_info()["center"]
 
-    def game_to_player_data(self):
+    def get_data_from_game_to_player(self):
         scene_info = self.get_scene_info
         player_info = {}
         for car in self.game_mode.car_info:
             # type of car is dictionary
-            player_info["ml_" + str(car["id"] + 1) + "P"] = {"frame": scene_info["frame"],
+            player_info[get_ai_name(int(car["id"]))] = {"frame": scene_info["frame"],
                                                              "status": car["status"],
                                                              "x": car["coordinate"][0],
                                                              "y": car["coordinate"][1],
