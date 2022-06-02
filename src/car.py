@@ -38,18 +38,18 @@ class Car(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
         self.rect = self.image.get_rect()
         if self.is_running and commands != None:
-            if commands[0]['right_PWM'] > 255:
+            if commands['right_PWM'] > 255:
                 self.R_PWM = 255
-            elif commands[0]['right_PWM'] < -255:
+            elif commands['right_PWM'] < -255:
                 self.R_PWM = -255
             else:
-                self.R_PWM = commands[0]['right_PWM']
-            if commands[0]['left_PWM'] > 255:
+                self.R_PWM = commands['right_PWM']
+            if commands['left_PWM'] > 255:
                 self.L_PWM = 255
-            elif commands[0]['left_PWM'] < -255:
+            elif commands['left_PWM'] < -255:
                 self.L_PWM = -255
             else:
-                self.L_PWM = commands[0]['left_PWM']
+                self.L_PWM = commands['left_PWM']
             self.left_move(self.L_PWM)
             self.right_move(self.R_PWM)
         else:
