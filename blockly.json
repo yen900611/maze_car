@@ -1,7 +1,7 @@
 {
-    "INIT_INFO": [
-        ["player", "player number", "玩家編號"]
-    ],
+   "INIT_INFO": [
+        ["ai_name", "name of ai", "AI編號"]
+    ],,
     "PLAYER_STATUS": [
         ["player1", "1P", "1P"],
         ["player2", "2P", "2P"],
