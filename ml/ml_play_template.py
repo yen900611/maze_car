@@ -6,6 +6,7 @@ class MLPlay:
         self.f_sensor_value = 0
         self.control_list = {"left_PWM" : 0, "right_PWM" : 0}
         # print("Initial ml script")
+        print(kwargs)
 
     def update(self, scene_info: dict, *args, **kwargs):
         """
