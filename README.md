@@ -93,7 +93,7 @@ game = MazeCar.MazeCar(user_num=1, game_type="MAZE", map=4, time=200, sensor=3, 
 ## 使用ＡＩ玩遊戲
 
 ```bash
-# python MLGame.py [options] maze_car [user_num] [game_type] [map] [time] [sensor][sound]
+# python MLGame.py [options] maze_car [user_num] [game_type] [map] [time_to_play] [sensor_num][sound]
 # 遊戲指令# before MLGame 9.1.*
 python MLGame.py -i ml_play_template.py maze_car 1 MAZE 3 1200 3 off
 

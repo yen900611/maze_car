@@ -1,3 +1,6 @@
-pygame==2.0.0
-Box2D==2.3.10
+mlgame>=9.5.3.2a0
+pygame==2.0.1
 # box2d-py for mac
+box2d-py==2.3.8
+# if you install box2d-py with trouble , you could try to comment last line and uncomment next line
+# Box2D==2.3.10
