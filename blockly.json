@@ -37,6 +37,10 @@
     ],
     "ACTION": [
         ["RESET", "RESET", "重置"]
+    ],
+    "ACTION_VALUE": [
+      ["left_PWM", "NUMBER", 100, "left PWM", "左輪轉速"],
+      ["right_PWM", "NUMBER", 100, "right PWM", "右輪轉速"]
     ]
 
 }
