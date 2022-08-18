@@ -1,4 +1,4 @@
-mlgame
+mlgame>=9.5.3.2a0
 pygame==2.0.1
 # box2d-py for mac
 box2d-py==2.3.8
