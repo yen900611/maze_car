@@ -8,25 +8,18 @@
     
 
 ## 運行於MLGame之下
-* 搭配[MLGame](https://github.com/LanKuDot/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
-    * 手動模式：
-`python MLGame.py -m maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
-    * 機器學習模式 MLGame 9.1.* 以前：
-`python MLGame.py -i ml_play_template.py maze_Car <the number of user> [game_type] [map] [time] [sensor] [sound]`
-
-    * 機器學習模式 MLGame 9.2.* 以後：
-`python MLGame.py \
--i ml_play_template.py -i ml_play_template.py -i ml_play_template.py \
--i ml_play_template.py -i ml_play_template.py -i ml_play_template.py -f 120 \
-Maze_Car --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
-`
+* 搭配[MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)執行，請將遊戲放在MLGame/games資料夾中，遊戲資料夾需命名為**Maze_Car**
+```
+# 在遊戲資料夾中
+python -m mlgame -i ml/ml_play_template.py ./ --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
+```
 ### 遊戲參數
 
 * `the number of user`：指定遊戲玩家人數，最少需一名玩家。單機手動模式最多兩名(鍵盤位置不足)，機器學習模式至多六名。
 * `game_mode`：遊戲模式，目前有迷宮模式、移動迷宮模式與練習模式，分別為"MAZE"、"MOVE_MAZE"、"PRACTICE"。
 * `map`：選擇不同的迷宮，目前提供2種迷宮地圖，並且會隨時增加，迷宮編號從1開始，預設為1號地圖。
 * `time`：控制遊戲時間，單位為秒，時間到了之後即使有玩家還沒走出迷宮，遊戲仍然會結束。
-* `sensor`：選擇感測器數量，目前可以選擇3或5個，預設為3。
+* `sensor`：選擇感測器數量，目前可以選擇3或5個，預設為5。
 * `sound`：音效設定，可選擇"on"或"off"，預設為"off"
 
 
@@ -38,30 +31,38 @@ Maze_Car --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5
 
 ### 初始化參數
 ```python=2
-def __init__(self, player):
-    self.r_sensor_value = 0
-    self.l_sensor_value = 0
-    self.f_sensor_value = 0
-    self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
+    def __init__(self, ai_name,*args,**kwargs):
+        self.player_no = ai_name
+        self.r_sensor_value = 0
+        self.l_sensor_value = 0
+        self.f_sensor_value = 0
+        self.control_list = {"left_PWM" : 0, "right_PWM" : 0}
+        # print("Initial ml script")
+        print(kwargs)
 ```
-`"player"`: 字串。其值只會是 `"player1"` 、 `"player2"` 、 `"player3"` 、 `"player4"` 、`"player5"` 、 `"player6"` ，代表這個程式被哪一台車使用。
-
+`ai_name`: 字串。其值只會是 `"1P"` 、 `"2P"` 、 `"3P"` 、 `"4P"` 、`"5P"` 、 `"6P"` ，代表這個程式被哪一台車使用。
+`kwargs`:字典。裡面會包含遊戲的啟動參數。
 
 ### 遊戲場景資訊
 
 由遊戲端發送的字典物件，同時也是存到紀錄檔的物件。
 ```python=17
-   def update(self, scene_info: dict,update(self, scene_info: dict, *args, **kwargs)):
-        """
-        Generate the command according to the received scene information
-        """
-        self.r_sensor_value = scene_info["R_sensor"]
-        self.l_sensor_value = scene_info["L_sensor"]
-        self.f_sensor_value = scene_info["F_sensor"]
-        self.control_list[0]["left_PWM"] += 50
-        self.control_list[0]["right_PWM"] += 50
-
-        return self.control_list
+def update(self, scene_info: dict, *args, **kwargs):
+    """
+    Generate the command according to the received scene information
+    """
+    if scene_info["status"] != "GAME_ALIVE":
+        return "RESET"
+    self.r_sensor_value = scene_info["R_sensor"]
+    self.l_sensor_value = scene_info["L_sensor"]
+    self.f_sensor_value = scene_info["F_sensor"]
+    if self.f_sensor_value >15:
+        self.control_list["left_PWM"] = 100
+        self.control_list["right_PWM"] = 100
+    else:
+        self.control_list["left_PWM"] = 0
+        self.control_list["right_PWM"] = 0
+    return self.control_list
 
 ```
 以下是該字典物件的鍵值對應：
@@ -84,14 +85,16 @@ def __init__(self, player):
 
 傳給遊戲端用來控制自走車的指令。
 
-玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為-255~255，並將此字典放入清單中回傳。
-例如：`[{"left_PWM" : 0, "right_PWM" : 0}]`
+玩家透過字典`{"left_PWM" : 0, "right_PWM" : 0}`回傳左右輪的馬力，範圍為-255~255。
+
 
 ### 機器學習模式的玩家程式
 
 自走車可以多人遊戲，所以在啟動機器學習模式時，需要利用 `-i <script_for_1P> -i <script_for_2P> -i <script_for_3P> -i <script_for_4P>` 指定最多六個不同的玩家程式。
 * For example
-`python MLGame.py -f 120 -i ml_play_template.py -i ml_play_template.py Maze_Car --user_num 2 --game_type MAZE --time_to_play 1 --sensor_num 3 --sound off`
+```shell
+python -m mlgame -i ./ml/ml_play_manual.py -i ./ml/ml_play_template.py  ./ 
+```
 
 
 ![](https://i.imgur.com/ubPC8Fp.jpg)
