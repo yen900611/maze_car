@@ -1,8 +1,8 @@
-
+from mlgame.utils.enum import get_ai_name
 from .gameMode import GameMode
 from .maze_wall import *
 from .sound_controller import SoundController
-from mlgame.gamedev.game_interface import GameResultState
+from mlgame.game.paia_game import GameResultState
 from .tilemap import Map
 
 
@@ -107,7 +107,7 @@ class MoveMazeMode(GameMode):
             self.wall_info.append([vertices[1], vertices[2]])
             self.wall_info.append([vertices[2], vertices[0]])
         for car in self.cars:
-            car.update(command["ml_" + str(car.car_no + 1) + "P"])
+            car.update(command[get_ai_name(car.car_no)])
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
             self.car_info.append(car.get_info())
             car.detect_distance(self.frame, self.wall_info)

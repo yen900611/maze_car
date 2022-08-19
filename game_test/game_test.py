@@ -48,7 +48,7 @@ class MazeCar:
         for key in self.game_mode.ranked_score.keys():
             self.ranked_score[key] += self.game_mode.ranked_score[key]
         print(self.ranked_score)
-        # self.game_mode = PlayingMode(user_num, map, time, self.sound_controller)
+        # self.game_mode = PlayingMode(user_num, map, time_to_play, self.sound_controller)
 
     def isRunning(self):
         return self.game_mode.isRunning()

@@ -1,17 +1,16 @@
 {
   "game_name": "maze_car",
-  "version": "3.2.9",
-  "url": "https://github.com/yen900611/RacingCar",
+  "version": "3.3.1",
+  "url": "https://github.com/yen900611/maze_car",
+  "description": "在錯綜復雜的棋盤迷宮中，如何讓你的自走車突破重圍，走到出口，而不會迷失在其之中。本遊戲也提供多元的關卡，隨著遊戲難度提升，迷宮的牆壁可是會移動，考驗各位玩家如何再多變的環境下，依然能夠逃出迷宮。",
+  "logo": [
+    "./asset/logo.svg",
+    "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Paia-Desktop/master/media/maze_car.svg"
+  ],
+  "user_num": {
+    "min": 1,"max": 6
+  },
   "game_params": [
-    {
-      "name": "user_num",
-      "verbose": "參賽人數",
-      "type": "int",
-      "max": 6,
-      "min": 1,
-      "default": 1,
-      "help": "set the number of user."
-    },
     {
       "name": "game_type",
       "verbose": "遊戲模式",

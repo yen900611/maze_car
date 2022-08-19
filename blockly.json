@@ -1,6 +1,6 @@
 {
-    "INIT_INFO": [
-        ["player", "player number", "玩家編號"]
+   "INIT_INFO": [
+        ["ai_name", "name of ai", "AI編號"]
     ],
     "PLAYER_STATUS": [
         ["player1", "1P", "1P"],
@@ -37,6 +37,10 @@
     ],
     "ACTION": [
         ["RESET", "RESET", "重置"]
+    ],
+    "ACTION_VALUE": [
+      ["left_PWM", "NUMBER", 100, "left PWM", "左輪轉速"],
+      ["right_PWM", "NUMBER", 100, "right PWM", "右輪轉速"]
     ]
 
 }

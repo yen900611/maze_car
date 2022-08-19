@@ -1,8 +1,9 @@
 import Box2D
 import pygame
 
-from mlgame.gamedev.game_interface import GameResultState
 # from .car import Car
+from mlgame.game.paia_game import GameResultState
+from mlgame.utils.enum import get_ai_name
 from .env import *
 from .gameMode import GameMode
 from .maze_wall import Wall
@@ -79,7 +80,7 @@ class MazeMode(GameMode):
         self.command = command
         # self.limit_pygame_screen()
         for car in self.cars:
-            car.update(command["ml_" + str(car.car_no + 1) + "P"])
+            car.update(command[get_ai_name(car.car_no)])
             car.rect.center = self.trnsfer_box2d_to_pygame(car.body.position)
             self.car_info.append(car.get_info())
             car.detect_distance(self.frame, self.wall_info)

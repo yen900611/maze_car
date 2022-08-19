@@ -1,6 +1,6 @@
 import unittest
 
-from game_core.gameView import PygameView
+from mlgame.view.view import PygameView
 
 
 class MyTestCase(unittest.TestCase):

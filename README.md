@@ -1,16 +1,18 @@
 # **Maze Car**
 
+<img src="./asset/logo.svg" alt="logo" width="100"/>
 
+![Maze_Car](https://img.shields.io/github/v/tag/yen900611/Maze_Car)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.4.1-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame->9.5.3.*-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
-此遊戲為迷宮自走車模擬遊戲，遊戲過程中玩家控制一台配備有三或五個超聲波感測器的車子，並運用正確的邏輯，讓車子可以最快的走出迷宮
+在錯綜復雜的棋盤迷宮中，如何讓你的自走車突破重圍，走到出口，而不會迷失在其之中。本遊戲也提供多元的關卡，隨著遊戲難度提升，迷宮的牆壁可是會移動，考驗各位玩家如何再多變的環境下，依然能夠逃出迷宮。
 
 ![](https://i.imgur.com/uDn6Foi.gif)
 
-# 更新內容(3.2.9)
-+ 新增座標格線，以利玩家判斷數值。
+# 更新內容(3.3.1)
+1. 更新程式碼內容，以運行於 MLGame 9.5.*以後版本
 
 
 ---
@@ -92,33 +94,23 @@ game = MazeCar.MazeCar(user_num=1, game_type="MAZE", map=4, time=200, sensor=3, 
 ## 使用ＡＩ玩遊戲
 
 ```bash
-# python MLGame.py [options] maze_car [user_num] [game_type] [map] [time] [sensor][sound]
-# 遊戲指令# before MLGame 9.1.*
-python MLGame.py -i ml_play_template.py maze_car 1 MAZE 3 1200 3 off
-
-# Begin from MLGame 9.2.*
-python MLGame.py \
--i ml_play_template.py -i ml_play_template.py -i ml_play_template.py \
--i ml_play_template.py -i ml_play_template.py -i ml_play_template.py -f 120 \
-Maze_Car --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
+python -m mlgame -i ml/ml_play_template.py ./ --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
 ```
 
-
-遊戲參數依序是[user_num] [game_type] [map] [time] [sensor][sound]
-
- 
 ## ＡＩ範例
 
 ```python
-
 class MLPlay:
-    def __init__(self, player):
+    def __init__(self, ai_name,*args,**kwargs):
+        self.player_no = ai_name
         self.r_sensor_value = 0
         self.l_sensor_value = 0
         self.f_sensor_value = 0
-        self.control_list = [{"left_PWM" : 0, "right_PWM" : 0}]
+        self.control_list = {"left_PWM" : 0, "right_PWM" : 0}
+        # print("Initial ml script")
+        print(kwargs)
 
-    def update(self, scene_info: dict):
+    def update(self, scene_info: dict, *args, **kwargs):
         """
         Generate the command according to the received scene information
         """
@@ -127,15 +119,19 @@ class MLPlay:
         self.r_sensor_value = scene_info["R_sensor"]
         self.l_sensor_value = scene_info["L_sensor"]
         self.f_sensor_value = scene_info["F_sensor"]
-        
-        self.control_list[0]["left_PWM"] = 100
-        self.control_list[0]["right_PWM"] = 100
+        if self.f_sensor_value >15:
+            self.control_list["left_PWM"] = 100
+            self.control_list["right_PWM"] = 100
+        else:
+            self.control_list["left_PWM"] = 0
+            self.control_list["right_PWM"] = 0
         return self.control_list
 
     def reset(self):
         """
         Reset the status
         """
+        # print("reset ml script")
         pass
 
 ```
@@ -181,12 +177,12 @@ class MLPlay:
 座標資訊請參考 `座標系統` 章節
 ## 動作指令
 
-- 在 update() 最後要回傳一個列表，列表內包含一個字典，資料型態如下。
+- 在 update() 最後要回傳一個字典，資料型態如下。
     ```python
-    [{
+    {
             'left_PWM': 0,
             'right_PWM': 0
-    }]
+    }
     ```
     其中`left_PWM`與`right_PWM`分別代表左輪與右輪的馬力，接受範圍為-255~255。
 
