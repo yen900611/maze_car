@@ -303,41 +303,41 @@ class MazeCar(PaiaGame):
                     "6P": "RESET",
                     }
         key_pressed_list = pygame.key.get_pressed()
-        cmd_1P = [{"left_PWM": 0, "right_PWM": 0}]
-        cmd_2P = [{"left_PWM": 0, "right_PWM": 0}]
-        cmd_3P = [{"left_PWM": 0, "right_PWM": 0}]
-        cmd_4P = [{"left_PWM": 0, "right_PWM": 0}]
-        cmd_5P = [{"left_PWM": 0, "right_PWM": 0}]
-        cmd_6P = [{"left_PWM": 0, "right_PWM": 0}]
+        cmd_1P = {"left_PWM": 0, "right_PWM": 0}
+        cmd_2P = {"left_PWM": 0, "right_PWM": 0}
+        cmd_3P = {"left_PWM": 0, "right_PWM": 0}
+        cmd_4P = {"left_PWM": 0, "right_PWM": 0}
+        cmd_5P = {"left_PWM": 0, "right_PWM": 0}
+        cmd_6P = {"left_PWM": 0, "right_PWM": 0}
 
         if key_pressed_list[pygame.K_UP]:
-            cmd_1P[0]["left_PWM"] = 100
-            cmd_1P[0]["right_PWM"] = 100
-        if key_pressed_list[pygame.K_DOWN]:
-            cmd_1P[0]["left_PWM"] = -100
-            cmd_1P[0]["right_PWM"] = -100
+            cmd_1P["left_PWM"] = 100
+            cmd_1P["right_PWM"] = 100
+        elif key_pressed_list[pygame.K_DOWN]:
+            cmd_1P["left_PWM"] = -100
+            cmd_1P["right_PWM"] = -100
         if key_pressed_list[pygame.K_LEFT]:
-            cmd_1P[0]["right_PWM"] += 100
-        if key_pressed_list[pygame.K_RIGHT]:
-            cmd_1P[0]["left_PWM"] += 100
+            cmd_1P["right_PWM"] += 100
+        elif key_pressed_list[pygame.K_RIGHT]:
+            cmd_1P["left_PWM"] += 100
 
         if key_pressed_list[pygame.K_w]:
-            cmd_2P[0]["left_PWM"] = 100
-            cmd_2P[0]["right_PWM"] = 100
-        if key_pressed_list[pygame.K_s]:
-            cmd_2P[0]["left_PWM"] = -100
-            cmd_2P[0]["right_PWM"] = -100
-        if key_pressed_list[pygame.K_a]:
-            cmd_2P[0]["right_PWM"] += 100
-        if key_pressed_list[pygame.K_d]:
-            cmd_2P[0]["left_PWM"] += 100
+            cmd_2P["left_PWM"] = 100
+            cmd_2P["right_PWM"] = 100
+        elif key_pressed_list[pygame.K_s]:
+            cmd_2P["left_PWM"] = -100
+            cmd_2P["right_PWM"] = -100
+        elif key_pressed_list[pygame.K_a]:
+            cmd_2P["right_PWM"] += 100
+        elif key_pressed_list[pygame.K_d]:
+            cmd_2P["left_PWM"] += 100
 
-        return {"ml_1P": cmd_1P,
-                "ml_2P": cmd_2P,
-                "ml_3P": cmd_3P,
-                "ml_4P": cmd_4P,
-                "ml_5P": cmd_5P,
-                "ml_6P": cmd_6P}
+        return {"1P": cmd_1P,
+                "2P": cmd_2P,
+                "3P": cmd_3P,
+                "4P": cmd_4P,
+                "5P": cmd_5P,
+                "6P": cmd_6P}
 
     def set_game_mode(self):
         if self.game_type == "MAZE":
