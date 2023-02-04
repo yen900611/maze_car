@@ -98,7 +98,7 @@ class MazeCar:
                 "walls": wall_vertices  #pygame(pixel)
             },
             "game_object": [
-                {"name": "player1_car", "size": self.game_mode.car.size, "color": RED, "image": "car_01.png"},
+                {"name": "player1_car", "size": self.game_mode.car.size, "color": RED, "image": "car0.png"},
                 {"name": "player2_car", "size": self.game_mode.car.size, "color": GREEN, "image": "car_02.png"},
                 {"name": "player3_car", "size": self.game_mode.car.size, "color": BLUE, "image": "car_03.png"},
                 {"name": "player4_car", "size": self.game_mode.car.size, "color": YELLOW, "image": "car_04.png"},
@@ -106,7 +106,7 @@ class MazeCar:
                 {"name": "player6_car", "size": self.game_mode.car.size, "color": PINK, "image": "car_06.png"},
                 {"name": "info", "size": (306, 480), "color": WHITE, "image": "info.png"},
             ],
-            "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
+            "images": ["car0.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
                        ]
         }
         if self.game_type == "MOVE_MAZE":
@@ -149,7 +149,7 @@ class MazeCar:
                 {"type": "image", "name": "info", "size": (306, 480), "color": WHITE, "image": "info.png",
                  "coordinate": (507, 20)},
             ],
-            "images": ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
+            "images": ["car0.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",
                        ]
         }
         for user in self.game_mode.car_info:
