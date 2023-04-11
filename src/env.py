@@ -59,7 +59,7 @@ LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/im
 TMF_LOGO = "TMFlogo.png"
 TMF_LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/TMFlogo.png'
 
-CARS_NAME = ["car0.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]
+CARS_NAME = ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]
 CARS_URL = ['https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_01.png',
             'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_02.png',
             'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_03.png',
