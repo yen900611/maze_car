@@ -75,6 +75,7 @@ class Car(pygame.sprite.Sprite):
         else:
             self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector = (0,pwm**0.5))
 
+
     def get_info(self):
         self.car_info = {"id": self.car_no,
                          "status":self.status,

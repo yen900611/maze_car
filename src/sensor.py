@@ -4,6 +4,7 @@ import pygame
 import Box2D
 from .env import *
 
+
 class Sensor():
     def __init__(self, world, body, sensor_num, angle):
         self.car = body
@@ -13,10 +14,12 @@ class Sensor():
         self.left__top_value = {}
         self.front_value = {}
         self.sensor_num = sensor_num
-        angle_t = int(angle/0.5)%4
-        self.sensor_right = world.CreateDynamicBody(position=(body.position[0] + sensor_trans[angle_t][0], body.position[1]+ sensor_trans[angle_t][1]))
+        angle_t = int(angle / 0.5) % 4
+        self.sensor_right = world.CreateDynamicBody(
+            position=(body.position[0] + sensor_trans[angle_t][0], body.position[1] + sensor_trans[angle_t][1]))
         ball = self.sensor_right.CreateCircleFixture(radius=0.1)
-        self.sensor_left = world.CreateDynamicBody(position=(body.position[0] - sensor_trans[angle_t][0], body.position[1] - sensor_trans[angle_t][1]))
+        self.sensor_left = world.CreateDynamicBody(
+            position=(body.position[0] - sensor_trans[angle_t][0], body.position[1] - sensor_trans[angle_t][1]))
         ball = self.sensor_left.CreateCircleFixture(radius=0.1)
 
         world.CreateDistanceJoint(bodyA=self.sensor_left, bodyB=body, anchorA=self.sensor_left.position,
@@ -34,10 +37,8 @@ class Sensor():
             self.right_top_value = self.sensor_detect(walls, (1, 1))
             self.left_top_value = self.sensor_detect(walls, (-1, 1))
         else:
-            self.right_top_value = {"coordinate":self.car.position,
-                            "distance": -1}
-            self.left_top_value = {"coordinate":self.car.position,
-                            "distance": -1}
+            self.right_top_value = {"coordinate": self.car.position, "distance": -1}
+            self.left_top_value = {"coordinate": self.car.position, "distance": -1}
 
         self.last_detect_sensor = frame
         if frame - self.last_detect_sensor > 2:
@@ -55,7 +56,7 @@ class Sensor():
         distance = []
         results = []
         dots = []
-        vector = self.car.GetWorldVector(localVector = vector)
+        vector = self.car.GetWorldVector(localVector=vector)
         sensor_value = {}
 
         for wall in walls:
@@ -79,8 +80,8 @@ class Sensor():
 
         try:
             coordinate = dots[results.index(min(results))]
-            sensor_value = {"coordinate":(round(coordinate[0], 3), round(coordinate[1], 3)),
-                            "distance":round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
+            sensor_value = {"coordinate": (round(coordinate[0], 3), round(coordinate[1], 3)),
+                            "distance": round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
                             }
             # self.front_value = round(min(results) * 5 * random.uniform(0.95, 1.05), 1)
             if sensor_value["distance"] < 0:
@@ -94,4 +95,3 @@ class Sensor():
             sensor_value["distance"] = -1
             sensor_value["coordinate"] = self.car.position
             return sensor_value
-

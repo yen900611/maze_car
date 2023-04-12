@@ -7,7 +7,7 @@ class MyTestCase(unittest.TestCase):
     def test_view_could_draw(self):
         try:
             game_info = {"images":
-                             ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",]
+                             ["car0.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", "info.png",]
                         }
             view = PygameView(game_info)
             data = {
@@ -17,7 +17,7 @@ class MyTestCase(unittest.TestCase):
                          "name":"car",
                          "coordinate":(10,20),
                          "size":(50,50),
-                         "image":"car_01.png",
+                         "image":"car0.png",
                          "angle":260},
                         {"type":"rectangle",
                          "name":"ball",
